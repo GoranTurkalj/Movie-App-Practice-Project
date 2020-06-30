@@ -10,8 +10,8 @@ import Header from "./components/Header.vue";
 
 export default {
   components: {
-    appHeader: Header,
-  },
+    appHeader: Header
+  }
 };
 </script>
 
@@ -30,5 +30,6 @@ export default {
   background-position: 0% 5%;
   background-size: cover;
   background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 </style>
