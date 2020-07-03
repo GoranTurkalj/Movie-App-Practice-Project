@@ -4,7 +4,8 @@
       <input class="search-input" type="text" @blur="updateSearchedTitle" />
       <button id="search-btn" @click="requestSearchResults">SEARCH</button>
     </div>
-    <movie-list></movie-list>
+    <div class="homepage-greeting" v-if="$store.state.resultsList.length < 1"></div>
+    <movie-list v-else></movie-list>
   </section>
 </template>
 
@@ -59,6 +60,19 @@ export default {
   &:hover,
   &:active {
     color: $accentColor;
+  }
+}
+
+.homepage-greeting {
+  margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h2 {
+    color: rgb(255, 255, 255);
+    font-family: "Monoton";
+    letter-spacing: 2px;
   }
 }
 </style>

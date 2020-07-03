@@ -2,7 +2,7 @@
   <section v-if="getResultsList.length > 0" id="movies-container">
     <ul id="movie-list">
       <li class="movie-item" v-for="result in getResultsList" :key="result.id">
-        <img class="movie-img" :src="result.fullPosterPath" alt />
+        <img class="movie-img" :src="result.fullPosterPath" alt="movie poster" />
       </li>
     </ul>
   </section>
