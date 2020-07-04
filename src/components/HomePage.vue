@@ -2,9 +2,21 @@
   <section id="homepage">
     <div class="search-container">
       <input class="search-input" type="text" @blur="updateSearchedTitle" />
-      <button id="search-btn" @click="requestSearchResults">SEARCH</button>
+      <button id="search-btn" @click="requestSearchResults"></button>
     </div>
-    <div class="homepage-greeting" v-if="$store.state.resultsList.length < 1"></div>
+    <div class="homepage-greeting" v-if="$store.state.resultsList.length < 1">
+      <ul class="info-list">
+        <li class="info-list__item">
+          <p>Search for your favourite movies and TV shows!</p>
+        </li>
+        <li class="info-list__item">
+          <p>Gather information or watch a trailer!</p>
+        </li>
+        <li class="info-list__item">
+          <p>Sign up to use the Watchlist feature!</p>
+        </li>
+      </ul>
+    </div>
     <movie-list v-else></movie-list>
   </section>
 </template>
@@ -31,48 +43,78 @@ export default {
 }
 .search-container {
   display: flex;
-  height: 2.2rem;
+  height: 2.7rem;
 }
 
 .search-input {
   height: 100%;
-  width: 50%;
+  width: 35%;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   padding: 0.5rem;
   font-size: 1.2rem;
   outline: none;
-  border: 1px solid $accentColor;
+  border: 2px solid $accentColor;
+  border-radius: 1rem 0 0 1rem;
   border-right: none;
 }
 
 #search-btn {
+  transition: all 200ms;
   height: 100%;
+  width: 4rem;
   padding: 0 1rem;
-
   background-color: rgba(0, 0, 0, 0.5);
+  background-image: url("../assets/search.svg");
+  background-size: 45%;
+  background-position: center;
+  background-repeat: no-repeat;
   color: white;
-  border: 1px solid $accentColor;
+  border: 2px solid $accentColor;
+  border-left: none;
+  border-radius: 0 1rem 1rem 0;
   font-size: 1.1rem;
   cursor: pointer;
   outline: none;
 
-  &:hover,
-  &:active {
-    color: $accentColor;
+  &:hover {
+    background-size: 55%;
   }
 }
 
 .homepage-greeting {
-  margin-top: 5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-top: 3rem;
+  width: 40%;
+  height: 15rem;
+}
 
-  h2 {
-    color: rgb(255, 255, 255);
+.info-list {
+  list-style-type: none;
+  color: $accentColor;
+  padding-left: 2.2rem;
+
+  li:first-of-type {
     font-family: "Monoton";
-    letter-spacing: 2px;
+  }
+}
+
+.info-list__item {
+  padding-bottom: 1rem;
+  font-size: 1.1rem;
+  position: relative;
+
+  p::before {
+    content: "";
+    background-image: url("../assets/bulletpoint.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 30px;
+    height: 30px;
+    
+    position: absolute;
+    left: -7%;
+
   }
 }
 </style>
