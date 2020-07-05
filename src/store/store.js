@@ -9,7 +9,7 @@ export const store = new Vuex.Store({
   state: {
     searchedTitle: "",
     resultsList: [],
-    selectedTitleImg: "",
+    selectedTitle: "",
   },
   //Getters******************************************************************
   getters: {
@@ -20,6 +20,10 @@ export const store = new Vuex.Store({
     getResultsList: function(state) {
       return state.resultsList;
     },
+
+    getSelectedTitle: function(state) {
+      return state.selectedTitle;
+    }
   },
   //Mutations****************************************************************
   mutations: {
@@ -32,10 +36,15 @@ export const store = new Vuex.Store({
     updateSearchResults: function(state, newList) {
       state.resultsList = newList;
     },
+
+    updateSelectedTitle: function(state, newTitle) {
+      state.selectedTitle = newTitle;
+    },
   },
 
   //Actions******************************************************************
   actions: {
+    //Sends a request to the Movie Database
     requestSearchResults: function(context) {
       if (!this.state.searchedTitle) {
         alert(
@@ -71,6 +80,16 @@ export const store = new Vuex.Store({
         });
     },
 
-  
+    //Displays more options and details for the selected title - this action fires when a title img is clicked on.
+    displaySelectedTitle: function({ commit, state, getters }, $event) {
+      if ($event.target.tagName === "IMG") {
+        for (const title of getters.getResultsList) {
+          if (+$event.target.id === title.id) {
+            commit("updateSelectedTitle", title);
+            console.log(state.selectedTitle);
+          }
+        }
+      }
+    },
   },
 });

@@ -30,8 +30,11 @@ export default {};
 <style lang="scss" scoped>
 #main-header {
   height: 10vh;
+  width: 100vw;
   padding: 0 3rem;
   background-color: rgba(0, 0, 0, 0.5);
+  
+  
 }
 
 .main-nav {
@@ -47,21 +50,22 @@ export default {};
   align-items: center;
 
   a {
-    transition: transform 200ms;
     display: inline-block;
-    color: white;
+    font-family: "Bungee Inline";
+    transition: transform 200ms;
+    color: $accentColor;
     text-decoration: none;
     font-size: 1.1rem;
     letter-spacing: 1px;
-    padding-right: 2rem;
+    margin-right: 2rem;
 
     &:hover {
-      color: $accentColor;
+      color: white;
       transform: translateY(-3px);
     }
 
     &:focus {
-      color: $accentColor;
+      color: white;
     }
   }
 }
@@ -70,8 +74,8 @@ export default {};
   justify-content: flex-end;
 
   a {
-    padding-right: 0;
-    padding-left: 2rem;
+    margin-right: 0;
+    margin-left: 2rem;
   }
 }
 

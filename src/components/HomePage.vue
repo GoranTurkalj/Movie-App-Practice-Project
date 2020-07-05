@@ -18,27 +18,28 @@
       </ul>
     </div>
     <movie-list v-else></movie-list>
+    <selected-card v-if="getSelectedTitle"></selected-card>
   </section>
 </template>
-
 <script>
-import { mapMutations, mapActions } from "vuex";
+import { mapMutations, mapActions, mapGetters } from "vuex";
 
 export default {
+  computed: {
+    ...mapGetters(["getSelectedTitle"])
+  },
   methods: {
     //Updating searchedTitle in the state
     ...mapMutations(["updateSearchedTitle"]),
     ...mapActions(["requestSearchResults"])
-  },
-
-  computed: {}
+  }
 };
 </script>
 
 <style lang="scss">
 #homepage {
   padding: 1.5rem 3rem;
-
+  position: relative;
   min-height: 90vh;
 }
 .search-container {
@@ -111,10 +112,9 @@ export default {
     background-position: center;
     width: 30px;
     height: 30px;
-    
+
     position: absolute;
     left: -7%;
-
   }
 }
 </style>

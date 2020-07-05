@@ -1,18 +1,22 @@
 <template>
-  <section v-if="getResultsList.length > 0" id="movies-container">
-    <ul id="movie-list">
+  <section v-if="getResultsList.length" id="movies-container">
+    <ul id="movie-list" @click="displaySelectedTitle">
       <li class="movie-item" v-for="result in getResultsList" :key="result.id">
-        <img class="movie-img" :src="result.fullPosterPath" alt="movie poster" />
+        <img :id="result.id" class="movie-img" :src="result.fullPosterPath" alt="movie poster" />
       </li>
     </ul>
   </section>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   computed: {
-    ...mapGetters(["getResultsList"])
+    ...mapGetters(["getResultsList", "getSelectedTitle"])
+  },
+
+  methods: {
+    ...mapActions(["displaySelectedTitle"])
   }
 };
 </script>
@@ -30,6 +34,7 @@ export default {
 }
 
 .movie-item {
+  transition: filter 300ms;
   padding-bottom: 1.5rem;
   padding-right: 1.5rem;
   width: 250px;
@@ -43,15 +48,13 @@ export default {
   height: 100%;
   border-radius: 8px;
   background-color: black;
-  filter: grayscale(100);
-
-  transition: transform 500ms, filter 500ms;
+  transition: transform 500ms, border-color 500ms;
 
   &:hover {
     transform: scale(1.1);
-    filter: grayscale(0);
     position: relative;
     z-index: 1;
+    border: 2px solid white;
   }
 }
 </style>
