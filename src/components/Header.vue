@@ -33,8 +33,6 @@ export default {};
   width: 100vw;
   padding: 0 3rem;
   background-color: rgba(0, 0, 0, 0.5);
-  
-  
 }
 
 .main-nav {
@@ -98,13 +96,6 @@ export default {};
   letter-spacing: 2px;
   color: $accentColor;
   word-spacing: 45px;
-  background: -webkit-linear-gradient(
-    top right,
-    rgb(107, 103, 103),
-    $accentColor
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  @include orangeGreyText();
 }
 </style>

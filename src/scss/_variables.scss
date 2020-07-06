@@ -1,1 +1,14 @@
+//Variables
 $accentColor: #d86c14;
+
+//Mixins
+@mixin orangeGreyText() {
+  background: -webkit-linear-gradient(
+    top right,
+    rgb(107, 103, 103),
+    $accentColor
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

@@ -23,7 +23,7 @@ export const store = new Vuex.Store({
 
     getSelectedTitle: function(state) {
       return state.selectedTitle;
-    }
+    },
   },
   //Mutations****************************************************************
   mutations: {
@@ -58,7 +58,7 @@ export const store = new Vuex.Store({
         )
         .then((response) => {
           const results = response.data.results;
-          const basePosterURL = "https://image.tmdb.org/t/p/w200";
+          const basePosterURL = "https://image.tmdb.org/t/p/w300";
 
           //Filtering out titles which have a poster_path
 
@@ -85,10 +85,21 @@ export const store = new Vuex.Store({
       if ($event.target.tagName === "IMG") {
         for (const title of getters.getResultsList) {
           if (+$event.target.id === title.id) {
+            //napraviti novi HTTP request za dobiti detaljnije podatke o filmu pomoću id-a
+            axios
+              .get(
+                `https://api.themoviedb.org/3/movie/${title.id}?api_key=9e612d73fdfb165c3aa123e0b09d606d&append_to_response=videos,images,credits`
+              )
+              .then((response) => {
+                console.log(response);
+              });
+
             commit("updateSelectedTitle", title);
             console.log(state.selectedTitle);
           }
         }
+
+        //Axios call with the id of the movie
       }
     },
   },

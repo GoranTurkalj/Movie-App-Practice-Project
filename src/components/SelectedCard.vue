@@ -71,7 +71,7 @@ export default {
   color: $accentColor;
   border: none;
   font-family: "Bungee Inline";
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   letter-spacing: 1px;
   line-height: 1;
   text-decoration: none;
