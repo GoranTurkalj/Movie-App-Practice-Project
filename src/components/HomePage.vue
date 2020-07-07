@@ -18,7 +18,9 @@
       </ul>
     </div>
     <movie-list v-else></movie-list>
-    <selected-card v-if="getSelectedTitle"></selected-card>
+    <transition name="fade">
+      <selected-card v-if="getSelectedTitle"></selected-card>
+    </transition>
   </section>
 </template>
 <script>
@@ -117,4 +119,17 @@ export default {
     left: -7%;
   }
 }
+
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+ transition: opacity 400ms;
+}
+
+.fade-leave-active {
+  transition: opacity 400ms;
+  opacity: 0;
+}
+
 </style>

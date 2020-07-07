@@ -24,6 +24,57 @@ export const store = new Vuex.Store({
     getSelectedTitle: function(state) {
       return state.selectedTitle;
     },
+
+    getDirector: function(state, getters) {
+      const crew = getters.getSelectedTitle.crew;
+      const directors = [];
+      for (const person of crew) {
+        if (person.job === "Director") {
+          directors.push(person.name);
+        }
+      }
+      return directors.length ? directors.join(", ") : "No available info";
+    },
+
+    getProducer: function(state, getters) {
+      const crew = getters.getSelectedTitle.crew;
+      const producers = [];
+      for (const person of crew) {
+        if (producers.length < 3 && person.job === "Executive Producer") {
+          producers.push(person.name);
+        }
+      }
+      return producers.length ? producers.join(", ") : "No available info";
+    },
+
+    getCast: function(state, getters) {
+      const cast = getters.getSelectedTitle.cast;
+      const mainCast = [];
+
+      for (const person of cast) {
+        if (cast.length && mainCast.length < 4) {
+          mainCast.push(person.name);
+        }
+      }
+
+      return mainCast.length ? mainCast.join(", ") : "No available info";
+    },
+
+    getGenres: function(state, getters) {
+      const genres = getters.getSelectedTitle.genres;
+      const keywords = [];
+      for (const genre of genres) {
+        console.log(genre.name);
+        keywords.push(genre.name);
+      }
+
+      return keywords.length ? keywords.join(", ") : "No available info";
+    },
+
+    //This getter returns video key of the selectedTitle
+    getSelectedTitleVideos: function(state) {
+      return state.selectedTitle.videos.results[0].key;
+    },
   },
   //Mutations****************************************************************
   mutations: {
@@ -39,6 +90,11 @@ export const store = new Vuex.Store({
 
     updateSelectedTitle: function(state, newTitle) {
       state.selectedTitle = newTitle;
+    },
+
+    //This mutations sets selectedTitle to "" after the close button is clicked on the SelectedCard component
+    clearSelectedTitle: function(state) {
+      state.selectedTitle = "";
     },
   },
 
@@ -83,24 +139,53 @@ export const store = new Vuex.Store({
     //Displays more options and details for the selected title - this action fires when a title img is clicked on.
     displaySelectedTitle: function({ commit, state, getters }, $event) {
       if ($event.target.tagName === "IMG") {
+        //Create new empty variable - this will hold the necessary detailed data from the response
+        let selectedTitleData = null;
+
+        //Napraviti loop kroz listu rezultata i ako kliknuti img ima isti id kao i title na listi, napraviti HTTP request s tim title id-om za dobiti detaljnije podatke
         for (const title of getters.getResultsList) {
           if (+$event.target.id === title.id) {
-            //napraviti novi HTTP request za dobiti detaljnije podatke o filmu pomoću id-a
             axios
               .get(
                 `https://api.themoviedb.org/3/movie/${title.id}?api_key=9e612d73fdfb165c3aa123e0b09d606d&append_to_response=videos,images,credits`
               )
               .then((response) => {
-                console.log(response);
-              });
+                console.log(response.data);
+                const data = response.data;
 
-            commit("updateSelectedTitle", title);
-            console.log(state.selectedTitle);
+                selectedTitleData = {
+                  fullPosterPath: title.fullPosterPath,
+                  overview: data.overview,
+                  tagline: data.tagline,
+                  budget: data.budget,
+                  language: data.original_language,
+                  genres: data.genres,
+                  homepage: data.homepage,
+                  images: data.images,
+                  runtime: data.runtime,
+                  revenue: data.revenue,
+                  releaseDate: data.release_date,
+                  originalTitle: data.original_title,
+                  title: data.title,
+                  videos: data.videos,
+                  rating: data.vote_average,
+                  votes: data.vote_count,
+                  cast: data.credits.cast,
+                  crew: data.credits.crew,
+                };
+
+                //Commitati mutaciju za updetjanje selectedTitle
+                commit("updateSelectedTitle", selectedTitleData);
+                console.log(state.selectedTitle);
+              });
           }
         }
-
-        //Axios call with the id of the movie
       }
+    },
+
+    //This action commits a mutation which sets the selectedTitle to ""
+    closeSelectedTitle: function(context) {
+      context.commit("clearSelectedTitle");
     },
   },
 });

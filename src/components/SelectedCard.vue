@@ -10,21 +10,26 @@
       </div>
     </div>
     <router-view></router-view>
-    <img class="close-icon" src="../assets/close.svg" alt="close icon" />
+    <button class="close-btn" @click="closeSelectedTitle">
+      <img src="../assets/close.svg" alt="close icon" />
+    </button>
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   computed: {
     ...mapGetters(["getSelectedTitle"])
+  },
+  methods: {
+    ...mapActions(["closeSelectedTitle"])
   }
 };
 </script>
 <style lang="scss" scoped>
 .selected-card {
-  width: 75%;
+  width: 90%;
   height: 80%;
   background-color: rgba(0, 0, 0, 0.9);
   padding: 1rem;
@@ -32,7 +37,7 @@ export default {
   border: 2px solid $accentColor;
   border-radius: 1rem;
   position: fixed;
-  left: 12.5%;
+  left: 5%;
   top: 10vh;
   z-index: 10;
   display: flex;
@@ -66,7 +71,8 @@ export default {
 .preview-control {
   transition: transform 200ms;
   width: 45%;
-  padding: 0.5rem;
+
+  padding-bottom: 0;
   background-color: transparent;
   color: $accentColor;
   border: none;
@@ -84,7 +90,11 @@ export default {
   }
 }
 
-.close-icon {
+.preview-control:last-of-type {
+  text-align: right;
+}
+
+.close-btn {
   cursor: pointer;
   position: absolute;
   top: 0.5rem;
@@ -93,9 +103,17 @@ export default {
   width: 25px;
   height: 25px;
   transition: transform 200ms;
+  background-color: transparent;
+  border: none;
+  outline: none;
 
   &:hover {
     transform: scale(1.1);
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
   }
 }
 </style>
