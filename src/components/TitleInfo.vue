@@ -58,7 +58,9 @@
           </li>
         </ul>
       </section>
-      <section class="overview-panel__gallery" :class="{displayed: !overviewDisplayed}"></section>
+      <section class="overview-panel__gallery" :class="{displayed: !overviewDisplayed}">
+        <photo-carousel></photo-carousel>
+      </section>
     </div>
   </div>
 </template>

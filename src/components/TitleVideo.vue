@@ -1,42 +1,33 @@
 <template>
   <div id="title-video-container" ref="trailerWindow">
-    <youtube
-      :video-id="getSelectedTitleVideos"
-      :player-width="videoWidth"
-      :player-height="videoHeight"
-    ></youtube>
+    <iframe
+      id="player"
+      :src="displayTrailer"
+      frameborder="0"
+      allow="accelerometer; autoplay; encrypted-media;"
+      allowfullscreen
+    ></iframe>
   </div>
 </template>
 <script>
 import { mapGetters } from "vuex";
 export default {
-  mounted() {
-    window.addEventListener("resize", this.getDimensions);
-    this.getDimensions();
-  },
-
-  data() {
-    return {
-      videoWidth: "",
-      videoHeight: "",
-    };
-  },
-
   computed: {
     ...mapGetters(["getSelectedTitleVideos"]),
-  },
-
-  methods: {
-    getDimensions: function() {
-      this.videoWidth = this.$refs.trailerWindow.clientWidth;
-      this.videoHeight = this.$refs.trailerWindow.clientHeight;
-    },
-  },
+    displayTrailer: function() {
+      return `https://www.youtube.com/embed/${this.getSelectedTitleVideos}?autoplay=1&modestbranding=1&rel=0&loop=1&playlist=${this.getSelectedTitleVideos}`;
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
 #title-video-container {
   width: calc(100% - 23rem);
+  height: 100%;
+}
+
+#player {
+  width: 100%;
   height: 100%;
 }
 </style>

@@ -3,14 +3,14 @@ import VueRouter from "vue-router";
 import { routes } from "./routes.js";
 import MovieList from "./components/MovieList.vue";
 import SelectedCard from "./components/SelectedCard.vue";
-import VueYoutubeEmbed from "vue-youtube-embed";
+import Carousel from "./components/Carousel.vue";
 import App from "./App.vue";
 import { store } from "./store/store.js";
 
 Vue.component("movie-list", MovieList);
 Vue.component("selected-card", SelectedCard);
+Vue.component("photo-carousel", Carousel);
 
-Vue.use(VueYoutubeEmbed);
 Vue.use(VueRouter);
 
 const router = new VueRouter({
