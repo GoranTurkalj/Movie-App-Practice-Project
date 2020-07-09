@@ -56,6 +56,11 @@
             <br />
             <span>{{getSelectedTitle.overview || "Not available"}}</span>
           </li>
+          <li class="title-list__item">
+            Homepage:
+            <br />
+            <a :href="getSelectedTitle.homepage">{{getSelectedTitle.homepage || "Not available"}}</a>
+          </li>
         </ul>
       </section>
       <section class="overview-panel__gallery" :class="{displayed: !overviewDisplayed}">
@@ -174,6 +179,17 @@ export default {
   span {
     color: $textColor;
     font-size: 1rem;
+  }
+
+  a {
+    color: $textColor;
+    font-size: 1rem;
+
+    &:hover,
+    &:active,
+    &:focus {
+      color: $accentColor;
+    }
   }
 }
 

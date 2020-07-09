@@ -10,6 +10,7 @@ export const store = new Vuex.Store({
     searchedTitle: "",
     resultsList: [],
     selectedTitle: "",
+    baseImageURL: "https://image.tmdb.org/t/p/w500",
   },
   //Getters******************************************************************
   getters: {
@@ -75,6 +76,10 @@ export const store = new Vuex.Store({
     getSelectedTitleVideos: function(state) {
       return state.selectedTitle.videos.results[0].key;
     },
+
+    getSelectedTitleImages: function(state) {
+      return state.selectedTitle.images;
+    },
   },
   //Mutations****************************************************************
   mutations: {
@@ -114,7 +119,6 @@ export const store = new Vuex.Store({
         )
         .then((response) => {
           const results = response.data.results;
-          const basePosterURL = "https://image.tmdb.org/t/p/w300";
 
           //Filtering out titles which have a poster_path
 
@@ -125,7 +129,7 @@ export const store = new Vuex.Store({
           });
           //For every element in results - build the entire poster image URL
           filteredResults.forEach((title) => {
-            title.fullPosterPath = `${basePosterURL}${title.poster_path}`;
+            title.fullPosterPath = `${this.state.baseImageURL}${title.poster_path}`;
           });
 
           //Then, update the resultsList in the state
@@ -153,6 +157,10 @@ export const store = new Vuex.Store({
                 console.log(response.data);
                 const data = response.data;
 
+                data.images.backdrops.forEach((image) => {
+                  image.fullImagePath = `${this.state.baseImageURL}${image.file_path}`;
+                });
+
                 selectedTitleData = {
                   fullPosterPath: title.fullPosterPath,
                   overview: data.overview,
@@ -161,7 +169,7 @@ export const store = new Vuex.Store({
                   language: data.original_language,
                   genres: data.genres,
                   homepage: data.homepage,
-                  images: data.images,
+                  images: data.images.backdrops,
                   runtime: data.runtime,
                   revenue: data.revenue,
                   releaseDate: data.release_date,

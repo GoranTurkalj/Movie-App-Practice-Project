@@ -1,47 +1,71 @@
 <template>
   <div id="carousel-wrapper">
     <div class="carousel">
-      <button ref="leftArrow" class="carousel__button carousel__button--left" @click="moveSlide">
+      <button ref="leftArrow" class="carousel__button carousel__button--left" @click="moveLeft">
         <img src="../assets/left.svg" alt="left arrow button icon" />
       </button>
       <ul ref="carouselList" class="carousel__list">
-        <li class="carousel__item">
-          <img src="../assets/pic1.jpg" alt />
-        </li>
-        <li class="carousel__item">
-          <img src="../assets/pic2.jpg" alt />
-        </li>
-        <li class="carousel__item">
-          <img src="../assets/pic3.jpg" alt />
+        <li v-for="img in getSelectedTitleImages" :key="img.fullImagePath" class="carousel__item">
+          <img :src="img.fullImagePath" alt="title poster images" />
         </li>
       </ul>
-      <button ref="rightArrow" class="carousel__button carousel__button--right" @click="moveSlide">
+      <button ref="rightArrow" class="carousel__button carousel__button--right" @click="moveRight">
         <img src="../assets/right.svg" alt="right-arrow button icon" />
       </button>
     </div>
   </div>
 </template>
 <script>
+import { mapGetters } from "vuex";
+
 export default {
+  mounted: function() {
+    this.track = this.$refs.carouselList;
+    this.slides = Array.from(this.track.children);
+    this.currentSlide = this.slides[0];
+    this.currentSlide.classList.add("current-slide");
+
+    window.addEventListener("resize", this.recalculateSlideWidth);
+  },
+
+  computed: {
+    ...mapGetters(["getSelectedTitleImages"])
+  },
+
   data() {
     return {
+      slides: "",
+      track: "",
+      slideWidth: "",
       currentSlide: "",
-      numberOfSlides: "",
-      clicks: 1
+      nextSlide: "",
+      previousSlide: ""
     };
   },
 
   methods: {
-    moveSlide: function(event) {
-      const trackEl = this.$refs.carouselList;
-      trackEl.style.transition = "transform 300ms ease-in";
-      const slides = Array.from(this.$refs.carouselList.children);
+    moveRight: function() {
+      this.currentSlide = this.track.querySelector(".current-slide");
+      this.nextSlide = this.currentSlide.nextElementSibling;
 
-      //Determine current slide
-      if (!this.currentSlide) {
-        this.currentSlide = slides[0];
-        this.currentSlide.classList.add("current-slide");
+      if (!this.nextSlide) {
+        this.nextSlide = this.slides[0];
       }
+
+      this.nextSlide.classList.add("current-slide");
+      this.currentSlide.classList.remove("current-slide");
+    },
+
+    moveLeft: function() {
+      this.currentSlide = this.track.querySelector(".current-slide");
+      this.previousSlide = this.currentSlide.previousElementSibling;
+
+      if (!this.previousSlide) {
+        this.previousSlide = this.slides[this.slides.length - 1];
+      }
+
+      this.previousSlide.classList.add("current-slide");
+      this.currentSlide.classList.remove("current-slide");
     }
   }
 };
@@ -63,6 +87,7 @@ export default {
 .carousel__button {
   position: absolute;
   top: 50%;
+  transition: transform 200ms;
   transform: translateY(-50%);
   width: 2rem;
   height: 2rem;
@@ -76,31 +101,52 @@ export default {
     width: 100%;
     height: 100%;
   }
+
+  &:hover {
+    transform: scale(1.1) translateY(-50%);
+  }
 }
 
 .carousel__button--left {
   left: -0.5rem;
+
+  &:active {
+    transform: translateX(-0.5rem) translateY(-50%);
+  }
 }
 .carousel__button--right {
   right: -0.5rem;
+
+  &:active {
+    transform: translateX(0.5rem) translateY(-50%);
+  }
 }
 
 .carousel__list {
   height: 100%;
   width: 100%;
   list-style-type: none;
-  display: flex;
+  position: relative;
 }
 
 .carousel__item {
-  width: 100%;
+  transition: opacity 300ms;
+  opacity: 0;
+
+  min-width: 100%;
+  height: 100%;
+  position: absolute;
 
   img {
-    height: 100%;
+    width: 100%;
+    min-height: 100%;
   }
 }
 
 .current-slide {
-  filter: grayscale(100);
+  opacity: 1;
 }
 </style>
+
+
+

@@ -25,3 +25,55 @@ new Vue({
   router,
   store,
 }).$mount("#app");
+
+/*
+
+ moveRight: function() {
+      //Determine currentSlide
+      this.currentSlide = this.track.querySelector(".current-slide");
+      //I need to determine the next slide
+      this.nextSlide = this.currentSlide.nextElementSibling;
+
+      if (!this.nextSlide) {
+        this.nextSlide = this.slides[0];
+      }
+
+      // const slideWidth = this.nextSlide.getBoundingClientRect().width;
+      this.track.style.transform = `translateX(-${this.slideWidth *
+        this.slides.indexOf(this.nextSlide)}px)`;
+
+      this.nextSlide.classList.add("current-slide");
+      this.currentSlide.classList.remove("current-slide");
+    },
+
+    moveLeft: function() {
+      //Determine currentSlide;
+      this.currentSlide = this.track.querySelector(".current-slide");
+      //I need to determine the previous slide
+      this.previousSlide = this.currentSlide.previousElementSibling;
+
+      if (!this.previousSlide) {
+        this.previousSlide = this.slides[this.slides.length - 1];
+      }
+
+      //const slideWidth = this.previousSlide.getBoundingClientRect().width;
+      this.track.style.transform = `translateX(-${this.slideWidth *
+        this.slides.indexOf(this.previousSlide)}px)`;
+
+      this.previousSlide.classList.add("current-slide");
+      this.currentSlide.classList.remove("current-slide");
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+*/
