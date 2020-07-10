@@ -31,10 +31,10 @@ export default {
   display: flex;
   flex-wrap: wrap;
   margin-top: 3rem;
+ 
 }
 
 .movie-item {
-  transition: filter 300ms;
   padding-bottom: 1.5rem;
   padding-right: 1.5rem;
   width: 250px;
@@ -48,6 +48,7 @@ export default {
   height: 100%;
   border-radius: 8px;
   background-color: black;
+  box-shadow: 2px 2px 4px 4px rgba(0, 0, 0, 0.5);
   transition: transform 500ms, border-color 500ms;
 
   &:hover {

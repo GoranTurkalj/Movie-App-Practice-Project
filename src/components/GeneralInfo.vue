@@ -1,0 +1,61 @@
+<template>
+  <section id="general-info">
+    <slot name="info-image"></slot>
+    <slot name="info-title"></slot>
+    <hr />
+    <slot name="info-tip-1"></slot>
+    <slot name="info-tip-2"></slot>
+  </section>
+</template>
+<script>
+export default {};
+</script>
+<style lang="scss" scoped>
+#general-info {
+  margin-top: 3rem;
+  max-width: 40rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 2px solid $accentColor;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  position: relative;
+  
+}
+
+img {
+  width: 3rem;
+  height: 3rem;
+  position: absolute;
+  top: -2rem;
+  left: -1rem;
+  animation: animateTip 5s linear infinite alternate-reverse;
+}
+
+h2 {
+  @include orangeGreyText();
+  font-size: 2rem;
+}
+
+hr {
+  border-color: $accentColor;
+  margin: 1rem 0;
+  width: 75%;
+}
+
+p {
+  color: $textColor;
+  margin-bottom: 1rem;
+}
+
+@keyframes animateTip {
+  0% {
+    transform: rotateZ(-20deg);
+  }
+  50% {
+    transform: rotateZ(20deg);
+  }
+  100% {
+    transform: rotateZ(-20deg);
+  }
+}
+</style>

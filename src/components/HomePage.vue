@@ -4,20 +4,19 @@
       <input class="search-input" type="text" @blur="updateSearchedTitle" />
       <button id="search-btn" @click="requestSearchResults"></button>
     </div>
-    <div class="homepage-greeting" v-if="$store.state.resultsList.length < 1">
-      <ul class="info-list">
-        <li class="info-list__item">
-          <p>Search for your favourite movies and TV shows!</p>
-        </li>
-        <li class="info-list__item">
-          <p>Gather information or watch a trailer!</p>
-        </li>
-        <li class="info-list__item">
-          <p>Sign up to use the Watchlist feature!</p>
-        </li>
-      </ul>
-    </div>
+    <transition name="fade" mode="out-in">
+    <general-info v-if="$store.state.resultsList.length < 1">
+      <img src="../assets/home-logo.png" alt slot="info-image" />
+      <h2 slot="info-title">Welome to Movie App!</h2>>
+      <p
+        slot="info-tip-1"
+      >This is the Homepage - you can search for your favourite TV shows or movies here.</p>
+      <p
+        slot="info-tip-2"
+      >You can add titles to your watchlist. To use the watchlist, sign-up or sign-in.</p>
+    </general-info>
     <movie-list v-else></movie-list>
+    </transition>
     <transition name="fade">
       <selected-card v-if="getSelectedTitle"></selected-card>
     </transition>
@@ -43,6 +42,7 @@ export default {
   padding: 1.5rem 3rem;
   position: relative;
   min-height: 90vh;
+  width: 100%;
 }
 .search-container {
   display: flex;
@@ -85,51 +85,15 @@ export default {
   }
 }
 
-.homepage-greeting {
-  margin-top: 3rem;
-  width: 40%;
-  height: 15rem;
-}
-
-.info-list {
-  list-style-type: none;
-  color: $accentColor;
-  padding-left: 2.2rem;
-
-  li:first-of-type {
-    font-family: "Monoton";
-  }
-}
-
-.info-list__item {
-  padding-bottom: 1rem;
-  font-size: 1.1rem;
-  position: relative;
-
-  p::before {
-    content: "";
-    background-image: url("../assets/bulletpoint.png");
-    background-size: 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 30px;
-    height: 30px;
-
-    position: absolute;
-    left: -7%;
-  }
-}
-
 .fade-enter {
   opacity: 0;
 }
 .fade-enter-active {
- transition: opacity 400ms;
+  transition: opacity 400ms;
 }
 
 .fade-leave-active {
   transition: opacity 400ms;
   opacity: 0;
 }
-
 </style>

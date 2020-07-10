@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <app-header></app-header>
-    <router-view></router-view>
+    <transition name="fade" mode="out-in">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
@@ -23,6 +25,11 @@ export default {
   font-family: "Roboto";
 }
 
+body {
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
 #app {
   width: 100vw;
   min-height: 100vh;
@@ -31,5 +38,18 @@ export default {
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
+  
+}
+
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: opacity 250ms;
+}
+
+.fade-leave-active {
+  opacity: 0;
+  transition: opacity 250ms;
 }
 </style>
