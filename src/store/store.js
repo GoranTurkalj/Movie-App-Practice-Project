@@ -74,7 +74,11 @@ export const store = new Vuex.Store({
 
     //This getter returns video key of the selectedTitle
     getSelectedTitleVideos: function(state) {
-      return state.selectedTitle.videos.results[0].key;
+      if (state.selectedTitle.videos.results.length) {
+        return state.selectedTitle.videos.results[0].key;
+      } else {
+        return null;
+      }
     },
 
     getSelectedTitleImages: function(state) {

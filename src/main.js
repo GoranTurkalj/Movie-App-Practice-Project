@@ -4,11 +4,13 @@ import { routes } from "./routes.js";
 import MovieList from "./components/MovieList.vue";
 import SelectedCard from "./components/SelectedCard.vue";
 import Carousel from "./components/Carousel.vue";
+import NotAvailable from "./components/NotAvailable.vue"; 
 import App from "./App.vue";
 import { store } from "./store/store.js";
 
 Vue.component("movie-list", MovieList);
 Vue.component("selected-card", SelectedCard);
+Vue.component("not-available", NotAvailable);
 Vue.component("photo-carousel", Carousel);
 
 Vue.use(VueRouter);

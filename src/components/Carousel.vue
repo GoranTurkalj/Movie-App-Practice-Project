@@ -1,7 +1,12 @@
 <template>
   <div id="carousel-wrapper">
-    <div class="carousel">
-      <button ref="leftArrow" class="carousel__button carousel__button--left" @click="moveLeft">
+    <div class="carousel" v-if="getSelectedTitleImages.length">
+      <button
+        v-show="slides.length > 1 "
+        ref="leftArrow"
+        class="carousel__button carousel__button--left"
+        @click="moveToPrevious"
+      >
         <img src="../assets/left.svg" alt="left arrow button icon" />
       </button>
       <ul ref="carouselList" class="carousel__list">
@@ -9,10 +14,16 @@
           <img :src="img.fullImagePath" alt="title poster images" />
         </li>
       </ul>
-      <button ref="rightArrow" class="carousel__button carousel__button--right" @click="moveRight">
+      <button
+        v-show="slides.length > 1"
+        ref="rightArrow"
+        class="carousel__button carousel__button--right"
+        @click="moveToNext"
+      >
         <img src="../assets/right.svg" alt="right-arrow button icon" />
       </button>
     </div>
+    <not-available v-else>PHOTOS</not-available>
   </div>
 </template>
 <script>
@@ -21,11 +32,18 @@ import { mapGetters } from "vuex";
 export default {
   mounted: function() {
     this.track = this.$refs.carouselList;
+
+    if (!this.track) {
+      return;
+    }
     this.slides = Array.from(this.track.children);
     this.currentSlide = this.slides[0];
-    this.currentSlide.classList.add("current-slide");
 
-    window.addEventListener("resize", this.recalculateSlideWidth);
+    if (!this.currentSlide) {
+      return;
+    }
+
+    this.currentSlide.classList.add("current-slide");
   },
 
   computed: {
@@ -36,7 +54,6 @@ export default {
     return {
       slides: "",
       track: "",
-      slideWidth: "",
       currentSlide: "",
       nextSlide: "",
       previousSlide: ""
@@ -44,25 +61,45 @@ export default {
   },
 
   methods: {
-    moveRight: function() {
+    moveToNext: function() {
       this.currentSlide = this.track.querySelector(".current-slide");
+
+      if (!this.currentSlide || this.slides.length <= 1) {
+        return;
+      }
+
       this.nextSlide = this.currentSlide.nextElementSibling;
 
       if (!this.nextSlide) {
         this.nextSlide = this.slides[0];
       }
 
+      //Add the next-slide class to get the effect of movement
+      this.nextSlide.classList.add("next-slide");
+      setTimeout(() => {
+        this.nextSlide.classList.remove("next-slide");
+      });
+
       this.nextSlide.classList.add("current-slide");
       this.currentSlide.classList.remove("current-slide");
     },
 
-    moveLeft: function() {
+    moveToPrevious: function() {
       this.currentSlide = this.track.querySelector(".current-slide");
+
+      if (!this.currentSlide || this.slides.length <= 1) {
+        return;
+      }
+
       this.previousSlide = this.currentSlide.previousElementSibling;
 
       if (!this.previousSlide) {
         this.previousSlide = this.slides[this.slides.length - 1];
       }
+      this.previousSlide.classList.add("previous-slide");
+      setTimeout(() => {
+        this.previousSlide.classList.remove("previous-slide");
+      });
 
       this.previousSlide.classList.add("current-slide");
       this.currentSlide.classList.remove("current-slide");
@@ -130,9 +167,8 @@ export default {
 }
 
 .carousel__item {
-  transition: opacity 300ms;
+  transition: all 300ms ease-in;
   opacity: 0;
-
   min-width: 100%;
   height: 100%;
   position: absolute;
@@ -145,6 +181,15 @@ export default {
 
 .current-slide {
   opacity: 1;
+  left: 0;
+}
+
+.previous-slide {
+  left: -100%;
+}
+
+.next-slide {
+  left: 100%;
 }
 </style>
 

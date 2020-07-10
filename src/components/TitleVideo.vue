@@ -1,12 +1,14 @@
 <template>
   <div id="title-video-container" ref="trailerWindow">
     <iframe
+      v-if="getSelectedTitleVideos"
       id="player"
       :src="displayTrailer"
       frameborder="0"
       allow="accelerometer; autoplay; encrypted-media;"
       allowfullscreen
     ></iframe>
+    <not-available v-else>VIDEOS</not-available>
   </div>
 </template>
 <script>
