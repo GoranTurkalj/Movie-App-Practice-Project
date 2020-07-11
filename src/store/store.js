@@ -11,6 +11,7 @@ export const store = new Vuex.Store({
     resultsList: [],
     selectedTitle: "",
     baseImageURL: "https://image.tmdb.org/t/p/w500",
+    watchlist: [],
   },
   //Getters******************************************************************
   getters: {
@@ -84,6 +85,10 @@ export const store = new Vuex.Store({
     getSelectedTitleImages: function(state) {
       return state.selectedTitle.images;
     },
+
+    getWatchlist: function(state) {
+      return state.watchlist;
+    },
   },
   //Mutations****************************************************************
   mutations: {
@@ -104,6 +109,12 @@ export const store = new Vuex.Store({
     //This mutations sets selectedTitle to "" after the close button is clicked on the SelectedCard component
     clearSelectedTitle: function(state) {
       state.selectedTitle = "";
+    },
+
+    //When "Add to watchlist" button is pressed - the selectedTitle data is added as an object to the watchlist array
+    updateWatchlist: function(state) {
+      state.watchlist.push(state.selectedTitle);
+      console.log(state.watchlist);
     },
   },
 
@@ -167,6 +178,7 @@ export const store = new Vuex.Store({
 
                 selectedTitleData = {
                   fullPosterPath: title.fullPosterPath,
+                  id: data.id,
                   overview: data.overview,
                   tagline: data.tagline,
                   budget: data.budget,
@@ -198,6 +210,12 @@ export const store = new Vuex.Store({
     //This action commits a mutation which sets the selectedTitle to ""
     closeSelectedTitle: function(context) {
       context.commit("clearSelectedTitle");
+    },
+
+    //This action commits updateWatchlist mutation
+    addToWatchlist: function({ commit, getters }, disableWatchlistBtn) {
+      commit("updateWatchlist");
+      disableWatchlistBtn();
     },
   },
 });

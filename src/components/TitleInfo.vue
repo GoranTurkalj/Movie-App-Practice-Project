@@ -9,7 +9,12 @@
       <span>{{getSelectedTitle.rating}} / 10</span>
       <span id="votes">({{getSelectedTitle.votes}} votes)</span>
     </div>
-    <button class="watchlist-btn">ADD TO WATCHLIST</button>
+    <button
+      ref="watchlistBtn"
+      class="watchlist-btn"
+      @click="addToWatchlist(disableWatchlistBtn)"
+      :disabled="alreadyAdded"
+    >ADD TO WATCHLIST</button>
     <ul class="title-list">
       <li class="title-list__item">
         Director:
@@ -70,12 +75,17 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
+  mounted: function() {
+    this.checkIfAdded();
+  },
+
   data() {
     return {
-      overviewDisplayed: true
+      overviewDisplayed: true,
+      alreadyAdded: false //this property is set from changeWatchlistBtn method
     };
   },
   computed: {
@@ -84,14 +94,37 @@ export default {
       "getDirector",
       "getProducer",
       "getCast",
-      "getGenres"
+      "getGenres",
+      "getWatchlist"
     ]),
-
     //Returns only the year of the release date
     extractYear: function() {
       const date = this.getSelectedTitle.releaseDate;
       const year = date.split("-");
       return year[0];
+    }
+  },
+
+  methods: {
+    ...mapActions(["addToWatchlist"]),
+
+    checkIfAdded: function() {
+      const selectedTitle = this.getSelectedTitle;
+      const watchlist = this.getWatchlist;
+
+      for (const item of watchlist) {
+        if (item.id === selectedTitle.id) {
+          this.disableWatchlistBtn();
+          return true;
+        }
+      }
+    },
+
+    //Called from inside checkIfAdded and also passed as payload to addToWatchlist action
+    disableWatchlistBtn: function() {
+      this.$refs.watchlistBtn.classList.add("added");
+      this.$refs.watchlistBtn.textContent = "ADDED";
+      this.alreadyAdded = true;
     }
   }
 };
@@ -254,5 +287,11 @@ export default {
 
 .displayed {
   display: block;
+}
+
+.added {
+  pointer-events: none;
+  filter: grayscale(100);
+  color: $textColor;
 }
 </style>

@@ -7,7 +7,7 @@
     <transition name="fade" mode="out-in">
     <general-info v-if="$store.state.resultsList.length < 1">
       <img src="../assets/home-logo.png" alt slot="info-image" />
-      <h2 slot="info-title">Welome to Movie App!</h2>>
+      <h2 slot="info-title">Welcome to Movie App!</h2>>
       <p
         slot="info-tip-1"
       >This is the Homepage - you can search for your favourite TV shows or movies here.</p>
