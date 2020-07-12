@@ -5,8 +5,8 @@
         <img :src="getSelectedTitle.fullPosterPath" alt="selected title image" />
       </div>
       <div class="preview-controls">
-        <router-link class="preview-control" to="/details">DETAILS</router-link>
-        <router-link class="preview-control" to="/trailer">TRAILER</router-link>
+        <router-link class="preview-control" to="/title_details" active-class="active">DETAILS</router-link>
+        <router-link class="preview-control" to="/title_trailer" active-class="active">TRAILER</router-link>
       </div>
     </div>
     <router-view></router-view>
@@ -19,6 +19,7 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
+
   computed: {
     ...mapGetters(["getSelectedTitle"])
   },
@@ -115,5 +116,9 @@ export default {
     width: 100%;
     height: 100%;
   }
+}
+
+.active {
+  color: $activeColor;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <section v-if="getResultsList.length" id="movies-container">
-    <ul id="movie-list" @click="displaySelectedTitle">
+    <ul id="movie-list" @click="displaySelectedTitle" :disabled="getSelectedTitle" :class="{disabled: getSelectedTitle }">
       <li class="movie-item" v-for="result in getResultsList" :key="result.id">
         <img :id="result.id" class="movie-img" :src="result.fullPosterPath" alt="movie poster" />
       </li>
@@ -31,7 +31,6 @@ export default {
   display: flex;
   flex-wrap: wrap;
   margin-top: 3rem;
- 
 }
 
 .movie-item {
@@ -57,5 +56,12 @@ export default {
     z-index: 1;
     border: 2px solid white;
   }
+}
+
+.disabled li{
+
+    filter: grayscale(100);
+    pointer-events: none;
+  
 }
 </style>

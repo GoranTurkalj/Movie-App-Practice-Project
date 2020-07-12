@@ -5,29 +5,30 @@
       <button id="search-btn" @click="requestSearchResults"></button>
     </div>
     <transition name="fade" mode="out-in">
-    <general-info v-if="$store.state.resultsList.length < 1">
-      <img src="../assets/home-logo.png" alt slot="info-image" />
-      <h2 slot="info-title">Welcome to Movie App!</h2>>
-      <p
-        slot="info-tip-1"
-      >This is the Homepage - you can search for your favourite TV shows or movies here.</p>
-      <p
-        slot="info-tip-2"
-      >You can add titles to your watchlist. To use the watchlist, sign-up or sign-in.</p>
-    </general-info>
-    <movie-list v-else></movie-list>
+      <general-info v-if="!getResultsList.length">
+        <img src="../assets/home-logo.png" alt slot="info-image" />
+        <h2 slot="info-title">Welcome to Movie App!</h2>>
+        <p
+          slot="info-tip-1"
+        >This is the Homepage - you can search for your favourite TV shows or movies here.</p>
+        <p
+          slot="info-tip-2"
+        >You can add titles to your watchlist. To use the watchlist, sign-up or sign-in.</p>
+      </general-info>
+      <movie-list v-else></movie-list>
     </transition>
     <transition name="fade">
       <selected-card v-if="getSelectedTitle"></selected-card>
     </transition>
   </section>
 </template>
+
 <script>
 import { mapMutations, mapActions, mapGetters } from "vuex";
 
 export default {
   computed: {
-    ...mapGetters(["getSelectedTitle"])
+    ...mapGetters(["getResultsList", "getSelectedTitle"])
   },
   methods: {
     //Updating searchedTitle in the state

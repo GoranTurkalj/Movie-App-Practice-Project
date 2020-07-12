@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import { router } from "../router";
 
 Vue.use(Vuex);
 
@@ -200,7 +201,7 @@ export const store = new Vuex.Store({
 
                 //Commitati mutaciju za updetjanje selectedTitle
                 commit("updateSelectedTitle", selectedTitleData);
-                console.log(state.selectedTitle);
+                router.push("/title_details"); // Kad se otvori SelectedCard, treba ići na details
               });
           }
         }
@@ -208,14 +209,19 @@ export const store = new Vuex.Store({
     },
 
     //This action commits a mutation which sets the selectedTitle to ""
-    closeSelectedTitle: function(context) {
+    //Pokrećem je kad kliknem na X na selectedCard i u beforeLeaveRoute guardovima za TitleInfo i TitleVideo
+    closeSelectedTitle: function(context, $event) {
       context.commit("clearSelectedTitle");
+      //Samo ako zatvorim selectedCard na klik na X ikonu, onda pusham na home rout da ne javlja redundant route navigation
+      if ($event) {
+        router.push("/"); // Kad se zatvori selectedCard, treba ići nazad na Home
+      }
     },
 
     //This action commits updateWatchlist mutation
-    addToWatchlist: function({ commit, getters }, disableWatchlistBtn) {
+    addToWatchlist: function({ commit }, disableWatchlistBtn) {
       commit("updateWatchlist");
-      disableWatchlistBtn();
+      disableWatchlistBtn(375, "added", "animated");
     },
   },
 });

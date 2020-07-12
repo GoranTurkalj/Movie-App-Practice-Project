@@ -12,13 +12,30 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
+  beforeRouteLeave(to, from, next) {
+    switch (to.name) {
+      case "home":
+      case "watchlist":
+      case "signup":
+      case "signin":
+        this.closeSelectedTitle();
+        break;
+    }
+
+    next();
+  },
+
   computed: {
     ...mapGetters(["getSelectedTitleVideos"]),
     displayTrailer: function() {
       return `https://www.youtube.com/embed/${this.getSelectedTitleVideos}?autoplay=1&modestbranding=1&rel=0&loop=1&playlist=${this.getSelectedTitleVideos}`;
     }
+  },
+
+  methods: {
+    ...mapActions(["closeSelectedTitle"])
   }
 };
 </script>

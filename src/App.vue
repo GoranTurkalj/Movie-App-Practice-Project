@@ -30,6 +30,10 @@ body {
   overflow-y: scroll;
 }
 
+.active {
+  color: red; 
+}
+
 #app {
   width: 100vw;
   min-height: 100vh;

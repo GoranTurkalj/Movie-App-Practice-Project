@@ -78,6 +78,19 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
+  beforeRouteLeave(to, from, next) {
+    switch (to.name) {
+      case "home":
+      case "watchlist":
+      case "signup":
+      case "signin":
+        this.closeSelectedTitle();
+        break;
+    }
+
+    next();
+  },
+
   mounted: function() {
     this.checkIfAdded();
   },
@@ -85,7 +98,7 @@ export default {
   data() {
     return {
       overviewDisplayed: true,
-      alreadyAdded: false //this property is set from changeWatchlistBtn method
+      alreadyAdded: false
     };
   },
   computed: {
@@ -106,7 +119,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["addToWatchlist"]),
+    ...mapActions(["addToWatchlist", "closeSelectedTitle"]),
 
     checkIfAdded: function() {
       const selectedTitle = this.getSelectedTitle;
@@ -114,16 +127,19 @@ export default {
 
       for (const item of watchlist) {
         if (item.id === selectedTitle.id) {
-          this.disableWatchlistBtn();
+          this.disableWatchlistBtn(0, "added");
           return true;
         }
       }
     },
 
     //Called from inside checkIfAdded and also passed as payload to addToWatchlist action
-    disableWatchlistBtn: function() {
-      this.$refs.watchlistBtn.classList.add("added");
-      this.$refs.watchlistBtn.textContent = "ADDED";
+    disableWatchlistBtn: function(delay, added, animated) {
+      this.$refs.watchlistBtn.classList.add(added, animated);
+      setTimeout(() => {
+        this.$refs.watchlistBtn.textContent = "TITLE ADDED";
+      }, delay);
+
       this.alreadyAdded = true;
     }
   }
@@ -153,7 +169,8 @@ export default {
   width: 14rem;
   height: min-content;
   transition: transform 200ms;
-  background: linear-gradient(rgb(107, 103, 103), $accentColor);
+
+  background-color: $accentColor;
   font-size: 1.2rem;
   font-weight: bold;
   padding: 0.5rem;
@@ -165,11 +182,6 @@ export default {
 
   &:hover {
     transform: scale(1.03);
-  }
-
-  &:active,
-  &:focus {
-    color: white;
   }
 }
 
@@ -291,7 +303,35 @@ export default {
 
 .added {
   pointer-events: none;
-  filter: grayscale(100);
-  color: $textColor;
+  background: white;
+  color: $accentColor;
+}
+
+.animated {
+  animation: flipButton 750ms linear 1 forwards;
+}
+
+@keyframes flipButton {
+  0% {
+    background-color: $accentColor;
+  }
+  10% {
+    background-color: white;
+  }
+
+  25% {
+    color: transparent;
+  }
+
+  50% {
+    color: transparent;
+  }
+
+  75% {
+    color: $accentColor;
+  }
+
+  100% {
+  }
 }
 </style>

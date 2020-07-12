@@ -2,11 +2,11 @@
   <header id="main-header">
     <nav class="main-nav">
       <ul class="nav-list nav-list--left">
-        <router-link to="/" tag="li">
-          <a href>HOME</a>
+        <router-link to="/" class="nav-item" exact tag="li" active-class="active">
+          <a>HOME</a>
         </router-link>
-        <router-link to="/watchlist" tag="li">
-          <a href>WATCHLIST</a>
+        <router-link to="/watchlist" class="nav-item" tag="li" active-class="active">
+          <a>WATCHLIST</a>
         </router-link>
       </ul>
       <div id="title-container">
@@ -14,10 +14,10 @@
         <h1 id="app-title">MOVIE APP</h1>
       </div>
       <ul class="nav-list nav-list--right">
-        <router-link to="/signup" tag="li">
+        <router-link to="/signup" class="nav-item" tag="li" active-class="active">
           <a>SIGN UP</a>
         </router-link>
-        <router-link to="/signin" tag="li">
+        <router-link to="/signin" class="nav-item" tag="li" active-class="active">
           <a>SIGN IN</a>
         </router-link>
       </ul>
@@ -25,7 +25,13 @@
   </header>
 </template>
 <script>
-export default {};
+import { mapActions } from "vuex";
+export default {
+  methods: {
+    ...mapActions(["closeSelectedTitle"]),
+
+  }
+};
 </script>
 <style lang="scss" scoped>
 #main-header {
@@ -46,25 +52,25 @@ export default {};
   list-style-type: none;
   display: flex;
   align-items: center;
+}
 
-  a {
-    display: inline-block;
-    font-family: "Bungee Inline";
-    transition: transform 200ms;
-    color: $accentColor;
-    text-decoration: none;
-    font-size: 1.1rem;
-    letter-spacing: 1px;
-    margin-right: 2rem;
+.nav-item a {
+  display: inline-block;
+  font-family: "Bungee Inline";
+  transition: transform 200ms;
+  color: $accentColor;
+  text-decoration: none;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  margin-right: 2rem;
 
-    &:hover {
-      color: white;
-      transform: translateY(-3px);
-    }
+  &:hover {
+    color: $textColor;
+    transform: translateY(-3px);
+  }
 
-    &:focus {
-      color: white;
-    }
+  &:focus {
+    color: $textColor;
   }
 }
 
@@ -97,5 +103,9 @@ export default {};
   color: $accentColor;
   word-spacing: 45px;
   @include orangeGreyText();
+}
+
+.active a {
+  color: $activeColor;
 }
 </style>
