@@ -6,6 +6,7 @@
       <p slot="info-tip-1">Signing Up lets you use the Watchlist feature.</p>
       <p slot="info-tip-2">Your watchlist will be saved to a database!</p>
     </general-info>
+    <!-- <watchlist-card></watchlist-card> -->
   </section>
 </template>
 

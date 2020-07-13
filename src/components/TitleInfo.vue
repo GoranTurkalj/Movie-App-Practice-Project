@@ -45,32 +45,12 @@
       </li>
     </ul>
     <div class="overview-panel">
-      <div class="overview-controls">
-        <button @click="overviewDisplayed = true">OVERVIEW</button>
-        <button @click="overviewDisplayed = false">GALLERY</button>
-      </div>
-      <section class="overview-panel__story" :class="{displayed: overviewDisplayed}">
-        <ul>
-          <li class="title-list__item">
-            Tagline
-            <br />
-            <span>{{getSelectedTitle.tagline || "Not available"}}</span>
-          </li>
-          <li class="title-list__item">
-            Overview
-            <br />
-            <span>{{getSelectedTitle.overview || "Not available"}}</span>
-          </li>
-          <li class="title-list__item">
-            Homepage:
-            <br />
-            <a :href="getSelectedTitle.homepage">{{getSelectedTitle.homepage || "Not available"}}</a>
-          </li>
-        </ul>
-      </section>
-      <section class="overview-panel__gallery" :class="{displayed: !overviewDisplayed}">
-        <photo-carousel></photo-carousel>
-      </section>
+      <nav class="overview-controls">
+        <router-link to="/title_details/story">STORY</router-link>
+        <router-link to="/title_details/gallery">GALLERY</router-link>
+        <router-link to="/title_details/review">REVIEW</router-link>
+      </nav>
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -244,7 +224,6 @@ export default {
   right: 0;
   width: 55%;
   height: 80%;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -252,19 +231,19 @@ export default {
 
 .overview-controls {
   height: 10%;
-  width: 40%;
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  border-bottom: 1px solid $accentColor;
 
-  button {
+  a {
+    text-decoration: none;
     transition: all 200ms;
     color: $accentColor;
+    padding-right: 1.5rem;
     background-color: transparent;
-    border: none;
     border-bottom: 1px solid transparent;
     cursor: pointer;
-    outline: none;
     font-size: 1rem;
     font-family: "Bungee Inline";
     line-height: 1;
@@ -276,29 +255,6 @@ export default {
       color: white;
     }
   }
-}
-
-.overview-panel__story {
-  height: 90%;
-  width: 100%;
-  display: none;
-  color: $textColor;
-  border-top: 1px solid $accentColor;
-  padding-top: 1rem;
-
-  ul {
-    list-style-type: none;
-  }
-}
-.overview-panel__gallery {
-  border-top: 1px solid $accentColor;
-  display: none;
-  height: 90%;
-  width: 100%;
-}
-
-.displayed {
-  display: block;
 }
 
 .added {

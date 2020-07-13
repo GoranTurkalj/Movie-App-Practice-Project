@@ -5,6 +5,7 @@ import SelectedCard from "./components/SelectedCard.vue";
 import Carousel from "./components/Carousel.vue";
 import NotAvailable from "./components/NotAvailable.vue";
 import GeneralInfo from "./components/GeneralInfo.vue";
+import WatchListCard from "./components/WatchListCard.vue";
 import App from "./App.vue";
 import { store } from "./store/store.js";
 
@@ -13,7 +14,7 @@ Vue.component("selected-card", SelectedCard);
 Vue.component("general-info", GeneralInfo);
 Vue.component("not-available", NotAvailable);
 Vue.component("photo-carousel", Carousel);
-
+Vue.component("watchlist-card", WatchListCard);
 
 Vue.config.productionTip = false;
 
