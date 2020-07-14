@@ -50,7 +50,9 @@
         <router-link to="/title_details/gallery">GALLERY</router-link>
         <router-link to="/title_details/review">REVIEW</router-link>
       </nav>
-      <router-view></router-view>
+      <transition name="fade" mode="out-in">
+        <router-view></router-view>
+      </transition>
     </div>
   </div>
 </template>
@@ -265,6 +267,17 @@ export default {
 
 .animated {
   animation: flipButton 750ms linear 1 forwards;
+}
+
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: opacity 300ms;
+}
+.fade-leave-active {
+  transition: opacity 300ms;
+  opacity: 0;
 }
 
 @keyframes flipButton {

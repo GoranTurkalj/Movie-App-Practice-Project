@@ -15,7 +15,7 @@
           slot="info-tip-2"
         >You can add titles to your watchlist. To use the watchlist, sign-up or sign-in.</p>
       </general-info>
-      <movie-list v-else></movie-list>
+      <movie-list v-else :titlesArray="getResultsList" :displayTitle="displaySelectedTitle"></movie-list>
     </transition>
     <transition name="fade">
       <selected-card v-if="getSelectedTitle"></selected-card>
@@ -33,7 +33,7 @@ export default {
   methods: {
     //Updating searchedTitle in the state
     ...mapMutations(["updateSearchedTitle"]),
-    ...mapActions(["requestSearchResults"])
+    ...mapActions(["requestSearchResults", "displaySelectedTitle"])
   }
 };
 </script>

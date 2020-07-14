@@ -5,7 +5,13 @@
         <router-link to="/" class="nav-item" exact tag="li" active-class="active">
           <a>HOME</a>
         </router-link>
-        <router-link to="/watchlist" class="nav-item" tag="li" active-class="active">
+        <router-link
+          v-if="authenticated"
+          to="/watchlist"
+          class="nav-item"
+          tag="li"
+          active-class="active"
+        >
           <a>WATCHLIST</a>
         </router-link>
       </ul>
@@ -14,22 +20,48 @@
         <h1 id="app-title">MOVIE APP</h1>
       </div>
       <ul class="nav-list nav-list--right">
-        <router-link to="/signup" class="nav-item" tag="li" active-class="active">
+        <router-link
+          v-if="!authenticated"
+          to="/signup"
+          class="nav-item"
+          tag="li"
+          active-class="active"
+        >
           <a>SIGN UP</a>
         </router-link>
-        <router-link to="/signin" class="nav-item" tag="li" active-class="active">
+        <router-link
+          v-if="!authenticated"
+          to="/signin"
+          class="nav-item"
+          tag="li"
+          active-class="active"
+        >
           <a>SIGN IN</a>
+        </router-link>
+        <router-link
+          v-if="authenticated"
+          to="/signin"
+          class="nav-item"
+          tag="li"
+          active-class="active"
+          @click.native="logOutUser" 
+        >
+          <a>LOG OUT</a>
         </router-link>
       </ul>
     </nav>
   </header>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
+  computed: {
+    authenticated() {
+      return this.$store.getters.isAuthenticated;
+    }
+  },
   methods: {
-    ...mapActions(["closeSelectedTitle"]),
-
+    ...mapActions(["closeSelectedTitle", "logOutUser"])
   }
 };
 </script>

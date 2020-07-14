@@ -1,11 +1,6 @@
 <template>
   <section id="sign-in-page">
-    <general-info>
-      <img slot="info-image" src="../assets/coming-soon.png" alt />
-      <h2 slot="info-title">Not yet implemented!</h2>
-      <p slot="info-tip-1">Signing in lets you use the Watchlist feature.</p>
-      <p slot="info-tip-2">You will need to Sign Up first!</p>
-    </general-info>
+    <main-form><h2>Sign In!</h2></main-form>
   </section>
 </template>
 

@@ -9,6 +9,7 @@ import TitleVideo from "./components/TitleVideo.vue";
 import StoryPanel from "./components/StoryPanel.vue";
 import GalleryPanel from "./components/GalleryPanel.vue";
 import ReviewPanel from "./components/ReviewPanel.vue";
+import { store } from "./store/store"; //Import storea radi pristupa stateu kod slaganja route guarda
 
 Vue.use(VueRouter);
 
@@ -43,7 +44,20 @@ const routes = [
       { path: "/title_trailer", name: "titleTrailer", component: TitleVideo },
     ],
   },
-  { path: "/watchlist", name: "watchlist", component: WatchList },
+  {
+    path: "/watchlist",
+    name: "watchlist",
+    component: WatchList,
+    //route guard koji onemogućuje ulazak na ovaj route ako user nije authenticated
+    beforeEnter: function(to, from, next) {
+      //Ako u stateu postoji token, onda moze nastaviti na /watchlist, a ako ne postoji, onda prebacim usera na /signin
+      if (store.state.token) {
+        next();
+      } else {
+        next("/signin");
+      }
+    },
+  },
   { path: "/signup", name: "signup", component: SignUpPage },
   { path: "/signin", name: "signin", component: SignInPage },
 ];

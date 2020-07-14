@@ -1,18 +1,51 @@
 <template>
   <section id="watchlist">
-    <general-info>
-      <img src="../assets/watchlist-logo.png" alt slot="info-image" />
-      <h2 slot="info-title">Your WatchList is currently empty!</h2>>
-      <p
-        slot="info-tip-1"
-      >You can add titles to your watchlist, rate them and write your own reviews!</p>
-      <p slot="info-tip-2">To save your watchlist, you need to sign-up or sign-in!</p>
-    </general-info>
+    <div id="watchlist-controls">
+      <button class="watchlist-control" @click="storeWatchlist">
+        <img src="../assets/save.svg" alt="save watchlist icon" />
+      </button>
+      <button class="watchlist-control">
+        <img src="../assets/delete.svg" alt="delete watchlist icon" />
+      </button>
+      <button class="watchlist-control">
+        <img src="../assets/download.svg" alt="download watchlist icon" @click="retrieveWatchlist" />
+      </button>
+    </div>
+    <movie-list :titlesArray="getWatchlist" :displayTitle="displayWatchlistTitle"></movie-list>
   </section>
 </template>
 
 <script>
-export default {};
+import axios from "axios";
+import { mapGetters, mapActions } from "vuex";
+export default {
+  computed: {
+    ...mapGetters(["getWatchlist"])
+  },
+
+  methods: {
+    ...mapActions(["displayWatchlistTitle", "retrieveWatchlist"]),
+
+    //Store your current watchlist to Firebase
+    storeWatchlist: function() {
+      //Get current watchlist data
+      const currentWatchlist = this.getWatchlist;
+
+      //Send a PUT request with Axios
+      axios
+        .put(
+          "https://movie-app-project-d0dc7.firebaseio.com/watchlist.json",
+          currentWatchlist
+        )
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  }
+};
 </script>
 
 
@@ -22,5 +55,34 @@ export default {};
   position: relative;
   min-height: 90vh;
   width: 100%;
+}
+
+#watchlist-controls {
+  width: 20rem;
+  height: 2.5rem;
+  border-bottom: 1px solid $accentColor;
+}
+
+.watchlist-control {
+  transition: transform 200ms;
+  height: 60%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin-right: 1.5rem;
+
+  img {
+    height: 100%;
+  }
+
+  &:hover,
+  &:active {
+    transform: scale(1.2);
+  }
+
+  &:focus {
+    outline: auto;
+  }
 }
 </style>

@@ -1,7 +1,12 @@
 <template>
-  <section v-if="getResultsList.length" id="movies-container">
-    <ul id="movie-list" @click="displaySelectedTitle" :disabled="getSelectedTitle" :class="{disabled: getSelectedTitle }">
-      <li class="movie-item" v-for="result in getResultsList" :key="result.id">
+  <section id="movies-container">
+    <ul
+      id="movie-list"
+      @click="displayTitle"
+      :disabled="getSelectedTitle"
+      :class="{disabled: getSelectedTitle }"
+    >
+      <li class="movie-item" v-for="result in titlesArray" :key="result.id">
         <img :id="result.id" class="movie-img" :src="result.fullPosterPath" alt="movie poster" />
       </li>
     </ul>
@@ -11,8 +16,17 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
+  props: {
+    titlesArray: {
+      type: Array
+    },
+    displayTitle: {
+      type: Function
+    }
+  },
+
   computed: {
-    ...mapGetters(["getResultsList", "getSelectedTitle"])
+    ...mapGetters(["getResultsList", "getWatchlist", "getSelectedTitle"])
   },
 
   methods: {
@@ -58,10 +72,8 @@ export default {
   }
 }
 
-.disabled li{
-
-    filter: grayscale(100);
-    pointer-events: none;
-  
+.disabled li {
+  filter: grayscale(100);
+  pointer-events: none;
 }
 </style>

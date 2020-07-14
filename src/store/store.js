@@ -8,14 +8,21 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
   // State*******************************************************************
   state: {
+    token: null,
+    userId: null,
     searchedTitle: "",
     resultsList: [],
     selectedTitle: "",
+    selectedWatchlistTitle: "",
     baseImageURL: "https://image.tmdb.org/t/p/w500",
     watchlist: [],
   },
   //Getters******************************************************************
   getters: {
+    isAuthenticated: function(state) {
+      return state.token !== null; //ovisno je li true ili false, prikazujem u Headeru watchlist link
+    },
+
     retrieveSearchedTitle: function(state) {
       return state.searchedTitle;
     },
@@ -93,6 +100,21 @@ export const store = new Vuex.Store({
   },
   //Mutations****************************************************************
   mutations: {
+    //authenticateUser mutacija updejta userId i token, prima userData iz responsea koji primim s Firebasea
+    authenticateUser: function(state, userData) {
+      state.token = userData.idToken;
+      state.userId = userData.localId; //ovo je user id iz responsa
+    },
+
+    //This mutation is commited from logOutUser action
+    clearAuthData: function(state) {
+      state.token = null;
+      state.userId = null;
+      if (router.currentRoute.name !== "signin") {
+        router.replace("signin");
+      }
+    },
+
     //This mutation will fire on blur event in the input field when searching for movies or TV shows
     updateSearchedTitle: function(state, $event) {
       state.searchedTitle = $event.target.value;
@@ -117,10 +139,138 @@ export const store = new Vuex.Store({
       state.watchlist.push(state.selectedTitle);
       console.log(state.watchlist);
     },
+
+    generateWatchlist: function(state, retrievedWatchlist) {
+      state.watchlist = retrievedWatchlist;
+    },
   },
 
   //Actions******************************************************************
   actions: {
+    //Dispatcha se u created() hooku u App.vue na samoom početku aplikacije
+    attemptAutoSignIn: function(context) {
+      const retrievedToken = localStorage.getItem("movieAppIdToken");
+      if (!retrievedToken) {
+        return;
+      }
+      const expirationDate = localStorage.getItem("movieAppExpDate");
+      const now = new Date();
+      if (now >= expirationDate) {
+        return;
+      }
+
+      const userId = localStorage.getItem("movieAppUserId");
+      //Ako još ima vremena do isteka validnosti tokena, commitati "authenticateUser"
+      console.log("this is running");
+      context.commit("authenticateUser", {
+        idToken: retrievedToken,
+        localId: userId,
+      });
+    },
+
+    //Signs Up a new User!
+    signUpAction: function(context, authData) {
+      axios
+        .post(
+          "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyArC3YYsF3y106dGvjbrf3vKC7WDZ4eNqY",
+          {
+            email: authData.email,
+            password: authData.password,
+            returnSecureToken: true,
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          //Izvući iz responsa idToken i localId (user id)
+          const data = {
+            idToken: res.data.idToken,
+            localId: res.data.localId,
+          };
+
+          //Auto login usera ako ode i vrati se na stranicu dok je token validan
+          //Vrijeme u ovom trenutku, puni datum
+          const now = new Date();
+          //Expiration date tokena - prvo izračunati koliko je vremena prošlo od početka do sad pomoću getTime() - dobit ću milisekunde
+          //zatim pribrojiti res.data.expiresIn također prebačen u milisekunde
+          //Sve zajedno ubaciti u new Date() za dobiti točno vrijeme - sat vremena nakon now.
+          const expirationDate = new Date(
+            now.getTime() + res.data.expiresIn * 1000
+          );
+
+          localStorage.setItem("movieAppExpDate", expirationDate);
+          localStorage.setItem("movieAppIdToken", data.idToken);
+          localStorage.setItem("movieAppUserId", data.localId);
+
+          //Commitati authenticateUser mutaciju s potrebnim podacima
+          context.commit("authenticateUser", data);
+          //Pokrećem logout timer
+          context.dispatch("setLogOutTimer", res.data.expiresIn);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    //Signs In existing User!
+    signInAction: function(context, authData) {
+      axios
+        .post(
+          "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyArC3YYsF3y106dGvjbrf3vKC7WDZ4eNqY",
+          {
+            email: authData.email,
+            password: authData.password,
+            returnSecureToken: true,
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          //Izvući iz responsa idToken i localId (user id)
+          const data = {
+            idToken: res.data.idToken,
+            localId: res.data.localId,
+          };
+
+          //Auto login usera ako ode i vrati se na stranicu dok je token validan
+          //Vrijeme u ovom trenutku, puni datum
+          const now = new Date();
+          //Expiration date tokena - prvo izračunati koliko je vremena prošlo od početka do sad pomoću getTime() - dobit ću milisekunde
+          //zatim pribrojiti res.data.expiresIn također prebačen u milisekunde
+          //Sve zajedno ubaciti u new Date() za dobiti točno vrijeme - sat vremena nakon now.
+          const expirationDate = new Date(
+            now.getTime() + res.data.expiresIn * 1000
+          );
+          localStorage.setItem("movieAppExpDate", expirationDate);
+          localStorage.setItem("movieAppIdToken", data.idToken);
+          localStorage.setItem("movieAppUserId", data.localId);
+
+          //Commitati authenticateUser mutaciju s tim podacima
+          context.commit("authenticateUser", data);
+          //Pokrećem logout timer
+          context.dispatch("setLogOutTimer", res.data.expiresIn);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    //Logs out user
+    logOutUser: function({ commit }) {
+      commit("clearAuthData");
+      localStorage.removeItem("movieAppExpDate");
+      localStorage.removeItem("movieAppIdToken");
+      localStorage.removeItem("movieAppUserId");
+    },
+
+    //Ova akcije je za automatski log out usera čim istekne validni token (3600s), dispatcham u responseu unutar signUpAction i signInAction
+    setLogOutTimer: function({ commit }, expirationTime) {
+      setTimeout(() => {
+        commit("clearAuthData");
+        localStorage.removeItem("movieAppExpDate");
+        localStorage.removeItem("movieAppIdToken");
+        localStorage.removeItem("movieAppUserId");
+      }, expirationTime * 1000); //response daje expiration time u sekundamaa pa ovdje treba prebaciti u ms
+    },
+
     //Sends a request to the Movie Database
     requestSearchResults: function(context) {
       if (!this.state.searchedTitle) {
@@ -208,6 +358,19 @@ export const store = new Vuex.Store({
       }
     },
 
+    displayWatchlistTitle: function({ commit, state, getters }, $event) {
+      if ($event.target.tagName === "IMG") {
+        //Napraviti loop kroz Watchlist i ako kliknuti img ima isti id kao i title na listi, assignati ga kao selectedTitle
+        for (const title of getters.getWatchlist) {
+          if (+$event.target.id === title.id) {
+            //Commitati mutaciju za updetjanje selectedTitle
+            commit("updateSelectedTitle", title);
+            router.push("/title_details"); // Kad se otvori SelectedCard, treba ići na details
+          }
+        }
+      }
+    },
+
     //This action commits a mutation which sets the selectedTitle to ""
     //Pokrećem je kad kliknem na X na selectedCard i u beforeLeaveRoute guardovima za TitleInfo i TitleVideo
     closeSelectedTitle: function(context, $event) {
@@ -222,6 +385,19 @@ export const store = new Vuex.Store({
     addToWatchlist: function({ commit }, disableWatchlistBtn) {
       commit("updateWatchlist");
       disableWatchlistBtn(375, "added", "animated");
+    },
+
+    //This action commits generateWatchlist mutation after the response gets back from Firebase
+    retrieveWatchlist: function(context) {
+      axios
+        .get("https://movie-app-project-d0dc7.firebaseio.com/watchlist.json")
+        .then((response) => {
+          //Response.data se  passa mutaciji kao payload
+          context.commit("generateWatchlist", response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 });
