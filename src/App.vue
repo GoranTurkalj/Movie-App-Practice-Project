@@ -12,12 +12,6 @@ import Header from "./components/Header.vue";
 
 export default {
   
-  created: function() {
-    //Check postoji li token i je li expiration date nakon trenutnog vremena, u kom slučaju se commita "authenticateUser" mutacija
-    this.$store.dispatch("attemptAutoSignIn");
-   
-  },
-
   components: {
     appHeader: Header
   }

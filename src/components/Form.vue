@@ -2,11 +2,11 @@
   <form class="main-form" action>
     <slot></slot>
     <label for="username">Name</label>
-    <input id="username" @blur="enteredUsername = $event.target.value" type="text" />
+    <input id="username" @blur="formData.name = $event.target.value" type="text" />
     <label for="email">Email</label>
-    <input id="email" type="email" @blur="enteredEmail = $event.target.value" />
+    <input id="email" type="email" @blur="formData.email = $event.target.value" />
     <label for="password">Password</label>
-    <input id="password" type="password" @blur="enteredPassword = $event.target.value" />
+    <input id="password" type="password" @blur="formData.password = $event.target.value" />
     <button @click.prevent="onSubmit">SUBMIT</button>
   </form>
 </template>
@@ -15,16 +15,19 @@ import axios from "axios";
 export default {
   data() {
     return {
-      enteredUsername: "",
-      enteredEmail: "",
-      enteredPassword: ""
+      formData: {
+        name: "",
+        email: "",
+        password: "",
+        watchlist: ["empty"]
+      }
     };
   },
 
   methods: {
     //Depending on current route, so either /signup or /signin, onSubmit will execute a different method
     onSubmit: function() {
-      console.log(this.$route.name); 
+      console.log(this.$route.name);
       if (this.$route.name === "signup") {
         this.signUpUser();
       } else if (this.$route.name === "signin") {
@@ -33,17 +36,11 @@ export default {
     },
 
     signUpUser: function() {
-      this.$store.dispatch("signUpAction", {
-        email: this.enteredEmail,
-        password: this.enteredPassword
-      });
+      this.$store.dispatch("signUpAction", this.formData);
     },
 
     signInUser: function() {
-      this.$store.dispatch("signInAction", {
-        email: this.enteredEmail,
-        password: this.enteredPassword
-      });
+      this.$store.dispatch("signInAction", this.formData);
     }
   }
 };

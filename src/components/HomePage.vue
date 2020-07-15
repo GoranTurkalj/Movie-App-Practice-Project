@@ -7,7 +7,9 @@
     <transition name="fade" mode="out-in">
       <general-info v-if="!getResultsList.length">
         <img src="../assets/home-logo.png" alt slot="info-image" />
-        <h2 slot="info-title">Welcome to Movie App!</h2>>
+
+        <h2 v-show="getUser.name" slot="info-title">Welcome to Movie App, {{getUser.name}}!</h2>>
+        <h2 v-show="!getUser.name" slot="info-title">Welcome to Movie App, random citizen!</h2>>
         <p
           slot="info-tip-1"
         >This is the Homepage - you can search for your favourite TV shows or movies here.</p>
@@ -28,7 +30,7 @@ import { mapMutations, mapActions, mapGetters } from "vuex";
 
 export default {
   computed: {
-    ...mapGetters(["getResultsList", "getSelectedTitle"])
+    ...mapGetters(["getResultsList", "getSelectedTitle", "getUser"])
   },
   methods: {
     //Updating searchedTitle in the state

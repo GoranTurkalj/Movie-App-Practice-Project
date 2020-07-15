@@ -13,6 +13,9 @@ import { store } from "./store/store"; //Import storea radi pristupa stateu kod 
 
 Vue.use(VueRouter);
 
+//This action returns a promise
+const autoLogin = store.dispatch("attemptAutoLogin");
+
 const routes = [
   {
     path: "",
@@ -50,6 +53,7 @@ const routes = [
     component: WatchList,
     //route guard koji onemogućuje ulazak na ovaj route ako user nije authenticated
     beforeEnter: function(to, from, next) {
+      console.log("beforeEnter Watchlist guard runs");
       //Ako u stateu postoji token, onda moze nastaviti na /watchlist, a ako ne postoji, onda prebacim usera na /signin
       if (store.state.token) {
         next();
@@ -60,9 +64,24 @@ const routes = [
   },
   { path: "/signup", name: "signup", component: SignUpPage },
   { path: "/signin", name: "signin", component: SignInPage },
+  { path: "*", redirect: "/" },
 ];
 
-export const router = new VueRouter({
+const router = new VueRouter({
   routes,
   mode: "history",
 });
+
+//Prvo sam probao u created() u App.vue dispatchati attemptAutoLogin - no ako user pokuša autologin dok je na /watchlist routeu koji je zaštićen s beforeEnter guardom koji gleda postoji li token ili ne - bit će prebačen na /signin makar validan token postojao u localStorageu
+
+// beforeEnter se izvrti PRIJE App.vue created hooka i zato prebacuje na /signin jer u tom trenu token nije dohvaćen
+
+//Solution (kind of) - spremiti promise koji vraća akcija "attemptAutoLogin" u varijablu autoLogin.
+// Staviti global guard koji pokreće next() nakon što je promise resolvd
+router.beforeEach((to, from, next) => {
+  autoLogin.then(() => {
+    next();
+  });
+});
+
+export default router;

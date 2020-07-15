@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
-import { router } from "../router";
+import router from "../router";
 
 Vue.use(Vuex);
 
@@ -10,6 +10,7 @@ export const store = new Vuex.Store({
   state: {
     token: null,
     userId: null,
+    user: "",
     searchedTitle: "",
     resultsList: [],
     selectedTitle: "",
@@ -21,6 +22,10 @@ export const store = new Vuex.Store({
   getters: {
     isAuthenticated: function(state) {
       return state.token !== null; //ovisno je li true ili false, prikazujem u Headeru watchlist link
+    },
+
+    getUser: function(state) {
+      return state.user;
     },
 
     retrieveSearchedTitle: function(state) {
@@ -106,6 +111,11 @@ export const store = new Vuex.Store({
       state.userId = userData.localId; //ovo je user id iz responsa
     },
 
+    //Storam u state podatke fetchanog usera iz databasea - mutacija se commita u fetchUser akciji nakon što stigne response
+    storeFetchedUser: function(state, fetchedUser) {
+      state.user = fetchedUser;
+    },
+
     //This mutation is commited from logOutUser action
     clearAuthData: function(state) {
       state.token = null;
@@ -147,40 +157,86 @@ export const store = new Vuex.Store({
 
   //Actions******************************************************************
   actions: {
-    //Dispatcha se u created() hooku u App.vue na samoom početku aplikacije
-    attemptAutoSignIn: function(context) {
+    //Dispatcha se unutar beforeEach globalnog route guarda u router.js
+    attemptAutoLogin: function(context) {
+      console.log("attemptAutoLogin runs");
       const retrievedToken = localStorage.getItem("movieAppIdToken");
       if (!retrievedToken) {
+        console.log("No token, auto login failed");
         return;
       }
-      const expirationDate = localStorage.getItem("movieAppExpDate");
+      const expirationDate = new Date(localStorage.getItem("movieAppExpDate"));
       const now = new Date();
+
       if (now >= expirationDate) {
+        console.log(
+          "Now > expirationDate",
+          now >= expirationDate,
+          "Auto Login failed"
+        );
         return;
       }
 
       const userId = localStorage.getItem("movieAppUserId");
       //Ako još ima vremena do isteka validnosti tokena, commitati "authenticateUser"
-      console.log("this is running");
+      console.log("Executing Auto Login...");
       context.commit("authenticateUser", {
         idToken: retrievedToken,
         localId: userId,
       });
     },
 
+    //Ova akcija će se dispatchati unutar SignUpAction i prima userData kojeg joj passa SignUpAction, preuzeto iz submitanog signup forma.
+    storeUserData: function(context, userData) {
+      //Check je li token već u stateu
+      if (!context.state.token) return;
+
+      //Ako imam token - pokrećem Axios post request na koji appendam token na kraj, i RETURNAM promise kako bi mogao u .then nastaviti sa fetchUserData - ovo sve u SignUpAction se odrađuje.
+      return axios
+        .post(
+          `https://movie-app-project-d0dc7.firebaseio.com/users.json?auth=${context.state.token}`,
+          userData
+        )
+        .then((res) => console.log("STORED USER DATA TO DATABASE:", res))
+        .catch((err) => console.log(err));
+    },
+
+    //Ova akcija će fetchati usera iz Firebase Databasea - dispatcham je unutar SignUP i SignIn akcija na kraju - recimo da zelim odmah po ulogiranji prikazat info od usera koji je kreiran
+    fetchUserData: function(context) {
+      //Check je li token već u stateu
+      if (!context.state.token) return;
+
+      //Ako imam token, kreće get request za fetchanje usera
+      console.log("FETCHING USER DATA FROM DATABASE...");
+
+      //Fetcham SAMO konkretnog usera, ne listu pa je prilagođen query da trazi prema uniqueID-u (localID je stavljen kao userId i uniqueID)
+      axios
+        .get(
+          `https://movie-app-project-d0dc7.firebaseio.com/users.json?orderBy="uniqueID"&equalTo="${context.state.userId}"&auth=${context.state.token}`
+        )
+        .then((res) => {
+          const fetchedUser = Object.values(res.data)[0];
+          //Commitam storeFetchedUser mutaciju
+          context.commit("storeFetchedUser", fetchedUser);
+          console.log("THIS IS THE FETCHED USER: ", context.getters.getUser);
+        })
+        .catch((err) => console.log(err));
+    },
+
     //Signs Up a new User!
-    signUpAction: function(context, authData) {
+    //UserData je passani formData iz Form komponente
+    signUpAction: function(context, userData) {
       axios
         .post(
           "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyArC3YYsF3y106dGvjbrf3vKC7WDZ4eNqY",
           {
-            email: authData.email,
-            password: authData.password,
+            email: userData.email,
+            password: userData.password,
             returnSecureToken: true,
           }
         )
         .then((res) => {
-          console.log(res);
+          console.log("RESPONSE NAKON SIGNUP POST REQUESTA: ", res);
           //Izvući iz responsa idToken i localId (user id)
           const data = {
             idToken: res.data.idToken,
@@ -205,6 +261,14 @@ export const store = new Vuex.Store({
           context.commit("authenticateUser", data);
           //Pokrećem logout timer
           context.dispatch("setLogOutTimer", res.data.expiresIn);
+
+          //Storing userData u database - prije toga dodam novi property "uniqueID" i assignam mu localId, ovo ću koristiti za fetchanje samo konkretnog usera a ne cijele liste usera iz databasea
+          userData.uniqueID = data.localId;
+
+          context.dispatch("storeUserData", userData).then(() => {
+            //Fetching user FROM database
+            context.dispatch("fetchUserData");
+          });
         })
         .catch((error) => {
           console.log(error);
@@ -247,6 +311,8 @@ export const store = new Vuex.Store({
           context.commit("authenticateUser", data);
           //Pokrećem logout timer
           context.dispatch("setLogOutTimer", res.data.expiresIn);
+          //Fetching user FROM database
+          context.dispatch("fetchUserData");
         })
         .catch((error) => {
           console.log(error);
