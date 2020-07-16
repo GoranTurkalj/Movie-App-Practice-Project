@@ -16,7 +16,6 @@ export const store = new Vuex.Store({
     selectedTitle: "",
     selectedWatchlistTitle: "",
     baseImageURL: "https://image.tmdb.org/t/p/w500",
-    watchlist: [],
   },
   //Getters******************************************************************
   getters: {
@@ -79,7 +78,6 @@ export const store = new Vuex.Store({
       const genres = getters.getSelectedTitle.genres;
       const keywords = [];
       for (const genre of genres) {
-        console.log(genre.name);
         keywords.push(genre.name);
       }
 
@@ -100,7 +98,12 @@ export const store = new Vuex.Store({
     },
 
     getWatchlist: function(state) {
-      return state.watchlist;
+      return state.user.watchlist;
+    },
+
+    //OVO JOŠ NEMA SVRHU
+    getSelectedWatchlistTitle: function(state) {
+      return state.selectedWatchlistTitle;
     },
   },
   //Mutations****************************************************************
@@ -111,7 +114,7 @@ export const store = new Vuex.Store({
       state.userId = userData.localId; //ovo je user id iz responsa
     },
 
-    //Storam u state podatke fetchanog usera iz databasea - mutacija se commita u fetchUser akciji nakon što stigne response
+    //Storam u state podatke fetchanog usera iz databasea - mutacija se commita u fetchUserData akciji nakon što stigne response
     storeFetchedUser: function(state, fetchedUser) {
       state.user = fetchedUser;
     },
@@ -120,6 +123,7 @@ export const store = new Vuex.Store({
     clearAuthData: function(state) {
       state.token = null;
       state.userId = null;
+      state.user = ""; //podaci o user - ime, watchlist
       if (router.currentRoute.name !== "signin") {
         router.replace("signin");
       }
@@ -135,6 +139,11 @@ export const store = new Vuex.Store({
       state.resultsList = newList;
     },
 
+    //Clears resultsList - commited in
+    clearSearchResults: function(state) {
+      state.resultsList = [];
+    },
+
     updateSelectedTitle: function(state, newTitle) {
       state.selectedTitle = newTitle;
     },
@@ -144,14 +153,10 @@ export const store = new Vuex.Store({
       state.selectedTitle = "";
     },
 
-    //When "Add to watchlist" button is pressed - the selectedTitle data is added as an object to the watchlist array
+    //When "Add to watchlist" button is pressed - the selectedTitle data is added as an object to the user.watchlist array
     updateWatchlist: function(state) {
-      state.watchlist.push(state.selectedTitle);
-      console.log(state.watchlist);
-    },
-
-    generateWatchlist: function(state, retrievedWatchlist) {
-      state.watchlist = retrievedWatchlist;
+      state.user.watchlist.push(state.selectedTitle);
+      console.log(state.user.watchlist);
     },
   },
 
@@ -177,13 +182,21 @@ export const store = new Vuex.Store({
         return;
       }
 
+      //Budući da još ima vremena do isteka validnosti tokena, commitati "authenticateUser"
       const userId = localStorage.getItem("movieAppUserId");
-      //Ako još ima vremena do isteka validnosti tokena, commitati "authenticateUser"
       console.log("Executing Auto Login...");
       context.commit("authenticateUser", {
         idToken: retrievedToken,
         localId: userId,
       });
+
+      //setLogOutTimer se dispatcha u SignUpAction i SignInAction nakon što dobijemo response nazad s tokenom i "expiresIn" i zbog toga uredno odlogira usera nakon isteka timera
+      //Treba ga dispatchati i kod autologina jer ako nema timera, neće napraviti automatski logout kad istekne expirationDate tokena
+
+      const expiresIn = (expirationDate.getTime() - now.getTime()) / 1000; //pretvorimo u sekunde jer ce u timeru setTimeout jos pomnoziti s 1000 za ms.
+      console.log(expiresIn);
+
+      context.dispatch("setLogOutTimer", expiresIn);
     },
 
     //Ova akcija će se dispatchati unutar SignUpAction i prima userData kojeg joj passa SignUpAction, preuzeto iz submitanog signup forma.
@@ -204,10 +217,12 @@ export const store = new Vuex.Store({
     //Ova akcija će fetchati usera iz Firebase Databasea - dispatcham je unutar SignUP i SignIn akcija na kraju - recimo da zelim odmah po ulogiranji prikazat info od usera koji je kreiran
     fetchUserData: function(context) {
       //Check je li token već u stateu
-      if (!context.state.token) return;
-
+      if (!context.state.token) {
+        console.log("COULD NOT FIND TOKEN, FETCHING USER DATA ABORTED!");
+        return;
+      }
       //Ako imam token, kreće get request za fetchanje usera
-      console.log("FETCHING USER DATA FROM DATABASE...");
+      console.log("TOKEN FOUND, FETCHING USER DATA.");
 
       //Fetcham SAMO konkretnog usera, ne listu pa je prilagođen query da trazi prema uniqueID-u (localID je stavljen kao userId i uniqueID)
       axios
@@ -216,7 +231,14 @@ export const store = new Vuex.Store({
         )
         .then((res) => {
           const fetchedUser = Object.values(res.data)[0];
-          //Commitam storeFetchedUser mutaciju
+
+          for (const key in res.data) {
+            fetchedUser.userDatabaseKey = key;
+          }
+          //Prije commitanja storeFetchedmutacije, napraviti check ima li user svoj watchlist, ako ne, kreirati.
+          if (!fetchedUser.watchlist) {
+            fetchedUser.watchlist = [];
+          }
           context.commit("storeFetchedUser", fetchedUser);
           console.log("THIS IS THE FETCHED USER: ", context.getters.getUser);
         })
@@ -266,7 +288,7 @@ export const store = new Vuex.Store({
           userData.uniqueID = data.localId;
 
           context.dispatch("storeUserData", userData).then(() => {
-            //Fetching user FROM database
+            //Fetching user FROM database - nakon što axios request returna promise fulfilled
             context.dispatch("fetchUserData");
           });
         })
@@ -322,18 +344,17 @@ export const store = new Vuex.Store({
     //Logs out user
     logOutUser: function({ commit }) {
       commit("clearAuthData");
+      commit("clearSearchResults");
       localStorage.removeItem("movieAppExpDate");
       localStorage.removeItem("movieAppIdToken");
       localStorage.removeItem("movieAppUserId");
     },
 
     //Ova akcije je za automatski log out usera čim istekne validni token (3600s), dispatcham u responseu unutar signUpAction i signInAction
-    setLogOutTimer: function({ commit }, expirationTime) {
+    setLogOutTimer: function({ dispatch }, expirationTime) {
+      console.log("Automatic logout in: ", expirationTime);
       setTimeout(() => {
-        commit("clearAuthData");
-        localStorage.removeItem("movieAppExpDate");
-        localStorage.removeItem("movieAppIdToken");
-        localStorage.removeItem("movieAppUserId");
+        dispatch("logOutUser");
       }, expirationTime * 1000); //response daje expiration time u sekundamaa pa ovdje treba prebaciti u ms
     },
 
@@ -372,8 +393,8 @@ export const store = new Vuex.Store({
         });
     },
 
-    //Displays more options and details for the selected title - this action fires when a title img is clicked on.
-    displaySelectedTitle: function({ commit, state, getters }, $event) {
+    //Displays more options and details for the clicked title - this action fires when a title img is clicked on.
+    showFullTitle: function({ commit, state, getters }, $event) {
       if ($event.target.tagName === "IMG") {
         //Create new empty variable - this will hold the necessary detailed data from the response
         let selectedTitleData = null;
@@ -386,7 +407,6 @@ export const store = new Vuex.Store({
                 `https://api.themoviedb.org/3/movie/${title.id}?api_key=9e612d73fdfb165c3aa123e0b09d606d&append_to_response=videos,images,credits`
               )
               .then((response) => {
-                console.log(response.data);
                 const data = response.data;
 
                 data.images.backdrops.forEach((image) => {
@@ -417,21 +437,21 @@ export const store = new Vuex.Store({
 
                 //Commitati mutaciju za updetjanje selectedTitle
                 commit("updateSelectedTitle", selectedTitleData);
-                router.push("/title_details"); // Kad se otvori SelectedCard, treba ići na details
+                router.push({ name: "titleDetails" }); // Kad se otvori SelectedCard, treba ići na details
               });
           }
         }
       }
     },
 
-    displayWatchlistTitle: function({ commit, state, getters }, $event) {
+    showFullWatchlistTitle: function({ commit, state, getters }, $event) {
       if ($event.target.tagName === "IMG") {
         //Napraviti loop kroz Watchlist i ako kliknuti img ima isti id kao i title na listi, assignati ga kao selectedTitle
         for (const title of getters.getWatchlist) {
           if (+$event.target.id === title.id) {
             //Commitati mutaciju za updetjanje selectedTitle
             commit("updateSelectedTitle", title);
-            router.push("/title_details"); // Kad se otvori SelectedCard, treba ići na details
+            router.push({name: "watchlistTitleDetails"}); // Kad se otvori SelectedCard ide na ovaj route
           }
         }
       }
@@ -448,18 +468,25 @@ export const store = new Vuex.Store({
     },
 
     //This action commits updateWatchlist mutation
-    addToWatchlist: function({ commit }, disableWatchlistBtn) {
-      commit("updateWatchlist");
-      disableWatchlistBtn(375, "added", "animated");
+    addToWatchlist: function(context, disableWatchlistBtn) {
+      if (context.getters.getUser && context.getters.isAuthenticated) {
+        context.commit("updateWatchlist");
+        disableWatchlistBtn(375, "added", "animated");
+      }
     },
 
-    //This action commits generateWatchlist mutation after the response gets back from Firebase
-    retrieveWatchlist: function(context) {
+    //This action will store / save user's watchlist to the database - not yet sure WHEN it should happen
+    saveWatchlist: function(context) {
+      //Get users watchlist
+      const unsavedWatchlist = context.getters.getWatchlist;
+
       axios
-        .get("https://movie-app-project-d0dc7.firebaseio.com/watchlist.json")
+        .put(
+          `https://movie-app-project-d0dc7.firebaseio.com/users/${context.getters.getUser.userDatabaseKey}/watchlist.json?auth=${context.state.token}`,
+          unsavedWatchlist
+        )
         .then((response) => {
-          //Response.data se  passa mutaciji kao payload
-          context.commit("generateWatchlist", response.data);
+          console.log(response);
         })
         .catch((error) => {
           console.log(error);

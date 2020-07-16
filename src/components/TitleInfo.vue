@@ -280,6 +280,10 @@ export default {
   opacity: 0;
 }
 
+.active {
+  color: $activeColor;
+}
+
 @keyframes flipButton {
   0% {
     background-color: $accentColor;

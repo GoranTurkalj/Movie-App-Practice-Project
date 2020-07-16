@@ -6,7 +6,7 @@
           <a>HOME</a>
         </router-link>
         <router-link
-          v-if="authenticated"
+          v-if="isAuthenticated"
           to="/watchlist"
           class="nav-item"
           tag="li"
@@ -21,7 +21,7 @@
       </div>
       <ul class="nav-list nav-list--right">
         <router-link
-          v-if="!authenticated"
+          v-if="!isAuthenticated"
           to="/signup"
           class="nav-item"
           tag="li"
@@ -30,7 +30,7 @@
           <a>SIGN UP</a>
         </router-link>
         <router-link
-          v-if="!authenticated"
+          v-if="!isAuthenticated"
           to="/signin"
           class="nav-item"
           tag="li"
@@ -39,14 +39,14 @@
           <a>SIGN IN</a>
         </router-link>
         <router-link
-          v-if="authenticated"
+          v-if="isAuthenticated"
           to="/signin"
           class="nav-item"
           tag="li"
           active-class="active"
-          @click.native="logOutUser" 
+          @click.native="logOutUser"
         >
-          <a>LOG OUT</a>
+          <a>LOG OUT, {{getUser.name}}</a>
         </router-link>
       </ul>
     </nav>
@@ -56,9 +56,7 @@
 import { mapGetters, mapActions } from "vuex";
 export default {
   computed: {
-    authenticated() {
-      return this.$store.getters.isAuthenticated;
-    }
+    ...mapGetters(["isAuthenticated", "getUser"])
   },
   methods: {
     ...mapActions(["closeSelectedTitle", "logOutUser"])

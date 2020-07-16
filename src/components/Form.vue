@@ -19,7 +19,6 @@ export default {
         name: "",
         email: "",
         password: "",
-        watchlist: ["empty"]
       }
     };
   },

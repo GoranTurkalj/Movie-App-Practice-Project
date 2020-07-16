@@ -1,5 +1,6 @@
 <template>
   <section id="movies-container">
+    <!--displayTitle prop može biti ili "showFullTitle" ili "showFullWatchlistTitle" akcija - obje komitaju istu mutaciju "updateSelectedTitle". Klikom na image na listi se kreira "selectedTitle" i onda se disejblaju ostali images ako je "getSelectedTitle" true-->
     <ul
       id="movie-list"
       @click="displayTitle"
@@ -16,6 +17,10 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
+  computed: {
+    ...mapGetters(["getSelectedTitle"])
+  },
+
   props: {
     titlesArray: {
       type: Array
@@ -23,14 +28,6 @@ export default {
     displayTitle: {
       type: Function
     }
-  },
-
-  computed: {
-    ...mapGetters(["getResultsList", "getWatchlist", "getSelectedTitle"])
-  },
-
-  methods: {
-    ...mapActions(["displaySelectedTitle"])
   }
 };
 </script>

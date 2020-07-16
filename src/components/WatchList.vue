@@ -1,17 +1,25 @@
 <template>
   <section id="watchlist">
     <div id="watchlist-controls">
-      <button class="watchlist-control" @click="storeWatchlist">
+      <button class="watchlist-control" @click="saveWatchlist">
         <img src="../assets/save.svg" alt="save watchlist icon" />
       </button>
       <button class="watchlist-control">
         <img src="../assets/delete.svg" alt="delete watchlist icon" />
       </button>
-      <button class="watchlist-control">
-        <img src="../assets/download.svg" alt="download watchlist icon" @click="retrieveWatchlist" />
-      </button>
     </div>
-    <movie-list :titlesArray="getWatchlist" :displayTitle="displayWatchlistTitle"></movie-list>
+    <general-info v-if="getWatchlist && !getWatchlist.length">
+      <img src="../assets/home-logo.png" alt slot="info-image" />
+      <h2 slot="info-title">Your Watchlist is empty, {{getUser.name}}!</h2>>
+      <p
+        slot="info-tip-1"
+      >When you search for your favourite titles, you can add them here to watch later.</p>
+      <p slot="info-tip-2">Make sure to have fun!</p>
+    </general-info>
+    <movie-list v-else :titlesArray="getWatchlist" :displayTitle="showFullWatchlistTitle"></movie-list>
+    <transition name="fade">
+      <selected-card v-if="getSelectedTitle"></selected-card>
+    </transition>
   </section>
 </template>
 
@@ -23,30 +31,16 @@ export default {
     console.log("Watchlist component is created");
   },
   computed: {
-    ...mapGetters(["getWatchlist"])
+    ...mapGetters([
+      "getWatchlist",
+      "getUser",
+      "getSelectedTitle",
+      "getSelectedWatchlistTitle"
+    ])
   },
 
   methods: {
-    ...mapActions(["displayWatchlistTitle", "retrieveWatchlist"]),
-
-    //Store your current watchlist to Firebase
-    storeWatchlist: function() {
-      //Get current watchlist data
-      const currentWatchlist = this.getWatchlist;
-
-      //Send a PUT request with Axios
-      axios
-        .put(
-          "https://movie-app-project-d0dc7.firebaseio.com/watchlist.json",
-          currentWatchlist
-        )
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    }
+    ...mapActions(["showFullWatchlistTitle", "saveWatchlist"])
   }
 };
 </script>
@@ -87,5 +81,17 @@ export default {
   &:focus {
     outline: auto;
   }
+}
+
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: opacity 400ms;
+}
+
+.fade-leave-active {
+  transition: opacity 400ms;
+  opacity: 0;
 }
 </style>

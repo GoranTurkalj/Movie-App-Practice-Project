@@ -7,7 +7,6 @@
     <transition name="fade" mode="out-in">
       <general-info v-if="!getResultsList.length">
         <img src="../assets/home-logo.png" alt slot="info-image" />
-
         <h2 v-show="getUser.name" slot="info-title">Welcome to Movie App, {{getUser.name}}!</h2>>
         <h2 v-show="!getUser.name" slot="info-title">Welcome to Movie App, random citizen!</h2>>
         <p
@@ -17,7 +16,7 @@
           slot="info-tip-2"
         >You can add titles to your watchlist. To use the watchlist, sign-up or sign-in.</p>
       </general-info>
-      <movie-list v-else :titlesArray="getResultsList" :displayTitle="displaySelectedTitle"></movie-list>
+      <movie-list v-else :titlesArray="getResultsList" :displayTitle="showFullTitle" ></movie-list>
     </transition>
     <transition name="fade">
       <selected-card v-if="getSelectedTitle"></selected-card>
@@ -35,7 +34,7 @@ export default {
   methods: {
     //Updating searchedTitle in the state
     ...mapMutations(["updateSearchedTitle"]),
-    ...mapActions(["requestSearchResults", "displaySelectedTitle"])
+    ...mapActions(["requestSearchResults", "showFullTitle"])
   }
 };
 </script>
