@@ -13,19 +13,9 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { routeGuardMixin } from "../mixins";
 export default {
-  beforeRouteLeave(to, from, next) {
-    switch (to.name) {
-      case "home":
-      case "watchlist":
-      case "signup":
-      case "signin":
-        this.closeSelectedTitle();
-        break;
-    }
-    next();
-  },
-
+  mixins: [routeGuardMixin],
   computed: {
     ...mapGetters(["getSelectedTitleVideos"]),
     displayTrailer: function() {

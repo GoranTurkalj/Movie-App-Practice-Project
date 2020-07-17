@@ -25,6 +25,7 @@ const routes = [
     children: [
       {
         path: "/title_details",
+        redirect: { name: "titleStory" },
         name: "titleDetails",
         component: TitleDetails,
         beforeEnter: function(to, from, next) {
@@ -61,6 +62,7 @@ const routes = [
     children: [
       {
         path: "/watchlist/title_details",
+        redirect: { name: "watchlistTitleStory" },
         name: "watchlistTitleDetails",
 
         component: TitleDetails,

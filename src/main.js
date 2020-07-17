@@ -8,6 +8,7 @@ import NotAvailable from "./components/NotAvailable.vue";
 import GeneralInfo from "./components/GeneralInfo.vue";
 import Form from "./components/Form.vue";
 import AppMessage from "./components/AppMessage.vue";
+import ButtonCTA from "./components/ButtonCTA.vue";
 import App from "./App.vue";
 import { store } from "./store/store.js";
 
@@ -18,6 +19,7 @@ Vue.component("not-available", NotAvailable);
 Vue.component("photo-carousel", Carousel);
 Vue.component("main-form", Form);
 Vue.component("app-message", AppMessage);
+Vue.component("button-cta", ButtonCTA);
 
 Vue.config.productionTip = false;
 

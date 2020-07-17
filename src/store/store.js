@@ -14,7 +14,6 @@ export const store = new Vuex.Store({
     searchedTitle: "",
     resultsList: [],
     selectedTitle: "",
-    selectedWatchlistTitle: "",
     baseImageURL: "https://image.tmdb.org/t/p/w500",
   },
   //Getters******************************************************************
@@ -438,7 +437,7 @@ export const store = new Vuex.Store({
       }
     },
 
-    showFullWatchlistTitle: function({ commit, state, getters }, $event) {
+    showFullWatchlistTitle: function({ commit, getters }, $event) {
       if ($event.target.tagName === "IMG") {
         //Napraviti loop kroz Watchlist i ako kliknuti img ima isti id kao i title na listi, assignati ga kao selectedTitle
         for (const title of getters.getWatchlist) {
@@ -452,18 +451,22 @@ export const store = new Vuex.Store({
     },
 
     //This action commits a mutation which sets the selectedTitle to ""
-    //Pokrećem je kad kliknem na X na selectedCard
+    //Pokrećem je kad kliknem na X na selectedCard, zatim u TitleDetails i TitleVideo preko importanog mixina kad se klika na određene rute.
     closeSelectedTitle: function(context, $event) {
       context.commit("clearSelectedTitle");
 
       //Ako je baš kliknut button na selectedCard onda izvrtiti switch statement
       if ($event) {
         switch (router.currentRoute.name) {
-          case "titleDetails":
+          case "titleStory":
+          case "titleGallery":
+          case "titleReview":
           case "titleTrailer":
             router.replace("/");
             break;
-          case "watchlistTitleDetails":
+          case "watchlistTitleStory":
+          case "watchlistTitleGallery":
+          case "watchlistTitleReview":
           case "watchlistTitleTrailer":
             router.replace("/watchlist");
             break;

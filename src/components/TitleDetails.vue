@@ -45,7 +45,7 @@
       </li>
     </ul>
     <div class="overview-panel">
-      <nav class="overview-controls" v-if="!isOnWatchlist">
+      <nav class="overview-controls" v-if="!isOnWatchlistRoute">
         <router-link :to="{name: 'titleStory'}">STORY</router-link>
         <router-link :to="{name: 'titleGallery'}">GALLERY</router-link>
         <router-link :to="{name: 'titleReview'}">REVIEW</router-link>
@@ -63,24 +63,13 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { determineRouteMixin } from "../mixins";
+import { determineRouteMixin, routeGuardMixin } from "../mixins";
 
 export default {
-  mixins: [determineRouteMixin],
-  beforeRouteLeave(to, from, next) {
-    switch (to.name) {
-      case "home":
-      case "watchlist":
-      case "signup":
-      case "signin":
-        this.closeSelectedTitle();
-        break;
-    }
-
-    next();
-  },
+  mixins: [determineRouteMixin, routeGuardMixin],
 
   mounted: function() {
+    //Checks if title already is on user's watchlist - only runs if user is logged in.
     this.checkIfAdded();
   },
 
@@ -97,7 +86,8 @@ export default {
       "getProducer",
       "getCast",
       "getGenres",
-      "getWatchlist"
+      "getWatchlist",
+      "isAuthenticated"
     ]),
     //Returns only the year of the release date
     extractYear: function() {
@@ -111,6 +101,10 @@ export default {
     ...mapActions(["addToWatchlist", "closeSelectedTitle"]),
 
     checkIfAdded: function() {
+      //Return ako nije authenticated jer u tom trenu ni nema userove liste za provjeru je li naslov već otprije dodan.
+
+      if (!this.isAuthenticated) return;
+
       const selectedTitle = this.getSelectedTitle;
       const watchlist = this.getWatchlist;
 

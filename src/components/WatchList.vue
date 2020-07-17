@@ -19,8 +19,7 @@
     <movie-list v-else :titlesArray="getWatchlist" :displayTitle="showFullWatchlistTitle"></movie-list>
     <transition name="fade">
       <selected-card
-        v-if="getSelectedTitle"
-        
+        v-if="getSelectedTitle"        
       ></selected-card>
     </transition>
   </section>

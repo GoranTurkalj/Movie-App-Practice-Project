@@ -4,7 +4,7 @@
       <div class="preview-img">
         <img :src="getSelectedTitle.fullPosterPath" alt="selected title image" />
       </div>
-      <div class="preview-controls" v-if="!isOnWatchlist">
+      <div class="preview-controls" v-if="!isOnWatchlistRoute">
         <router-link class="preview-control" to="/title_details" active-class="active">DETAILS</router-link>
         <router-link class="preview-control" to="/title_trailer" active-class="active">TRAILER</router-link>
       </div>
