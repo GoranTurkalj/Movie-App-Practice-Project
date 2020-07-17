@@ -4,15 +4,24 @@
       <div class="preview-img">
         <img :src="getSelectedTitle.fullPosterPath" alt="selected title image" />
       </div>
-      <div class="preview-controls">
-        <router-link
-          class="preview-control"
-          to="/title_details"
-          active-class="active"
-        >DETAILS</router-link>
+      <div class="preview-controls" v-if="!isOnWatchlist">
+        <router-link class="preview-control" to="/title_details" active-class="active">DETAILS</router-link>
         <router-link class="preview-control" to="/title_trailer" active-class="active">TRAILER</router-link>
       </div>
+      <div class="preview-controls" v-else>
+        <router-link
+          class="preview-control"
+          to="/watchlist/title_details"
+          active-class="active"
+        >DETAILS</router-link>
+        <router-link
+          class="preview-control"
+          to="/watchlist/title_trailer"
+          active-class="active"
+        >TRAILER</router-link>
+      </div>
     </div>
+
     <router-view></router-view>
     <button class="close-btn" @click="closeSelectedTitle">
       <img src="../assets/close.svg" alt="close icon" />
@@ -21,8 +30,10 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { determineRouteMixin } from "../mixins";
 
 export default {
+  mixins: [determineRouteMixin],
   computed: {
     ...mapGetters(["getSelectedTitle"])
   },

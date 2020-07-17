@@ -16,7 +16,7 @@
           slot="info-tip-2"
         >You can add titles to your watchlist. To use the watchlist, sign-up or sign-in.</p>
       </general-info>
-      <movie-list v-else :titlesArray="getResultsList" :displayTitle="showFullTitle" ></movie-list>
+      <movie-list v-else :titlesArray="getResultsList" :displayTitle="showFullTitle"></movie-list>
     </transition>
     <transition name="fade">
       <selected-card v-if="getSelectedTitle"></selected-card>
@@ -28,13 +28,22 @@
 import { mapMutations, mapActions, mapGetters } from "vuex";
 
 export default {
+  beforeRouteLeave(to, from, next) {
+    this.closeSelectedTitle();
+    next();
+  },
+
   computed: {
     ...mapGetters(["getResultsList", "getSelectedTitle", "getUser"])
   },
   methods: {
     //Updating searchedTitle in the state
     ...mapMutations(["updateSearchedTitle"]),
-    ...mapActions(["requestSearchResults", "showFullTitle"])
+    ...mapActions([
+      "requestSearchResults",
+      "showFullTitle",
+      "closeSelectedTitle"
+    ])
   }
 };
 </script>

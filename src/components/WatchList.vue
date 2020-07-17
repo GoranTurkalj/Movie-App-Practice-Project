@@ -18,7 +18,10 @@
     </general-info>
     <movie-list v-else :titlesArray="getWatchlist" :displayTitle="showFullWatchlistTitle"></movie-list>
     <transition name="fade">
-      <selected-card v-if="getSelectedTitle"></selected-card>
+      <selected-card
+        v-if="getSelectedTitle"
+        
+      ></selected-card>
     </transition>
   </section>
 </template>
@@ -26,10 +29,16 @@
 <script>
 import axios from "axios";
 import { mapGetters, mapActions } from "vuex";
+
 export default {
+  beforeRouteLeave(to, from, next) {
+    this.closeSelectedTitle();
+    next();
+  },
   created: function() {
     console.log("Watchlist component is created");
   },
+
   computed: {
     ...mapGetters([
       "getWatchlist",
@@ -40,7 +49,11 @@ export default {
   },
 
   methods: {
-    ...mapActions(["showFullWatchlistTitle", "saveWatchlist"])
+    ...mapActions([
+      "showFullWatchlistTitle",
+      "saveWatchlist",
+      "closeSelectedTitle"
+    ])
   }
 };
 </script>

@@ -100,11 +100,6 @@ export const store = new Vuex.Store({
     getWatchlist: function(state) {
       return state.user.watchlist;
     },
-
-    //OVO JOŠ NEMA SVRHU
-    getSelectedWatchlistTitle: function(state) {
-      return state.selectedWatchlistTitle;
-    },
   },
   //Mutations****************************************************************
   mutations: {
@@ -385,7 +380,6 @@ export const store = new Vuex.Store({
             title.fullPosterPath = `${this.state.baseImageURL}${title.poster_path}`;
           });
 
-          //Then, update the resultsList in the state
           context.commit("updateSearchResults", filteredResults);
         })
         .catch((error) => {
@@ -437,7 +431,7 @@ export const store = new Vuex.Store({
 
                 //Commitati mutaciju za updetjanje selectedTitle
                 commit("updateSelectedTitle", selectedTitleData);
-                router.push({ name: "titleDetails" }); // Kad se otvori SelectedCard, treba ići na details
+                router.push("/title_details");
               });
           }
         }
@@ -451,19 +445,29 @@ export const store = new Vuex.Store({
           if (+$event.target.id === title.id) {
             //Commitati mutaciju za updetjanje selectedTitle
             commit("updateSelectedTitle", title);
-            router.push({name: "watchlistTitleDetails"}); // Kad se otvori SelectedCard ide na ovaj route
+            router.push("/watchlist/title_details");
           }
         }
       }
     },
 
     //This action commits a mutation which sets the selectedTitle to ""
-    //Pokrećem je kad kliknem na X na selectedCard i u beforeLeaveRoute guardovima za TitleInfo i TitleVideo
+    //Pokrećem je kad kliknem na X na selectedCard
     closeSelectedTitle: function(context, $event) {
       context.commit("clearSelectedTitle");
-      //Samo ako zatvorim selectedCard na klik na X ikonu, onda pusham na home rout da ne javlja redundant route navigation
+
+      //Ako je baš kliknut button na selectedCard onda izvrtiti switch statement
       if ($event) {
-        router.push("/"); // Kad se zatvori selectedCard, treba ići nazad na Home
+        switch (router.currentRoute.name) {
+          case "titleDetails":
+          case "titleTrailer":
+            router.replace("/");
+            break;
+          case "watchlistTitleDetails":
+          case "watchlistTitleTrailer":
+            router.replace("/watchlist");
+            break;
+        }
       }
     },
 

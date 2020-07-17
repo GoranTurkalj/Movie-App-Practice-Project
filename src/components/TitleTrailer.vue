@@ -23,7 +23,6 @@ export default {
         this.closeSelectedTitle();
         break;
     }
-
     next();
   },
 

@@ -45,10 +45,15 @@
       </li>
     </ul>
     <div class="overview-panel">
-      <nav class="overview-controls">
-        <router-link to="/title_details/story">STORY</router-link>
-        <router-link to="/title_details/gallery">GALLERY</router-link>
-        <router-link to="/title_details/review">REVIEW</router-link>
+      <nav class="overview-controls" v-if="!isOnWatchlist">
+        <router-link :to="{name: 'titleStory'}">STORY</router-link>
+        <router-link :to="{name: 'titleGallery'}">GALLERY</router-link>
+        <router-link :to="{name: 'titleReview'}">REVIEW</router-link>
+      </nav>
+      <nav class="overview-controls" v-else>
+        <router-link :to="{name: 'watchlistTitleStory'}">STORY</router-link>
+        <router-link :to="{name: 'watchlistTitleGallery'}">GALLERY</router-link>
+        <router-link :to="{name: 'watchlistTitleReview'}">REVIEW</router-link>
       </nav>
       <transition name="fade" mode="out-in">
         <router-view></router-view>
@@ -58,8 +63,10 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { determineRouteMixin } from "../mixins";
 
 export default {
+  mixins: [determineRouteMixin],
   beforeRouteLeave(to, from, next) {
     switch (to.name) {
       case "home":

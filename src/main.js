@@ -1,5 +1,6 @@
 import Vue from "vue";
-import router  from "./router.js";
+import router from "./router.js";
+import "./assets/global.css";
 import MovieList from "./components/MovieList.vue";
 import SelectedCard from "./components/SelectedCard.vue";
 import Carousel from "./components/Carousel.vue";

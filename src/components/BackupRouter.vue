@@ -7,9 +7,6 @@ import SignInPage from "./components/SignInPage.vue";
 import TitleDetails from "./components/TitleDetails.vue";
 import TitleTrailer from "./components/TitleTrailer.vue";
 import GeneralInfo from "./components/GeneralInfo.vue";
-import StoryPanel from "./components/StoryPanel.vue";
-import GalleryPanel from "./components/GalleryPanel.vue";
-import ReviewPanel from "./components/ReviewPanel.vue";
 import { store } from "./store/store"; //Import storea radi pristupa stateu kod slaganja route guarda
 
 Vue.use(VueRouter);
@@ -34,11 +31,6 @@ const routes = [
             next("/");
           }
         },
-        children: [
-          { path: "story", name: "titleStory", component: StoryPanel },
-          { path: "gallery", name: "titleGallery", component: GalleryPanel },
-          { path: "review", name: "titleReview", component: ReviewPanel },
-        ],
       },
       {
         path: "/title_trailer",
@@ -71,19 +63,6 @@ const routes = [
             next("/watchlist");
           }
         },
-        children: [
-          { path: "story", name: "watchlistTitleStory", component: StoryPanel },
-          {
-            path: "gallery",
-            name: "watchlistTitleGallery",
-            component: GalleryPanel,
-          },
-          {
-            path: "review",
-            name: "watchlistTitleReview",
-            component: ReviewPanel,
-          },
-        ],
       },
       {
         path: "/watchlist/title_trailer",

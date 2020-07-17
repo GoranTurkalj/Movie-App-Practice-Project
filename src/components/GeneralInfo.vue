@@ -1,9 +1,9 @@
 <template>
   <section id="general-info">
     <slot name="info-image"></slot>
-    <slot name="info-title"></slot>
+    <slot name="info-title"><h2>PAGE NOT FOUND!</h2></slot>
     <hr />
-    <slot name="info-tip-1"></slot>
+    <slot name="info-tip-1"><p>Please, go <router-link to="/">HOME</router-link>!</p></slot>
     <slot name="info-tip-2"></slot>
   </section>
 </template>
