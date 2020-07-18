@@ -2,6 +2,7 @@
 $accentColor: #d86c14;
 $textColor: #dbd6d6;
 $activeColor: white;
+$btnBackgroundGreen: rgb(5, 80, 5);
 
 //Mixins
 @mixin orangeGreyText() {
@@ -14,4 +15,3 @@ $activeColor: white;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-

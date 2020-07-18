@@ -7,9 +7,13 @@
       :disabled="getSelectedTitle"
       :class="{disabled: getSelectedTitle }"
     >
-      <li class="movie-item" v-for="result in titlesArray" :key="result.id">
-        <img :id="result.id" class="movie-img" :src="result.fullPosterPath" alt="movie poster" />
-      </li>
+    <!--Ova komponenta prima id od svih naslova iz arraya, assigna ih kao id na images, taj id dalje šaljem u "cta-button" komponentu, da mu se mijenja izgled i funkcionalnost ovisno o tome je li film već dodan na listu i je li user ulogiran-->
+      <title-thumbnail
+        v-for="result in titlesArray"
+        :key="result.id"
+        :resultID="result.id"
+        :poster="result.fullPosterPath"
+      ></title-thumbnail>
     </ul>
   </section>
 </template>
@@ -42,35 +46,5 @@ export default {
   display: flex;
   flex-wrap: wrap;
   margin-top: 3rem;
-}
-
-.movie-item {
-  padding-bottom: 1.5rem;
-  padding-right: 1.5rem;
-  width: 250px;
-  height: 350px;
-}
-
-.movie-img {
-  cursor: pointer;
-  border: 2px solid black;
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-  background-color: black;
-  box-shadow: 2px 2px 4px 4px rgba(0, 0, 0, 0.5);
-  transition: transform 500ms, border-color 500ms;
-
-  &:hover {
-    transform: scale(1.1);
-    position: relative;
-    z-index: 1;
-    border: 2px solid white;
-  }
-}
-
-.disabled li {
-  filter: grayscale(100);
-  pointer-events: none;
 }
 </style>

@@ -438,7 +438,11 @@ export const store = new Vuex.Store({
     },
 
     showFullWatchlistTitle: function({ commit, getters }, $event) {
-      if ($event.target.tagName === "IMG") {
+      //Ne zelim da klik na zvijezdicu uoopće pokrene funkciju
+      if (
+        $event.target.tagName === "IMG" &&
+        $event.target.classList.contains("movie-img")
+      ) {
         //Napraviti loop kroz Watchlist i ako kliknuti img ima isti id kao i title na listi, assignati ga kao selectedTitle
         for (const title of getters.getWatchlist) {
           if (+$event.target.id === title.id) {

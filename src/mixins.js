@@ -12,8 +12,6 @@ export const routeGuardMixin = {
     switch (to.name) {
       case "home":
       case "watchlist":
-      case "signup":
-      case "signin":
         this.closeSelectedTitle();
         break;
     }
