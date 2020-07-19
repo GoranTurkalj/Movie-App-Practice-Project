@@ -1,8 +1,12 @@
 <template>
-  <button class="cta-button" :class="applyClasses">{{buttonText }}</button>
+  <button
+    @click="handleUserClick(recievedTitleID)"
+    class="cta-button"
+    :class="{'cta-button--disabled': !isAuthenticated, 'cta-button--static': isOnSelectedTitle, 'cta-button--watch': isOnWatchlist}"
+  >{{buttonText}}</button>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   props: {
     recievedTitleID: {
@@ -15,26 +19,53 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["getResultsList", "getWatchlist", "isAuthenticated"]),
+    ...mapGetters([
+      "getResultsList",
+      "getWatchlist",
+      "isAuthenticated",
+      "getSelectedTitle"
+    ]),
 
-    applyClasses: function() {
-      //Ako nismo logged in samo resultsList se gleda
+    isOnSelectedTitle: function() {
+      //if cta button component is rendered on a currently displayed SELECTED TITLE - then the "cta-button--static" class needs to applay to adjust it a bit.
+      if (
+        this.getSelectedTitle &&
+        this.recievedTitleID === this.getSelectedTitle.id
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+
+    isOnWatchlist: function() {
+      //if this button is rendered on a title thumbnail which can be found on the watchlist, then this returns true
       if (!this.isAuthenticated) {
-        for (const title of this.getResultsList) {
-          if (title.id === this.recievedTitleID) {
-            this.buttonText = "ADD TO WATCHLIST";
-            return { "cta-button--disabled": true };
-          }
-        }
+        return false;
       }
 
-      //Ako postoji lista znači da jesmo authenticated - ALI lista moze biti prazna pa testiram length
-      if (this.getWatchlist.length) {
-        for (const title of this.getWatchlist) {
-          if (title.id === this.recievedTitleID) {
-            this.buttonText = "WATCH NOW";
-            return { "cta-button--watch": true };
-          }
+      for (const title of this.getWatchlist) {
+        if (title.id === this.recievedTitleID) {
+          this.buttonText = "WATCH NOW";
+          return true;
+        }
+      }
+    }
+  },
+
+  methods: {
+    ...mapActions(["getDetailedTitleInfo"]),
+
+    handleUserClick: function(recievedTitleID) {
+      //Kad kliknem na button - trazi se title s istim ID-om kao i recievedTitleID (primljen kao prop iz TitleThumbnail komponente
+      for (const title of this.getResultsList) {
+        if (title.id === recievedTitleID) {
+          //Akciji passam payload objekt koji sadrzi ime mutacije koju treba commitati, zatim titleID - jer će trebati napraviti GET request za detaljnije podatke za taj naslov, te naposljetku, poster path jer svaki searched result na listi ima konstruiran path za povući poster img pa cu ga passati ovdje
+          this.getDetailedTitleInfo({
+            mutationName: "updateWatchlist",
+            titleID: recievedTitleID,
+            poster: title.fullPosterPath
+          });
         }
       }
     }
@@ -49,17 +80,22 @@ export default {
   background-color: $accentColor;
   font-size: 1.2rem;
   font-weight: bold;
-  padding: 0.5rem;
   border: none;
   border-radius: 0 0 0.5rem 0.5rem;
   outline: none;
   cursor: pointer;
-  //z-index: 2;
 
   &:hover,
   &:focus {
     filter: brightness(150%);
   }
+}
+
+.cta-button--static {
+  width: 14rem;
+  margin-top: 2rem;
+  border-radius: 0.5rem;
+  border: 2px solid rgb(231, 214, 182);
 }
 
 .cta-button--watch {

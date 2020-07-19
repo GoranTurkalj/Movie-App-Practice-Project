@@ -148,8 +148,12 @@ export const store = new Vuex.Store({
     },
 
     //When "Add to watchlist" button is pressed - the selectedTitle data is added as an object to the user.watchlist array
-    updateWatchlist: function(state) {
-      state.user.watchlist.push(state.selectedTitle);
+    // updateWatchlist: function(state) {
+    //   state.user.watchlist.push(state.selectedTitle);
+    //   console.log(state.user.watchlist);
+    // },
+    updateWatchlist: function(state, addedTitle) {
+      state.user.watchlist.push(addedTitle);
       console.log(state.user.watchlist);
     },
   },
@@ -387,51 +391,16 @@ export const store = new Vuex.Store({
     },
 
     //Displays more options and details for the clicked title - this action fires when a title img is clicked on.
-    showFullTitle: function({ commit, state, getters }, $event) {
+    showFullTitle: function({ dispatch, getters }, $event) {
       if ($event.target.tagName === "IMG") {
-        //Create new empty variable - this will hold the necessary detailed data from the response
-        let selectedTitleData = null;
-
         //Napraviti loop kroz listu rezultata i ako kliknuti img ima isti id kao i title na listi, napraviti HTTP request s tim title id-om za dobiti detaljnije podatke
         for (const title of getters.getResultsList) {
           if (+$event.target.id === title.id) {
-            axios
-              .get(
-                `https://api.themoviedb.org/3/movie/${title.id}?api_key=9e612d73fdfb165c3aa123e0b09d606d&append_to_response=videos,images,credits`
-              )
-              .then((response) => {
-                const data = response.data;
-
-                data.images.backdrops.forEach((image) => {
-                  image.fullImagePath = `${this.state.baseImageURL}${image.file_path}`;
-                });
-
-                selectedTitleData = {
-                  fullPosterPath: title.fullPosterPath,
-                  id: data.id,
-                  overview: data.overview,
-                  tagline: data.tagline,
-                  budget: data.budget,
-                  language: data.original_language,
-                  genres: data.genres,
-                  homepage: data.homepage,
-                  images: data.images.backdrops,
-                  runtime: data.runtime,
-                  revenue: data.revenue,
-                  releaseDate: data.release_date,
-                  originalTitle: data.original_title,
-                  title: data.title,
-                  videos: data.videos,
-                  rating: data.vote_average,
-                  votes: data.vote_count,
-                  cast: data.credits.cast,
-                  crew: data.credits.crew,
-                };
-
-                //Commitati mutaciju za updetjanje selectedTitle
-                commit("updateSelectedTitle", selectedTitleData);
-                router.push("/title_details");
-              });
+            dispatch("getDetailedTitleInfo", {
+              mutationName: "updateSelectedTitle",
+              titleID: title.id,
+              poster: title.fullPosterPath,
+            });
           }
         }
       }
@@ -484,6 +453,55 @@ export const store = new Vuex.Store({
         context.commit("updateWatchlist");
         disableWatchlistBtn(375, "added", "animated");
       }
+    },
+
+    //Akcija se koristi u ButtonCTA komponenti - pri kliku, i u showFullTitle akciji kad se klikne na neki thumbnail onda se napravi novi "selectedTitle" objekt
+    getDetailedTitleInfo: function(context, { mutationName, titleID, poster }) {
+      // Akcija prima payload objekt s imenom mutacije koju treba commitati i title objektom - oboje su destrukturirani u parametrima
+      //objekt title ima id i treba napraviti GET request pomoću tog id-a da se dobiju detaljniji podaci za naslov
+
+      //Create new empty variable - this will hold the necessary detailed data from the response
+      let newTitleData = null;
+
+      axios
+        .get(
+          `https://api.themoviedb.org/3/movie/${titleID}?api_key=9e612d73fdfb165c3aa123e0b09d606d&append_to_response=videos,images,credits`
+        )
+        .then((response) => {
+          const data = response.data;
+
+          data.images.backdrops.forEach((image) => {
+            image.fullImagePath = `${this.state.baseImageURL}${image.file_path}`;
+          });
+
+          newTitleData = {
+            fullPosterPath: poster,
+            id: data.id,
+            overview: data.overview,
+            tagline: data.tagline,
+            budget: data.budget,
+            language: data.original_language,
+            genres: data.genres,
+            homepage: data.homepage,
+            images: data.images.backdrops,
+            runtime: data.runtime,
+            revenue: data.revenue,
+            releaseDate: data.release_date,
+            originalTitle: data.original_title,
+            title: data.title,
+            videos: data.videos,
+            rating: data.vote_average,
+            votes: data.vote_count,
+            cast: data.credits.cast,
+            crew: data.credits.crew,
+          };
+
+          //Commitati mutaciju updateWatchlist - na button click,  ILI committati mutaciju updateSelectedTitle kad se klikne na thumbnail na resultsList.
+          context.commit(mutationName, newTitleData);
+          if (mutationName === "updateSelectedTitle") {
+            router.push("/title_details");
+          }
+        });
     },
 
     //This action will store / save user's watchlist to the database - not yet sure WHEN it should happen

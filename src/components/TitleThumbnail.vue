@@ -31,7 +31,7 @@ export default {
   border: 2px solid black;
   background-color: black;
   border-radius: 0.5rem;
-  transition: transform 500ms, border-color 500ms;
+  transition: all 500ms;
   margin-right: 2.5rem;
   margin-bottom: 2.5rem;
   box-shadow: 2px 2px 4px 4px rgba(0, 0, 0, 0.5);
@@ -41,8 +41,6 @@ export default {
   overflow: hidden;
   &:hover {
     transform: scale(1.1);
-    position: relative;
-    z-index: 1;
     border: 2px solid white;
 
     .movie-img {

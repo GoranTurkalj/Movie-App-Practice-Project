@@ -7,7 +7,7 @@
       :disabled="getSelectedTitle"
       :class="{disabled: getSelectedTitle }"
     >
-    <!--Ova komponenta prima id od svih naslova iz arraya, assigna ih kao id na images, taj id dalje šaljem u "cta-button" komponentu, da mu se mijenja izgled i funkcionalnost ovisno o tome je li film već dodan na listu i je li user ulogiran-->
+      <!--Ova komponenta prima id od svih naslova iz arraya, assigna ih kao id na images, taj id dalje šaljem u "cta-button" komponentu, da mu se mijenja izgled i funkcionalnost ovisno o tome je li film već dodan na listu i je li user ulogiran-->
       <title-thumbnail
         v-for="result in titlesArray"
         :key="result.id"

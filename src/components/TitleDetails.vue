@@ -9,12 +9,8 @@
       <span>{{getSelectedTitle.rating}} / 10</span>
       <span id="votes">({{getSelectedTitle.votes}} votes)</span>
     </div>
-    <button
-      ref="watchlistBtn"
-      class="watchlist-btn"
-      @click="addToWatchlist(disableWatchlistBtn)"
-      :disabled="alreadyAdded"
-    >ADD TO WATCHLIST</button>
+    <!--CTA button komponenta ovdje prima id od onog titlea koji je trenutno selected-->
+    <cta-button :recievedTitleID="getSelectedTitle.id"></cta-button>
     <ul class="title-list">
       <li class="title-list__item">
         Director:
@@ -70,7 +66,7 @@ export default {
 
   mounted: function() {
     //Checks if title already is on user's watchlist - only runs if user is logged in.
-    this.checkIfAdded();
+    //this.checkIfAdded();
   },
 
   data() {
@@ -98,33 +94,33 @@ export default {
   },
 
   methods: {
-    ...mapActions(["addToWatchlist", "closeSelectedTitle"]),
+    ...mapActions(["addToWatchlist", "closeSelectedTitle"])
 
-    checkIfAdded: function() {
-      //Return ako nije authenticated jer u tom trenu ni nema userove liste za provjeru je li naslov već otprije dodan.
+    // checkIfAdded: function() {
+    //   //Return ako nije authenticated jer u tom trenu ni nema userove liste za provjeru je li naslov već otprije dodan.
 
-      if (!this.isAuthenticated) return;
+    //   if (!this.isAuthenticated) return;
 
-      const selectedTitle = this.getSelectedTitle;
-      const watchlist = this.getWatchlist;
+    //   const selectedTitle = this.getSelectedTitle;
+    //   const watchlist = this.getWatchlist;
 
-      for (const item of watchlist) {
-        if (item.id === selectedTitle.id) {
-          this.disableWatchlistBtn(0, "added");
-          return true;
-        }
-      }
-    },
+    //   for (const item of watchlist) {
+    //     if (item.id === selectedTitle.id) {
+    //       this.disableWatchlistBtn(0, "added");
+    //       return true;
+    //     }
+    //   }
+    // },
 
     //Called from inside checkIfAdded and also passed as payload to addToWatchlist action
-    disableWatchlistBtn: function(delay, added, animated) {
-      this.$refs.watchlistBtn.classList.add(added, animated);
-      setTimeout(() => {
-        this.$refs.watchlistBtn.textContent = "TITLE ADDED";
-      }, delay);
+    // disableWatchlistBtn: function(delay, added, animated) {
+    //   this.$refs.watchlistBtn.classList.add(added, animated);
+    //   setTimeout(() => {
+    //     this.$refs.watchlistBtn.textContent = "TITLE ADDED";
+    //   }, delay);
 
-      this.alreadyAdded = true;
-    }
+    //   this.alreadyAdded = true;
+    // }
   }
 };
 </script>
@@ -146,26 +142,6 @@ export default {
 
 .info-year {
   @include orangeGreyText();
-}
-
-.watchlist-btn {
-  width: 14rem;
-  height: min-content;
-  transition: transform 200ms;
-
-  background-color: $accentColor;
-  font-size: 1.2rem;
-  font-weight: bold;
-  padding: 0.5rem;
-  border: 2px solid black;
-  border-radius: 0.5rem;
-  outline: none;
-  cursor: pointer;
-  margin-top: 2rem;
-
-  &:hover {
-    transform: scale(1.03);
-  }
 }
 
 .rating-container {
