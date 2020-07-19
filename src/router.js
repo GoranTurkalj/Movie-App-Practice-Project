@@ -10,6 +10,7 @@ import GeneralInfo from "./components/GeneralInfo.vue";
 import StoryPanel from "./components/StoryPanel.vue";
 import GalleryPanel from "./components/GalleryPanel.vue";
 import ReviewPanel from "./components/ReviewPanel.vue";
+import WatchNowScreen from "./components/WatchNowScreen.vue";
 import { store } from "./store/store"; //Import storea radi pristupa stateu kod slaganja route guarda
 
 Vue.use(VueRouter);
@@ -101,7 +102,6 @@ const routes = [
       },
     ],
     beforeEnter: function(to, from, next) {
-      console.log("beforeEnter Watchlist guard runs");
       //Ako u stateu postoji token, onda moze nastaviti na /watchlist, a ako ne postoji, onda prebacim usera na /signin
       if (store.state.token) {
         next();
@@ -112,6 +112,18 @@ const routes = [
   },
   { path: "/signup", name: "signup", component: SignUpPage },
   { path: "/signin", name: "signin", component: SignInPage },
+  {
+    path: "/watch_now",
+    name: "watchnow",
+    component: WatchNowScreen,
+    beforeEnter: function(to, from, next) {
+      if (store.state.token) {
+        next();
+      } else {
+        next("signin");
+      }
+    },
+  },
   { path: "*", component: GeneralInfo },
 ];
 

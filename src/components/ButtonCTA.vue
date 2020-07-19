@@ -1,23 +1,21 @@
 <template>
   <button
-    @click="handleUserClick(recievedTitleID)"
+    @click="watchFullTitle"
     class="cta-button"
     :class="{'cta-button--disabled': !isAuthenticated, 'cta-button--static': isOnSelectedTitle, 'cta-button--watch': isOnWatchlist}"
-  >{{buttonText}}</button>
+  >{{displayButtonText}}</button>
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { isOnWatchlistMixin } from "../mixins";
 export default {
+  mixins: [isOnWatchlistMixin],
   props: {
     recievedTitleID: {
       type: Number
     }
   },
-  data() {
-    return {
-      buttonText: "ADD TO WATCHLIST"
-    };
-  },
+
   computed: {
     ...mapGetters([
       "getResultsList",
@@ -25,6 +23,12 @@ export default {
       "isAuthenticated",
       "getSelectedTitle"
     ]),
+
+    displayButtonText: function() {
+      //ako isOnWatchlist (importan mixin) vrati true - onda tekst treba biti "WATCH NOW", ako ne, onda "ADD TO WATCHLIST"
+
+      return this.isOnWatchlist ? "WATCH NOW" : "ADD TO WATCHLIST";
+    },
 
     isOnSelectedTitle: function() {
       //if cta button component is rendered on a currently displayed SELECTED TITLE - then the "cta-button--static" class needs to applay to adjust it a bit.
@@ -36,25 +40,20 @@ export default {
       } else {
         return false;
       }
-    },
-
-    isOnWatchlist: function() {
-      //if this button is rendered on a title thumbnail which can be found on the watchlist, then this returns true
-      if (!this.isAuthenticated) {
-        return false;
-      }
-
-      for (const title of this.getWatchlist) {
-        if (title.id === this.recievedTitleID) {
-          this.buttonText = "WATCH NOW";
-          return true;
-        }
-      }
     }
   },
 
   methods: {
     ...mapActions(["getDetailedTitleInfo"]),
+
+    watchFullTitle: function() {
+      this.$router.push("/watch_now");
+      setTimeout(() => {
+
+       
+        this.$store.commit("turnOnIsPlaying");
+      }, 3000);
+    },
 
     handleUserClick: function(recievedTitleID) {
       //Kad kliknem na button - trazi se title s istim ID-om kao i recievedTitleID (primljen kao prop iz TitleThumbnail komponente
@@ -76,7 +75,7 @@ export default {
 .cta-button {
   width: 100%;
   height: 2.5rem;
-  transition: all 200ms;
+  transition: all 300ms;
   background-color: $accentColor;
   font-size: 1.2rem;
   font-weight: bold;
@@ -101,10 +100,21 @@ export default {
 .cta-button--watch {
   background-color: $btnBackgroundGreen;
   color: white;
+
+  animation: animateTextWhite 300ms linear 1 forwards;
 }
 
 .cta-button--disabled {
   background-color: rgb(73, 72, 72);
   color: rgb(167, 164, 164);
+}
+
+@keyframes animateTextWhite {
+  0% {
+    color: transparent;
+  }
+  100% {
+    color: white;
+  }
 }
 </style>

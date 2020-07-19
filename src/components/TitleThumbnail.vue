@@ -2,17 +2,27 @@
   <li class="movie-item">
     <img class="favorite-img" src="../assets/star.svg" alt="favorite movie icon" />
     <div id="sticker-container">
-      <p>OWNED</p>
+      <transition name="fade">
+        <p v-show="isOnWatchlist">OWNED</p>
+      </transition>
     </div>
-    <img :id="resultID" class="movie-img" :src="poster" alt="movie poster" />
-    <!--Šaljem dalje id kao prop u button-->
-    <cta-button :recievedTitleID="resultID"></cta-button>
+    <img :id="recievedTitleID" class="movie-img" :src="poster" alt="movie poster" />
+    <!--MovieList šalje prop "recievedTitleID" u TitleThumbnail a onda se šalje dalje u ButtonCTA-->
+    <cta-button :recievedTitleID="recievedTitleID"></cta-button>
   </li>
 </template>
 <script>
+import { isOnWatchlistMixin } from "../mixins";
+import { mapGetters } from "vuex";
 export default {
+  mixins: [isOnWatchlistMixin],
+
+  computed: {
+    ...mapGetters(["isAuthenticated", "getWatchlist"])
+  },
+
   props: {
-    resultID: {
+    recievedTitleID: {
       type: Number,
       required: true
     },

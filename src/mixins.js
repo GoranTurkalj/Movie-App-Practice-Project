@@ -19,3 +19,20 @@ export const routeGuardMixin = {
     next();
   },
 };
+
+//Koristim ga u TitleThumbnail da znam kad treba prikazati "owned" sticker na thumbnaili, te u ButtonCTA da znam na koje naslove se treba attachati "cta-button--watch" klasa i još u "displayButtonText" computed propertiju također u ButtonCTA komponenti
+export const isOnWatchlistMixin = {
+ computed: {
+    isOnWatchlist: function() {
+      if (!this.isAuthenticated) {
+        return false;
+      }
+
+      for (const title of this.getWatchlist) {
+        if (title.id === this.recievedTitleID) {
+          return true;
+        }
+      }
+    },
+  },
+};

@@ -23,6 +23,7 @@ Vue.component("app-message", AppMessage);
 Vue.component("cta-button", ButtonCTA);
 Vue.component("title-thumbnail", TitleThumbnail);
 
+
 Vue.config.productionTip = false;
 
 new Vue({

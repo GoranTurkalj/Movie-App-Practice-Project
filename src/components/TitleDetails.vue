@@ -64,11 +64,6 @@ import { determineRouteMixin, routeGuardMixin } from "../mixins";
 export default {
   mixins: [determineRouteMixin, routeGuardMixin],
 
-  mounted: function() {
-    //Checks if title already is on user's watchlist - only runs if user is logged in.
-    //this.checkIfAdded();
-  },
-
   data() {
     return {
       overviewDisplayed: true,

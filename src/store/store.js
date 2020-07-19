@@ -15,6 +15,7 @@ export const store = new Vuex.Store({
     resultsList: [],
     selectedTitle: "",
     baseImageURL: "https://image.tmdb.org/t/p/w500",
+    isPlaying: false, // refers to playing the full movie by clicking the "WATCH NOW" button
   },
   //Getters******************************************************************
   getters: {
@@ -99,6 +100,10 @@ export const store = new Vuex.Store({
     getWatchlist: function(state) {
       return state.user.watchlist;
     },
+
+    getIsPlaying: function(state) {
+      return state.isPlaying;
+    },
   },
   //Mutations****************************************************************
   mutations: {
@@ -155,6 +160,13 @@ export const store = new Vuex.Store({
     updateWatchlist: function(state, addedTitle) {
       state.user.watchlist.push(addedTitle);
       console.log(state.user.watchlist);
+    },
+
+    turnOnIsPlaying: function(state) {
+      state.isPlaying = true;
+    },
+    turnOffIsPlaying: function(state) {
+      state.isPlaying = false;
     },
   },
 
@@ -423,7 +435,7 @@ export const store = new Vuex.Store({
       }
     },
 
-    //This action commits a mutation which sets the selectedTitle to ""
+    //This action commits a mutation which sets the selectedTitle to "" and this will close SelectedCard component
     //Pokrećem je kad kliknem na X na selectedCard, zatim u TitleDetails i TitleVideo preko importanog mixina kad se klika na određene rute.
     closeSelectedTitle: function(context, $event) {
       context.commit("clearSelectedTitle");
@@ -444,14 +456,6 @@ export const store = new Vuex.Store({
             router.replace("/watchlist");
             break;
         }
-      }
-    },
-
-    //This action commits updateWatchlist mutation
-    addToWatchlist: function(context, disableWatchlistBtn) {
-      if (context.getters.getUser && context.getters.isAuthenticated) {
-        context.commit("updateWatchlist");
-        disableWatchlistBtn(375, "added", "animated");
       }
     },
 
@@ -495,6 +499,10 @@ export const store = new Vuex.Store({
             cast: data.credits.cast,
             crew: data.credits.crew,
           };
+
+          if (mutationName === "updateWatchlist") {
+            newTitleData.owned = true;
+          }
 
           //Commitati mutaciju updateWatchlist - na button click,  ILI committati mutaciju updateSelectedTitle kad se klikne na thumbnail na resultsList.
           context.commit(mutationName, newTitleData);

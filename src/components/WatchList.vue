@@ -34,10 +34,7 @@ export default {
     this.closeSelectedTitle();
     next();
   },
-  created: function() {
-    console.log("Watchlist component is created");
-  },
-
+ 
   computed: {
     ...mapGetters([
       "getWatchlist",
