@@ -1,9 +1,13 @@
 <template>
   <section id="movies-container">
     <!--displayTitle prop može biti ili "showFullTitle" ili "showFullWatchlistTitle" akcija - obje komitaju istu mutaciju "updateSelectedTitle". Klikom na image na listi se kreira "selectedTitle" i onda se disejblaju ostali images ako je "getSelectedTitle" true-->
-    <ul
+    <transition-group
+      @before-leave="beforeLeave"
+      type="animation"
+      name="slide"
+      tag="ul"
       id="movie-list"
-      @click="displayTitle"
+      @click.native="displayTitle"
       :disabled="getSelectedTitle"
       :class="{disabled: getSelectedTitle }"
     >
@@ -14,17 +18,13 @@
         :recievedTitleID="result.id"
         :poster="result.fullPosterPath"
       ></title-thumbnail>
-    </ul>
+    </transition-group>
   </section>
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
 
 export default {
-  computed: {
-    ...mapGetters(["getSelectedTitle"])
-  },
-
   props: {
     titlesArray: {
       type: Array
@@ -32,6 +32,17 @@ export default {
     displayTitle: {
       type: Function
     }
+  },
+
+  methods: {
+    beforeLeave: function(el) {
+      el.style.left = el.offsetLeft + "px";
+      el.style.top = el.offsetTop + "px";
+    }
+  },
+
+  computed: {
+    ...mapGetters(["getSelectedTitle"])
   }
 };
 </script>
@@ -47,4 +58,34 @@ export default {
   flex-wrap: wrap;
   margin-top: 3rem;
 }
+
+.slide-leave-active {
+  animation: slideOut 1s ease-out 1 forwards;
+  position: absolute;
+}
+
+.slide-move {
+  transition: transform 500ms;
+  transition-delay: 1000ms;
+}
+
+@keyframes slideOut {
+  0% {
+  }
+
+  15% {
+    transform: translateY(30px);
+  }
+
+  40% {
+    transform: translateY(-90px);
+    opacity: 0.1;
+  }
+
+  100% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+}
 </style>
+

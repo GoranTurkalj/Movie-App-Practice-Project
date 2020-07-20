@@ -1,5 +1,6 @@
 <template>
-  <li class="movie-item">
+  <li>
+    <div class="movie-item">
     <button @click="removeClickedTitle({event: $event, recievedTitleID})" v-show="determineWhenVisible" class="remove-title-btn" ref="removeTitleBtn">
       <img class="remove-img" src="../assets/remove.svg" alt="remove title button icon" />
     </button>
@@ -11,6 +12,7 @@
     <img :id="recievedTitleID" class="movie-img" :src="poster" alt="movie poster" />
     <!--MovieList šalje prop "recievedTitleID" u TitleThumbnail a onda se šalje dalje u ButtonCTA-->
     <cta-button :recievedTitleID="recievedTitleID"></cta-button>
+     </div>
   </li>
 </template>
 <script>
@@ -35,7 +37,7 @@ export default {
 
     determineWhenVisible: function() {
       if (this.isAuthenticated)
-        return this.isOnWatchlist && this.$route.name === "watchlist";
+        return this.isOnWatchlist && this.$route.name.startsWith("watchlist");
     }
   },
 
@@ -49,6 +51,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+
 .movie-item {
   position: relative;
   width: 250px;
