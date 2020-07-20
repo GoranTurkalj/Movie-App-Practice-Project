@@ -117,8 +117,10 @@ const routes = [
     name: "watchnow",
     component: WatchNowScreen,
     beforeEnter: function(to, from, next) {
-      if (store.state.token) {
+      if (store.state.token && store.getters.getWatchlist) {
         next();
+      } else if (store.state.token && !store.getters.getWatchlist) {
+        next("/watchlist");
       } else {
         next("signin");
       }

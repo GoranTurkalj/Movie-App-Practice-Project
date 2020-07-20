@@ -15,7 +15,6 @@ export const store = new Vuex.Store({
     resultsList: [],
     selectedTitle: "",
     baseImageURL: "https://image.tmdb.org/t/p/w500",
-    isPlaying: false, // refers to playing the full movie by clicking the "WATCH NOW" button
   },
   //Getters******************************************************************
   getters: {
@@ -100,10 +99,6 @@ export const store = new Vuex.Store({
     getWatchlist: function(state) {
       return state.user.watchlist;
     },
-
-    getIsPlaying: function(state) {
-      return state.isPlaying;
-    },
   },
   //Mutations****************************************************************
   mutations: {
@@ -152,21 +147,18 @@ export const store = new Vuex.Store({
       state.selectedTitle = "";
     },
 
-    //When "Add to watchlist" button is pressed - the selectedTitle data is added as an object to the user.watchlist array
-    // updateWatchlist: function(state) {
-    //   state.user.watchlist.push(state.selectedTitle);
-    //   console.log(state.user.watchlist);
-    // },
+    //When "Add to watchlist" button is pressed - the addedTitle data is added as an object to the user's watchlist array
     updateWatchlist: function(state, addedTitle) {
       state.user.watchlist.push(addedTitle);
       console.log(state.user.watchlist);
     },
 
-    turnOnIsPlaying: function(state) {
-      state.isPlaying = true;
-    },
-    turnOffIsPlaying: function(state) {
-      state.isPlaying = false;
+    //This mutation removes a title from the watchlist when a user clicks on button on the thumbnail, which displays only when the route is "/watchlist"
+    removeWatchlistTitle: function(state, titleToRemove) {
+      state.user.watchlist.splice(
+        state.user.watchlist.indexOf(titleToRemove),
+        1
+      );
     },
   },
 
@@ -501,7 +493,7 @@ export const store = new Vuex.Store({
           };
 
           if (mutationName === "updateWatchlist") {
-            newTitleData.owned = true;
+            newTitleData.deletionAllowed = true;
           }
 
           //Commitati mutaciju updateWatchlist - na button click,  ILI committati mutaciju updateSelectedTitle kad se klikne na thumbnail na resultsList.
@@ -528,6 +520,17 @@ export const store = new Vuex.Store({
         .catch((error) => {
           console.log(error);
         });
+    },
+
+    //Commits a mutation when "removeTitleBtn" is clicked
+    removeClickedTitle: function({ commit, getters }, payload) {
+      if (payload.event.currentTarget.tagName === "BUTTON") {
+        for (const title of getters.getWatchlist) {
+          if (title.id === payload.recievedTitleID) {
+            commit("removeWatchlistTitle", title);
+          }
+        }
+      }
     },
   },
 });

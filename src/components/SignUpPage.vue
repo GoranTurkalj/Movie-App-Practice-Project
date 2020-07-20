@@ -25,14 +25,5 @@ export default {
 #sign-up-page {
   padding: 1.5rem 3rem;
 }
-.fade-enter {
-  opacity: 0;
-}
-.fade-enter-active {
-  transition: opacity 500ms;
-}
-.fade-leave-active {
-  opacity: 0;
-  transition: opacity 500ms;
-}
+
 </style>

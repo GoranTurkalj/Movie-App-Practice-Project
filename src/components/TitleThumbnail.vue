@@ -1,9 +1,11 @@
 <template>
   <li class="movie-item">
-    <img class="favorite-img" src="../assets/star.svg" alt="favorite movie icon" />
+    <button @click="removeClickedTitle({event: $event, recievedTitleID})" v-show="determineWhenVisible" class="remove-title-btn" ref="removeTitleBtn">
+      <img class="remove-img" src="../assets/remove.svg" alt="remove title button icon" />
+    </button>
     <div id="sticker-container">
       <transition name="fade">
-        <p v-show="isOnWatchlist">OWNED</p>
+        <p v-show="isOnWatchlist && !determineWhenVisible">OWNED</p>
       </transition>
     </div>
     <img :id="recievedTitleID" class="movie-img" :src="poster" alt="movie poster" />
@@ -13,13 +15,9 @@
 </template>
 <script>
 import { isOnWatchlistMixin } from "../mixins";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   mixins: [isOnWatchlistMixin],
-
-  computed: {
-    ...mapGetters(["isAuthenticated", "getWatchlist"])
-  },
 
   props: {
     recievedTitleID: {
@@ -30,7 +28,24 @@ export default {
       type: String,
       required: true
     }
+  },
+
+  computed: {
+    ...mapGetters(["isAuthenticated", "getWatchlist"]),
+
+    determineWhenVisible: function() {
+      if (this.isAuthenticated)
+        return this.isOnWatchlist && this.$route.name === "watchlist";
+    }
+  },
+
+  methods: {
+
+    ...mapActions(["removeClickedTitle"]), 
+    
+
   }
+
 };
 </script>
 <style lang="scss" scoped>
@@ -57,20 +72,40 @@ export default {
       border-radius: 0.5rem;
     }
 
-    button {
+    button:last-child {
       width: 85%;
       border-radius: 0.5rem;
     }
   }
 }
 
-.favorite-img {
+.remove-title-btn {
   position: absolute;
-  top: 0.3rem;
-  right: 0.3rem;
+  top: 0.5rem;
+  right: 0.5rem;
   width: 2rem;
   height: 2rem;
-  transform: rotateZ(-45deg);
+  border: 3px solid #c00909;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 200ms;
+  cursor: pointer;
+  outline: none;
+
+  &:hover {
+    transform: scale(1.2);
+    .remove-img {
+      transform: scale(0.7);
+    }
+  }
+}
+.remove-img {
+  width: 75%;
+  height: 75%;
+  transition: transform 200ms;
 }
 
 .movie-img {

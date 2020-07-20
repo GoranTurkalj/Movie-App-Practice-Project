@@ -50,7 +50,7 @@ export default {
   max-width: 30rem;
   height: 500px;
   border: 2px solid $accentColor;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 1);
   border-radius: 0.5rem;
   margin: 0 auto;
   padding: 0.5rem;
