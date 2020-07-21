@@ -12,6 +12,7 @@
     "vue": "^2.6.11",
     "vue-router": "^3.3.4",
     "vue-youtube-embed": "^2.2.2",
+    "vuelidate": "^0.7.5",
     "vuex": "^3.4.0"
   },
   "devDependencies": {

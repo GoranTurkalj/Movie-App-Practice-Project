@@ -7,16 +7,32 @@
     <transition name="fade" mode="out-in">
       <general-info v-if="!getResultsList.length">
         <img src="../assets/home-logo.png" alt slot="info-image" />
-        <h2 v-show="getUser.name" slot="info-title">Welcome to Movie App, {{getUser.name}}!</h2>>
-        <h2 v-show="!getUser.name" slot="info-title">Welcome to Movie App, random citizen!</h2>>
-        <p
-          slot="info-tip-1"
-        >This is the Homepage - you can search for your favourite TV shows or movies here.</p>
-        <p
-          slot="info-tip-2"
-        >You can add titles to your watchlist. To use the watchlist, sign-up or sign-in.</p>
+        <h2 v-show="getUser.name" slot="info-title">
+          Welcome to Movie App, {{ getUser.name }}!
+        </h2>
+        >
+        <h2 v-show="!getUser.name" slot="info-title">
+          Hello, welcome to Movie App!
+        </h2>
+        >
+        <p slot="info-tip-1">
+          You can search for your favourite movies here, just type the title name in
+          the searchbar. You can add movies to your personal watchlist, rate them and
+          write reviews!
+        </p>
+        <p slot="info-tip-2" v-show="!getUser.name">
+          To use the watchlist, just
+          <router-link to="/signin">sign-in</router-link> to your account.
+          <br />
+          If you don't have an account, create one by
+          <router-link to="/signup">signing-up</router-link> now.
+        </p>
       </general-info>
-      <movie-list v-else :titlesArray="getResultsList" :displayTitle="showFullTitle"></movie-list>
+      <movie-list
+        v-else
+        :titlesArray="getResultsList"
+        :displayTitle="showFullTitle"
+      ></movie-list>
     </transition>
     <transition name="fade">
       <selected-card v-if="getSelectedTitle"></selected-card>
@@ -34,7 +50,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["getResultsList", "getSelectedTitle", "getUser"])
+    ...mapGetters(["getResultsList", "getSelectedTitle", "getUser"]),
   },
   methods: {
     //Updating searchedTitle in the state
@@ -42,9 +58,9 @@ export default {
     ...mapActions([
       "requestSearchResults",
       "showFullTitle",
-      "closeSelectedTitle"
-    ])
-  }
+      "closeSelectedTitle",
+    ]),
+  },
 };
 </script>
 

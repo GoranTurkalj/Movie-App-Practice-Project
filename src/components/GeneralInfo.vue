@@ -1,6 +1,6 @@
 <template>
   <section id="general-info">
-    <slot name="info-image"></slot>
+    <slot name="info-image"><img src="../assets/not-found-icon.png" alt="page not found icon"></slot>
     <slot name="info-title"><h2>PAGE NOT FOUND!</h2></slot>
     <hr />
     <slot name="info-tip-1"><p>Please, go <router-link to="/">HOME</router-link>!</p></slot>
@@ -13,8 +13,8 @@ export default {};
 <style lang="scss" scoped>
 #general-info {
   margin-top: 3rem;
-  max-width: 40rem;
-  background-color: rgba(0, 0, 0, 0.5);
+  max-width: 45rem;
+  background-color: black;
   border: 2px solid $accentColor;
   border-radius: 0.5rem;
   padding: 1rem;
@@ -44,7 +44,18 @@ hr {
 
 p {
   color: $textColor;
+  font-size: 1.2rem;
   margin-bottom: 1rem;
+
+  a {
+    text-decoration: none; 
+    color: $accentColor;
+    font-weight: bold;
+
+    &:hover {
+      color: white;
+    }
+  }
 }
 
 @keyframes animateTip {

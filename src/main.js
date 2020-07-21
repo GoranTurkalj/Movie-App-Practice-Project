@@ -1,5 +1,6 @@
 import Vue from "vue";
 import router from "./router.js";
+import Vuelidate from "vuelidate";
 import "./assets/global.css";
 import MovieList from "./components/MovieList.vue";
 import SelectedCard from "./components/SelectedCard.vue";
@@ -13,6 +14,8 @@ import TitleThumbnail from "./components/TitleThumbnail.vue";
 import App from "./App.vue";
 import { store } from "./store/store.js";
 
+Vue.use(Vuelidate);
+
 Vue.component("movie-list", MovieList);
 Vue.component("selected-card", SelectedCard);
 Vue.component("general-info", GeneralInfo);
@@ -22,7 +25,6 @@ Vue.component("main-form", Form);
 Vue.component("app-message", AppMessage);
 Vue.component("cta-button", ButtonCTA);
 Vue.component("title-thumbnail", TitleThumbnail);
-
 
 Vue.config.productionTip = false;
 

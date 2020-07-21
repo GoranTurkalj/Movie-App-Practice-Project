@@ -5,7 +5,7 @@
         <h2>Sign Up!</h2>
       </main-form>
       <app-message v-else>
-        <h2>You belong to me now! :)</h2>
+        <h2>You have signed up, great!</h2>
       </app-message>
     </transition>
   </section>

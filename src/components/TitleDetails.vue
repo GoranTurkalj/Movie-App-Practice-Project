@@ -91,31 +91,6 @@ export default {
   methods: {
     ...mapActions(["addToWatchlist", "closeSelectedTitle"])
 
-    // checkIfAdded: function() {
-    //   //Return ako nije authenticated jer u tom trenu ni nema userove liste za provjeru je li naslov već otprije dodan.
-
-    //   if (!this.isAuthenticated) return;
-
-    //   const selectedTitle = this.getSelectedTitle;
-    //   const watchlist = this.getWatchlist;
-
-    //   for (const item of watchlist) {
-    //     if (item.id === selectedTitle.id) {
-    //       this.disableWatchlistBtn(0, "added");
-    //       return true;
-    //     }
-    //   }
-    // },
-
-    //Called from inside checkIfAdded and also passed as payload to addToWatchlist action
-    // disableWatchlistBtn: function(delay, added, animated) {
-    //   this.$refs.watchlistBtn.classList.add(added, animated);
-    //   setTimeout(() => {
-    //     this.$refs.watchlistBtn.textContent = "TITLE ADDED";
-    //   }, delay);
-
-    //   this.alreadyAdded = true;
-    // }
   }
 };
 </script>
