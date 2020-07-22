@@ -3,6 +3,9 @@ $accentColor: #d86c14;
 $textColor: #dbd6d6;
 $activeColor: white;
 $btnBackgroundGreen: rgb(5, 70, 5);
+$borderNormal: 2px solid $accentColor;
+$borderThin: 1px solid $accentColor;
+$accent-red: #c00909;
 
 //Mixins
 @mixin orangeGreyText() {
@@ -14,4 +17,11 @@ $btnBackgroundGreen: rgb(5, 70, 5);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+@mixin basicPageStyle() {
+  padding: 1.5rem 3rem;
+  position: relative;
+  min-height: 90vh;
+  width: 100%;
 }

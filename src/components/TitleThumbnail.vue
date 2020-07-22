@@ -1,18 +1,23 @@
 <template>
   <li>
     <div class="movie-item">
-    <button @click="removeClickedTitle({event: $event, recievedTitleID})" v-show="determineWhenVisible" class="remove-title-btn" ref="removeTitleBtn">
-      <img class="remove-img" src="../assets/remove.svg" alt="remove title button icon" />
-    </button>
-    <div id="sticker-container">
-      <transition name="fade">
-        <p v-show="isOnWatchlist && !determineWhenVisible">OWNED</p>
-      </transition>
+      <button
+        @click="removeClickedTitle({event: $event, recievedTitleID})"
+        v-show="determineWhenVisible"
+        class="remove-title-btn"
+        ref="removeTitleBtn"
+      >
+        <img class="remove-img" src="../assets/remove.svg" alt="remove title button icon" />
+      </button>
+      <div id="sticker-container">
+        <transition name="fade">
+          <p v-show="isOnWatchlist && !determineWhenVisible">OWNED</p>
+        </transition>
+      </div>
+      <img :id="recievedTitleID" class="movie-img" :src="poster" alt="movie poster" />
+      <!--MovieList šalje prop "recievedTitleID" u TitleThumbnail a onda se šalje dalje u ButtonCTA-->
+      <cta-button :recievedTitleID="recievedTitleID"></cta-button>
     </div>
-    <img :id="recievedTitleID" class="movie-img" :src="poster" alt="movie poster" />
-    <!--MovieList šalje prop "recievedTitleID" u TitleThumbnail a onda se šalje dalje u ButtonCTA-->
-    <cta-button :recievedTitleID="recievedTitleID"></cta-button>
-     </div>
   </li>
 </template>
 <script>
@@ -42,16 +47,11 @@ export default {
   },
 
   methods: {
-
-    ...mapActions(["removeClickedTitle"]), 
-    
-
+    ...mapActions(["removeClickedTitle"])
   }
-
 };
 </script>
 <style lang="scss" scoped>
-
 .movie-item {
   position: relative;
   width: 250px;

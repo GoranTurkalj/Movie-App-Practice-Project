@@ -15,6 +15,8 @@ export const store = new Vuex.Store({
     resultsList: [],
     selectedTitle: "",
     baseImageURL: "https://image.tmdb.org/t/p/w500",
+    confirmPrompt: false,
+    messageDisplayed: false,
   },
   //Getters******************************************************************
   getters: {
@@ -160,6 +162,10 @@ export const store = new Vuex.Store({
         1
       );
     },
+    //When user confirms watchlist deletion, deleteWatchlistAction commits this mutation
+    deleteWatchlist: function(state) {
+      state.user.watchlist = [];
+    },
   },
 
   //Actions******************************************************************
@@ -292,6 +298,16 @@ export const store = new Vuex.Store({
           context.dispatch("storeUserData", userData).then(() => {
             //Fetching user FROM database - nakon što axios request returna promise fulfilled
             context.dispatch("fetchUserData");
+            //Displaying app message and changing route after a small delay
+            context.state.messageDisplayed = true;
+
+            setTimeout(() => {
+              context.state.messageDisplayed = false;
+            }, 2300);
+
+            setTimeout(() => {
+              router.replace("/");
+            }, 3000);
           });
         })
         .catch((error) => {
@@ -337,6 +353,16 @@ export const store = new Vuex.Store({
           context.dispatch("setLogOutTimer", res.data.expiresIn);
           //Fetching user FROM database
           context.dispatch("fetchUserData");
+          //Displaying app message and changing route after a small delay
+          context.state.messageDisplayed = true;
+
+          setTimeout(() => {
+            context.state.messageDisplayed = false;
+          }, 2300);
+
+          setTimeout(() => {
+            router.replace("/");
+          }, 3000);
         })
         .catch((error) => {
           console.log(error);
@@ -492,10 +518,6 @@ export const store = new Vuex.Store({
             crew: data.credits.crew,
           };
 
-          if (mutationName === "updateWatchlist") {
-            newTitleData.deletionAllowed = true;
-          }
-
           //Commitati mutaciju updateWatchlist - na button click,  ILI committati mutaciju updateSelectedTitle kad se klikne na thumbnail na resultsList.
           context.commit(mutationName, newTitleData);
           if (mutationName === "updateSelectedTitle") {
@@ -531,6 +553,10 @@ export const store = new Vuex.Store({
           }
         }
       }
+    },
+
+    deleteWatchlistAction: function(context) {
+      context.commit("deleteWatchlist");
     },
   },
 });

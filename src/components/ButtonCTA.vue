@@ -48,7 +48,10 @@ export default {
     },
 
     displaySignInPrompt: function() {
-      console.log("SIGN IN TO WATCH");
+      this.$store.state.messageDisplayed = true; 
+      setTimeout(()=>{
+        this.$store.state.messageDisplayed = false; 
+      }, 2500); 
     },
 
     addToWatchlist: function(recievedTitleID) {

@@ -1,6 +1,10 @@
 <template>
   <div id="app">
     <app-header></app-header>
+    <transition name="fade">
+       <app-backdrop v-if="$store.state.confirmPrompt"></app-backdrop>
+    </transition>
+   
     <transition name="fade" mode="out-in">
       <router-view></router-view>
     </transition>
@@ -11,7 +15,6 @@
 import Header from "./components/Header.vue";
 
 export default {
-  
   components: {
     appHeader: Header
   }

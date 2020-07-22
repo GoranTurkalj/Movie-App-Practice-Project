@@ -4,10 +4,13 @@
       <main-form v-if="!authenticated">
         <h2>Sign In!</h2>
       </main-form>
-      <app-message v-else>
-        <h2>You are signed in!</h2>
+       </transition>
+      <transition name="dropIn">
+         <app-message v-if="$store.state.messageDisplayed">
+        <h1>Welcome, {{$store.getters.getUser.name}}!</h1>
+        <p slot="app-message">You are now signed in!</p>
       </app-message>
-    </transition>
+      </transition>
   </section>
 </template>
 
@@ -24,6 +27,6 @@ export default {
 
 <style lang="scss" scoped>
 #sign-in-page {
-  padding: 1.5rem 3rem;
+  @include basicPageStyle();
 }
 </style>

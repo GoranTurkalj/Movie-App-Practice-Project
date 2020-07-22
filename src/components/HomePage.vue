@@ -1,20 +1,19 @@
 <template>
   <section id="homepage">
     <div class="search-container">
-      <input class="search-input" type="text" @blur="updateSearchedTitle" />
+      <input
+        class="search-input"
+        type="text"
+        @input="updateSearchedTitle"
+        @keyup.enter="requestSearchResults"
+      />
       <button id="search-btn" @click="requestSearchResults"></button>
     </div>
     <transition name="fade" mode="out-in">
       <general-info v-if="!getResultsList.length">
         <img src="../assets/home-logo.png" alt slot="info-image" />
-        <h2 v-show="getUser.name" slot="info-title">
-          Welcome to Movie App, {{ getUser.name }}!
-        </h2>
-        >
-        <h2 v-show="!getUser.name" slot="info-title">
-          Hello, welcome to Movie App!
-        </h2>
-        >
+        <h2 v-show="getUser.name" slot="info-title">Welcome to Movie App, {{ getUser.name }}!</h2>>
+        <h2 v-show="!getUser.name" slot="info-title">Hello, welcome to Movie App!</h2>>
         <p slot="info-tip-1">
           You can search for your favourite movies here, just type the title name in
           the searchbar. You can add movies to your personal watchlist, rate them and
@@ -22,18 +21,18 @@
         </p>
         <p slot="info-tip-2" v-show="!getUser.name">
           To use the watchlist, just
-          <router-link to="/signin">sign-in</router-link> to your account.
-          <br />
-          If you don't have an account, create one by
-          <router-link to="/signup">signing-up</router-link> now.
+          <router-link to="/signin">sign-in</router-link>to your account.
+          <br />If you don't have an account, create one by
+          <router-link to="/signup">signing-up</router-link>now.
         </p>
       </general-info>
-      <movie-list
-        v-else
-        :titlesArray="getResultsList"
-        :displayTitle="showFullTitle"
-      ></movie-list>
+      <movie-list v-else :titlesArray="getResultsList" :displayTitle="showFullTitle"></movie-list>
     </transition>
+     <transition name="dropIn">
+         <app-message v-if="$store.state.messageDisplayed">
+        <p slot="app-message">To access the watchlist, you need to sign up or sign in!</p>
+      </app-message>
+      </transition>
     <transition name="fade">
       <selected-card v-if="getSelectedTitle"></selected-card>
     </transition>
@@ -50,7 +49,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["getResultsList", "getSelectedTitle", "getUser"]),
+    ...mapGetters(["getResultsList", "getSelectedTitle", "getUser"])
   },
   methods: {
     //Updating searchedTitle in the state
@@ -58,18 +57,15 @@ export default {
     ...mapActions([
       "requestSearchResults",
       "showFullTitle",
-      "closeSelectedTitle",
-    ]),
-  },
+      "closeSelectedTitle"
+    ])
+  }
 };
 </script>
 
 <style lang="scss">
 #homepage {
-  padding: 1.5rem 3rem;
-  position: relative;
-  min-height: 90vh;
-  width: 100%;
+  @include basicPageStyle();
 }
 .search-container {
   display: flex;
@@ -84,9 +80,20 @@ export default {
   padding: 0.5rem;
   font-size: 1.2rem;
   outline: none;
-  border: 2px solid $accentColor;
+  border: $borderNormal;
   border-radius: 1rem 0 0 1rem;
   border-right: none;
+  transition: border-color 200ms;
+
+  &:focus {
+    border: 2px solid $activeColor;
+    border-right: none;
+  }
+
+  &:focus + #search-btn {
+    border: 2px solid $activeColor;
+    border-left: none;
+  }
 }
 
 #search-btn {

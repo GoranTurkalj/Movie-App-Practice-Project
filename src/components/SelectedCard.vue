@@ -49,7 +49,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.9);
   padding: 1rem;
   color: $accentColor;
-  border: 2px solid $accentColor;
+  border: $borderNormal;
   border-radius: 1rem;
   position: fixed;
   left: 5%;

@@ -11,6 +11,8 @@ import Form from "./components/Form.vue";
 import AppMessage from "./components/AppMessage.vue";
 import ButtonCTA from "./components/ButtonCTA.vue";
 import TitleThumbnail from "./components/TitleThumbnail.vue";
+import Backdrop from "./components/Backdrop.vue";
+import ConfirmationAlert from "./components/ConfirmationAlert.vue";
 import App from "./App.vue";
 import { store } from "./store/store.js";
 
@@ -25,6 +27,9 @@ Vue.component("main-form", Form);
 Vue.component("app-message", AppMessage);
 Vue.component("cta-button", ButtonCTA);
 Vue.component("title-thumbnail", TitleThumbnail);
+Vue.component("app-backdrop", Backdrop);
+Vue.component("confirmation-alert", ConfirmationAlert);
+
 
 Vue.config.productionTip = false;
 

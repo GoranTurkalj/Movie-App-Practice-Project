@@ -1,9 +1,11 @@
 <template>
   <section id="general-info">
-    <slot name="info-image"><img src="../assets/not-found-icon.png" alt="page not found icon"></slot>
-    <slot name="info-title"><h2>PAGE NOT FOUND!</h2></slot>
+    <slot name="info-image"></slot>
+    <slot name="info-title">
+      <h2>PAGE NOT FOUND!</h2>
+    </slot>
     <hr />
-    <slot name="info-tip-1"><p>Please, go <router-link to="/">HOME</router-link>!</p></slot>
+    <slot name="info-tip-1"></slot>
     <slot name="info-tip-2"></slot>
   </section>
 </template>
@@ -15,11 +17,10 @@ export default {};
   margin-top: 3rem;
   max-width: 45rem;
   background-color: black;
-  border: 2px solid $accentColor;
+  border: $borderNormal;
   border-radius: 0.5rem;
   padding: 1rem;
   position: relative;
-  
 }
 
 img {
@@ -48,7 +49,7 @@ p {
   margin-bottom: 1rem;
 
   a {
-    text-decoration: none; 
+    text-decoration: none;
     color: $accentColor;
     font-weight: bold;
 

@@ -6,7 +6,7 @@ import SignUpPage from "./components/SignUpPage.vue";
 import SignInPage from "./components/SignInPage.vue";
 import TitleDetails from "./components/TitleDetails.vue";
 import TitleTrailer from "./components/TitleTrailer.vue";
-import GeneralInfo from "./components/GeneralInfo.vue";
+import PageNotFound from "./components/PageNotFound.vue";
 import StoryPanel from "./components/StoryPanel.vue";
 import GalleryPanel from "./components/GalleryPanel.vue";
 import ReviewPanel from "./components/ReviewPanel.vue";
@@ -103,6 +103,7 @@ const routes = [
     ],
     beforeEnter: function(to, from, next) {
       //Ako u stateu postoji token, onda moze nastaviti na /watchlist, a ako ne postoji, onda prebacim usera na /signin
+
       if (store.state.token) {
         next();
       } else {
@@ -126,7 +127,7 @@ const routes = [
       }
     },
   },
-  { path: "*", component: GeneralInfo },
+  { path: "*", component: PageNotFound },
 ];
 
 const router = new VueRouter({

@@ -1,7 +1,9 @@
 <template>
   <div id="message-container">
-    <h1>Welcome, {{$store.getters.getUser.name}}!</h1>
-    <slot></slot>
+    <slot>
+      <h1>Welcome, dear user!</h1>
+    </slot>
+    <slot name="app-message"></slot>
   </div>
 </template>
 <script>
@@ -9,25 +11,30 @@ export default {};
 </script>
 <style lang="scss" scoped>
 #message-container {
-  width: 300px;
-  height: 500px;
-  margin: 0 auto;
-  background-color: rgba(0, 0, 0, 0.8);
-  border: 2px solid $accentColor;
+  width: 25rem;
+  position: fixed;
+  top: 30%;
+  left: calc(50% - 12.5rem);
+  padding: 1rem;
+  background-color: black;
+  border: $borderThin;
   border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  z-index: 50;
 }
 
 h1 {
-  color: white;
+  @include orangeGreyText();
   text-align: center;
+  margin-bottom: 0.5rem;
 }
 
-h2 {
-  color: white;
+p {
+  color: $textColor;
+  letter-spacing: 1px;
   text-align: center;
 }
 </style>

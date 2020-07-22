@@ -75,13 +75,15 @@ export default {
   height: 100%;
   display: flex;
   justify-content: space-between;
+  
 }
 
 .nav-list {
-  width: 23rem;
+  width: 15rem;
   list-style-type: none;
   display: flex;
   align-items: center;
+  
 }
 
 .nav-item a {

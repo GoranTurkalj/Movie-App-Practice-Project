@@ -58,34 +58,5 @@ export default {
   flex-wrap: wrap;
   margin-top: 3rem;
 }
-
-.slide-leave-active {
-  animation: slideOut 1s ease-out 1 forwards;
-  position: absolute;
-}
-
-.slide-move {
-  transition: transform 500ms;
-  transition-delay: 1000ms;
-}
-
-@keyframes slideOut {
-  0% {
-  }
-
-  15% {
-    transform: translateY(30px);
-  }
-
-  40% {
-    transform: translateY(-90px);
-    opacity: 0.1;
-  }
-
-  100% {
-    transform: translateY(-100px);
-    opacity: 0;
-  }
-}
 </style>
 

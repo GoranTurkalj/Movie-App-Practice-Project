@@ -1,26 +1,34 @@
 <template>
   <section id="watchlist">
-    <div id="watchlist-controls">
+    <transition name="fade">
+    <div id="watchlist-controls" v-if="getWatchlist && getWatchlist.length">
       <button class="watchlist-control" @click="saveWatchlist">
         <img src="../assets/save.svg" alt="save watchlist icon" />
       </button>
-      <button class="watchlist-control">
+      <button class="watchlist-control" @click="open">
         <img src="../assets/delete.svg" alt="delete watchlist icon" />
       </button>
     </div>
-    <general-info v-if="getWatchlist && !getWatchlist.length">
-      <img src="../assets/watchlist-logo.png" alt slot="info-image" />
-      <h2 slot="info-title">{{getUser.name}}, you have no movies to watch!</h2>>
-      <p
-        slot="info-tip-1"
-      >You can search for movie titles <router-link to="/">here</router-link>, and add the ones you like to your watchlist. </p>
-      <p slot="info-tip-2">Movies can be deleted by clicking the remove icon on the thumbnail.</p>
-    </general-info>
-    <movie-list v-else :titlesArray="getWatchlist" :displayTitle="showFullWatchlistTitle"></movie-list>
+    </transition>
     <transition name="fade">
-      <selected-card
-        v-if="getSelectedTitle"        
-      ></selected-card>
+      <confirmation-alert v-if="$store.state.confirmPrompt" :confirm="deleteWatchlistAction">
+        <h2>Delete your entire watchlist?</h2>
+      </confirmation-alert>
+    </transition>
+    <transition name="fade" mode="out-in">
+      <general-info v-if="getWatchlist && !getWatchlist.length">
+        <img src="../assets/watchlist-logo.png" alt slot="info-image" />
+        <h2 slot="info-title">{{getUser.name}}, you have no movies to watch!</h2>>
+        <p slot="info-tip-1">
+          You can search for movie titles
+          <router-link to="/">here</router-link>, and add the ones you like to your watchlist.
+        </p>
+        <p slot="info-tip-2">Movies can be deleted by clicking the remove icon on the thumbnail.</p>
+      </general-info>
+      <movie-list v-else :titlesArray="getWatchlist" :displayTitle="showFullWatchlistTitle"></movie-list>
+    </transition>
+    <transition name="fade">
+      <selected-card v-if="getSelectedTitle"></selected-card>
     </transition>
   </section>
 </template>
@@ -34,7 +42,7 @@ export default {
     this.closeSelectedTitle();
     next();
   },
- 
+
   computed: {
     ...mapGetters([
       "getWatchlist",
@@ -48,8 +56,14 @@ export default {
     ...mapActions([
       "showFullWatchlistTitle",
       "saveWatchlist",
-      "closeSelectedTitle"
-    ])
+      "closeSelectedTitle",
+      "deleteWatchlistAction"
+    ]), 
+
+    open: function(){
+
+      this.$store.state.confirmPrompt = !this.$store.state.confirmPrompt;
+    },
   }
 };
 </script>
@@ -57,10 +71,7 @@ export default {
 
 <style lang="scss" scoped>
 #watchlist {
-  padding: 1.5rem 3rem;
-  position: relative;
-  min-height: 90vh;
-  width: 100%;
+  @include basicPageStyle();
 }
 
 #watchlist-controls {
