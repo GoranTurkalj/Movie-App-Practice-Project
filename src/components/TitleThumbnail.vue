@@ -2,6 +2,7 @@
   <li>
     <div class="movie-item">
       <button
+        :tabindex="disableFocusMixin"
         @click="removeClickedTitle({event: $event, recievedTitleID})"
         v-show="determineWhenVisible"
         class="remove-title-btn"
@@ -21,34 +22,39 @@
   </li>
 </template>
 <script>
-import { isOnWatchlistMixin } from "../mixins";
+import { isOnWatchlistMixin, disableFocusMixin } from "../mixins";
 import { mapGetters, mapActions } from "vuex";
 export default {
-  mixins: [isOnWatchlistMixin],
+  mixins: [isOnWatchlistMixin, disableFocusMixin],
 
   props: {
     recievedTitleID: {
       type: Number,
-      required: true
+      required: true,
     },
     poster: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
 
   computed: {
-    ...mapGetters(["isAuthenticated", "getWatchlist"]),
+    ...mapGetters([
+      "isAuthenticated",
+      "getWatchlist",
+      "getSelectedTitle",
+      "getPrompt",
+    ]),
 
-    determineWhenVisible: function() {
+    determineWhenVisible: function () {
       if (this.isAuthenticated)
         return this.isOnWatchlist && this.$route.name.startsWith("watchlist");
-    }
+    },
   },
 
   methods: {
-    ...mapActions(["removeClickedTitle"])
-  }
+    ...mapActions(["removeClickedTitle"]),
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -117,11 +123,6 @@ export default {
   width: 100%;
   height: calc(100% - 2.5rem);
   border-radius: 0.5rem 0.5rem 0 0;
-}
-
-.disabled li {
-  filter: grayscale(100);
-  pointer-events: none;
 }
 
 #sticker-container {

@@ -1,14 +1,24 @@
 <template>
   <section id="watchlist">
     <transition name="fade">
-    <div id="watchlist-controls" v-if="getWatchlist && getWatchlist.length">
-      <button class="watchlist-control" @click="saveWatchlist">
-        <img src="../assets/save.svg" alt="save watchlist icon" />
-      </button>
-      <button class="watchlist-control" @click="open">
-        <img src="../assets/delete.svg" alt="delete watchlist icon" />
-      </button>
-    </div>
+      <div id="watchlist-controls" v-if="getWatchlist && getWatchlist.length">
+        <button
+          :tabindex="disableFocusMixin"
+          class="watchlist-control"
+          @click="saveWatchlist"
+          :class="{'disabled-universal': getPrompt || getSelectedTitle}"
+        >
+          <img src="../assets/save.svg" alt="save watchlist icon" />
+        </button>
+        <button
+          :tabindex="disableFocusMixin"
+          class="watchlist-control"
+          @click="open"
+          :class="{'disabled-universal': getPrompt || getSelectedTitle}"
+        >
+          <img src="../assets/delete.svg" alt="delete watchlist icon" />
+        </button>
+      </div>
     </transition>
     <transition name="fade">
       <confirmation-alert v-if="$store.state.confirmPrompt" :confirm="deleteWatchlistAction">
@@ -27,6 +37,11 @@
       </general-info>
       <movie-list v-else :titlesArray="getWatchlist" :displayTitle="showFullWatchlistTitle"></movie-list>
     </transition>
+    <transition name="dropIn">
+      <app-message v-if="$store.state.messageDisplayed">
+        <h1>Watchlist saved successfully!</h1>
+      </app-message>
+    </transition>
     <transition name="fade">
       <selected-card v-if="getSelectedTitle"></selected-card>
     </transition>
@@ -36,8 +51,10 @@
 <script>
 import axios from "axios";
 import { mapGetters, mapActions } from "vuex";
+import { disableFocusMixin } from "../mixins";
 
 export default {
+  mixins: [disableFocusMixin],
   beforeRouteLeave(to, from, next) {
     this.closeSelectedTitle();
     next();
@@ -48,8 +65,9 @@ export default {
       "getWatchlist",
       "getUser",
       "getSelectedTitle",
-      "getSelectedWatchlistTitle"
-    ])
+      "getSelectedWatchlistTitle",
+      "getPrompt",
+    ]),
   },
 
   methods: {
@@ -57,14 +75,13 @@ export default {
       "showFullWatchlistTitle",
       "saveWatchlist",
       "closeSelectedTitle",
-      "deleteWatchlistAction"
-    ]), 
+      "deleteWatchlistAction",
+    ]),
 
-    open: function(){
-
-      this.$store.state.confirmPrompt = !this.$store.state.confirmPrompt;
+    open: function () {
+      this.$store.state.confirmPrompt = true;
     },
-  }
+  },
 };
 </script>
 
@@ -94,12 +111,13 @@ export default {
   }
 
   &:hover,
-  &:active {
-    transform: scale(1.2);
-  }
-
+  &:active,
   &:focus {
-    outline: auto;
+    transform: scale(1.2);
+
+    img {
+      filter: brightness(140%);
+    }
   }
 }
 

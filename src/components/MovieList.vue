@@ -9,7 +9,7 @@
       id="movie-list"
       @click.native="displayTitle"
       :disabled="getSelectedTitle"
-      :class="{disabled: getSelectedTitle }"
+      :class="{disabled: getSelectedTitle || $store.state.confirmPrompt }"
     >
       <!--Ova komponenta prima id od svih naslova iz arraya, assigna ih kao id na images, taj id dalje šaljem u "title-thumbnail" i "cta-button" komponentu, da mu se mijenja izgled i funkcionalnost ovisno o tome je li film već dodan na listu i je li user ulogiran-->
       <title-thumbnail

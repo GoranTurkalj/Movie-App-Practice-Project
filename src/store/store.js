@@ -101,6 +101,10 @@ export const store = new Vuex.Store({
     getWatchlist: function(state) {
       return state.user.watchlist;
     },
+
+    getPrompt: function(state){
+      return state.confirmPrompt;
+    },
   },
   //Mutations****************************************************************
   mutations: {
@@ -538,6 +542,11 @@ export const store = new Vuex.Store({
         )
         .then((response) => {
           console.log(response);
+          //show message to user
+          context.state.messageDisplayed = true;
+          setTimeout(()=>{
+            context.state.messageDisplayed = false;
+          }, 2000); 
         })
         .catch((error) => {
           console.log(error);

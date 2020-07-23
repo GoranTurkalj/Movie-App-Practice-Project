@@ -2,6 +2,7 @@
   <section id="homepage">
     <div class="search-container">
       <input
+        placeholder="Enter movie title here"
         class="search-input"
         type="text"
         @input="updateSearchedTitle"
@@ -119,15 +120,4 @@ export default {
   }
 }
 
-.fade-enter {
-  opacity: 0;
-}
-.fade-enter-active {
-  transition: opacity 400ms;
-}
-
-.fade-leave-active {
-  transition: opacity 400ms;
-  opacity: 0;
-}
 </style>

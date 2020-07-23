@@ -34,3 +34,14 @@ export const isOnWatchlistMixin = {
     },
   },
 };
+
+//Ako je nešto od ovog true, disableati keyboard focus stavljanjem tabindex = -1
+export const disableFocusMixin = {
+  computed: {
+    disableFocusMixin() {
+      if (this.getPrompt || this.getSelectedTitle) {
+        return -1;
+      }
+    },
+  },
+};

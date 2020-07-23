@@ -1,3 +1,16 @@
+
+.disabled li {
+  filter: grayscale(100);
+  pointer-events: none;
+}
+
+.disabled-universal {
+
+  filter: grayscale(100);
+  pointer-events: none;
+}
+
+
 .fade-enter {
   opacity: 0;
 }

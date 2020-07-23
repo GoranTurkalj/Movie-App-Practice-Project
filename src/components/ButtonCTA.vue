@@ -1,5 +1,6 @@
 <template>
   <button
+    :tabindex="disableFocusMixin"
     @click="performAllowedAction"
     class="cta-button"
     :class="{'cta-button--disabled': !isAuthenticated, 'cta-button--static': isOnSelectedTitle, 'cta-button--watch': isOnWatchlist}"
@@ -7,9 +8,9 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { isOnWatchlistMixin } from "../mixins";
+import { isOnWatchlistMixin, disableFocusMixin } from "../mixins";
 export default {
-  mixins: [isOnWatchlistMixin],
+  mixins: [isOnWatchlistMixin, disableFocusMixin],
   props: {
     recievedTitleID: {
       type: Number
@@ -21,7 +22,8 @@ export default {
       "getResultsList",
       "getWatchlist",
       "isAuthenticated",
-      "getSelectedTitle"
+      "getSelectedTitle", 
+      "getPrompt"
     ]),
 
     displayButtonText: function() {
