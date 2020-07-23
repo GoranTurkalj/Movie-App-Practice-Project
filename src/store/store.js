@@ -102,7 +102,7 @@ export const store = new Vuex.Store({
       return state.user.watchlist;
     },
 
-    getPrompt: function(state){
+    getPrompt: function(state) {
       return state.confirmPrompt;
     },
   },
@@ -144,8 +144,13 @@ export const store = new Vuex.Store({
       state.resultsList = [];
     },
 
+    //Committed in
     updateSelectedTitle: function(state, newTitle) {
       state.selectedTitle = newTitle;
+      console.log(
+        "Selected title was just MUTATED to this: ",
+        state.selectedTitle
+      );
     },
 
     //This mutations sets selectedTitle to "" after the close button is clicked on the SelectedCard component
@@ -156,7 +161,7 @@ export const store = new Vuex.Store({
     //When "Add to watchlist" button is pressed - the addedTitle data is added as an object to the user's watchlist array
     updateWatchlist: function(state, addedTitle) {
       state.user.watchlist.push(addedTitle);
-      console.log(state.user.watchlist);
+      console.log("THIS IS THE WATCHLIST", state.user.watchlist);
     },
 
     //This mutation removes a title from the watchlist when a user clicks on button on the thumbnail, which displays only when the route is "/watchlist"
@@ -247,7 +252,13 @@ export const store = new Vuex.Store({
           for (const key in res.data) {
             fetchedUser.userDatabaseKey = key;
           }
-          //Prije commitanja storeFetchedmutacije, napraviti check ima li user svoj watchlist, ako ne, kreirati.
+          //Pošto Firebase ne vraća propertije koji su prazni, kad sejvam watchlist prvo JSON stringify cijeli array i stavim ga property "stringifiedArray od "savedData" objekta, a ovdje onda JSON.parse treba napraviti da dobijem nazad watchlist array bez izbrisanih praznih propertija što Firebase inače radi.
+          if (fetchedUser.watchlist) {
+            fetchedUser.watchlist = JSON.parse(
+              fetchedUser.watchlist.stringifiedArray
+            );
+          }
+          //Prije commitanja storeFetchedUser mutacije, napraviti check ima li user svoj watchlist, ako ne, kreirati.
           if (!fetchedUser.watchlist) {
             fetchedUser.watchlist = [];
           }
@@ -426,10 +437,16 @@ export const store = new Vuex.Store({
 
     //Displays more options and details for the clicked title - this action fires when a title img is clicked on.
     showFullTitle: function({ dispatch, getters }, $event) {
-      if ($event.target.tagName === "IMG") {
+      if (
+        $event.target.tagName === "IMG" &&
+        $event.target.classList.contains("movie-img")
+      ) {
         //Napraviti loop kroz listu rezultata i ako kliknuti img ima isti id kao i title na listi, napraviti HTTP request s tim title id-om za dobiti detaljnije podatke
         for (const title of getters.getResultsList) {
           if (+$event.target.id === title.id) {
+            console.log(
+              "Show Full Title just dispatched 'getDetailedTitleInfo'"
+            );
             dispatch("getDetailedTitleInfo", {
               mutationName: "updateSelectedTitle",
               titleID: title.id,
@@ -440,8 +457,8 @@ export const store = new Vuex.Store({
       }
     },
 
+    //This action is dispatche
     showFullWatchlistTitle: function({ commit, getters }, $event) {
-      //Ne zelim da klik na zvijezdicu uoopće pokrene funkciju
       if (
         $event.target.tagName === "IMG" &&
         $event.target.classList.contains("movie-img")
@@ -449,7 +466,11 @@ export const store = new Vuex.Store({
         //Napraviti loop kroz Watchlist i ako kliknuti img ima isti id kao i title na listi, assignati ga kao selectedTitle
         for (const title of getters.getWatchlist) {
           if (+$event.target.id === title.id) {
-            //Commitati mutaciju za updetjanje selectedTitle
+            console.log(
+              "show full watchlist title runs and is committing 'updateSelectedTitle' with: ",
+              title
+            );
+            //Commitati mutaciju za updejtanje selectedTitle
             commit("updateSelectedTitle", title);
             router.push("/watchlist/title_details");
           }
@@ -481,10 +502,10 @@ export const store = new Vuex.Store({
       }
     },
 
-    //Akcija se koristi u ButtonCTA komponenti - pri kliku, i u showFullTitle akciji kad se klikne na neki thumbnail onda se napravi novi "selectedTitle" objekt
+    //Akcija se dispatcha u ButtonCTA komponenti - u metodi "addToWatchlist", i u "showFullTitle" akciji kad se klikne na neki thumbnail onda se napravi novi "selectedTitle" objekt
     getDetailedTitleInfo: function(context, { mutationName, titleID, poster }) {
       // Akcija prima payload objekt s imenom mutacije koju treba commitati i title objektom - oboje su destrukturirani u parametrima
-      //objekt title ima id i treba napraviti GET request pomoću tog id-a da se dobiju detaljniji podaci za naslov
+      //objekt title ima id i treba napraviti GET request pomoću tog id-a za detaljnije podatke o filmu
 
       //Create new empty variable - this will hold the necessary detailed data from the response
       let newTitleData = null;
@@ -522,31 +543,39 @@ export const store = new Vuex.Store({
             crew: data.credits.crew,
           };
 
-          //Commitati mutaciju updateWatchlist - na button click,  ILI committati mutaciju updateSelectedTitle kad se klikne na thumbnail na resultsList.
+          //Commitati mutaciju updateWatchlist - na cta button click,  ILI committati mutaciju updateSelectedTitle kad se klikne na thumbnail na resultsList.
           context.commit(mutationName, newTitleData);
+          console.log(
+            "GET DETAILED INFO  just ran and commitetd this mutation: ",
+            mutationName,
+            " and this data: ",
+            newTitleData
+          );
           if (mutationName === "updateSelectedTitle") {
             router.push("/title_details");
           }
         });
     },
 
-    //This action will store / save user's watchlist to the database - not yet sure WHEN it should happen
+    //This action will store / save user's watchlist to the database
     saveWatchlist: function(context) {
-      //Get users watchlist
-      const unsavedWatchlist = context.getters.getWatchlist;
+      //Get users watchlist and stringify it because Firebase would otherwise not return any property that was empty.
+      const savedData = {};
+      savedData.stringifiedArray = JSON.stringify(context.getters.getWatchlist);
+      console.log(savedData);
 
       axios
         .put(
           `https://movie-app-project-d0dc7.firebaseio.com/users/${context.getters.getUser.userDatabaseKey}/watchlist.json?auth=${context.state.token}`,
-          unsavedWatchlist
+          savedData
         )
         .then((response) => {
           console.log(response);
           //show message to user
           context.state.messageDisplayed = true;
-          setTimeout(()=>{
+          setTimeout(() => {
             context.state.messageDisplayed = false;
-          }, 2000); 
+          }, 2000);
         })
         .catch((error) => {
           console.log(error);

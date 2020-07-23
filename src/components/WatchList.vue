@@ -1,7 +1,7 @@
 <template>
   <section id="watchlist">
     <transition name="fade">
-      <div id="watchlist-controls" v-if="getWatchlist && getWatchlist.length">
+      <div id="watchlist-controls">
         <button
           :tabindex="disableFocusMixin"
           class="watchlist-control"
@@ -11,6 +11,7 @@
           <img src="../assets/save.svg" alt="save watchlist icon" />
         </button>
         <button
+          v-if="getWatchlist && getWatchlist.length"
           :tabindex="disableFocusMixin"
           class="watchlist-control"
           @click="open"
@@ -61,13 +62,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      "getWatchlist",
-      "getUser",
-      "getSelectedTitle",
-      "getSelectedWatchlistTitle",
-      "getPrompt",
-    ]),
+    ...mapGetters(["getWatchlist", "getUser", "getSelectedTitle", "getPrompt"]),
   },
 
   methods: {
@@ -119,17 +114,5 @@ export default {
       filter: brightness(140%);
     }
   }
-}
-
-.fade-enter {
-  opacity: 0;
-}
-.fade-enter-active {
-  transition: opacity 400ms;
-}
-
-.fade-leave-active {
-  transition: opacity 400ms;
-  opacity: 0;
 }
 </style>

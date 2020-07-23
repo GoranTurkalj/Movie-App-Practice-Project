@@ -13,8 +13,8 @@ export default {
   mixins: [isOnWatchlistMixin, disableFocusMixin],
   props: {
     recievedTitleID: {
-      type: Number
-    }
+      type: Number,
+    },
   },
 
   computed: {
@@ -22,54 +22,56 @@ export default {
       "getResultsList",
       "getWatchlist",
       "isAuthenticated",
-      "getSelectedTitle", 
-      "getPrompt"
+      "getSelectedTitle",
     ]),
 
-    displayButtonText: function() {
+    displayButtonText: function () {
       //ako isOnWatchlist (importan mixin) vrati true - onda tekst treba biti "WATCH NOW", ako ne, onda "ADD TO WATCHLIST"
 
       return this.isOnWatchlist ? "WATCH NOW" : "ADD TO WATCHLIST";
     },
 
-    isOnSelectedTitle: function() {
+    isOnSelectedTitle: function () {
       //if cta button component is rendered on a currently displayed SELECTED TITLE - then the "cta-button--static" class needs to applay to adjust it a bit.
 
       return (
         this.getSelectedTitle &&
         this.recievedTitleID === this.getSelectedTitle.id
       );
-    }
+    },
   },
 
   methods: {
     ...mapActions(["getDetailedTitleInfo"]),
 
-    watchFullTitle: function() {
+    watchFullTitle: function () {
       this.$router.push("/watch_now");
     },
 
-    displaySignInPrompt: function() {
-      this.$store.state.messageDisplayed = true; 
-      setTimeout(()=>{
-        this.$store.state.messageDisplayed = false; 
-      }, 2500); 
+    displaySignInPrompt: function () {
+      this.$store.state.messageDisplayed = true;
+      setTimeout(() => {
+        this.$store.state.messageDisplayed = false;
+      }, 2500);
     },
 
-    addToWatchlist: function(recievedTitleID) {
+    addToWatchlist: function (recievedTitleID) {
       for (const title of this.getResultsList) {
         if (title.id === recievedTitleID) {
-          //Akciji passam payload objekt koji sadrzi ime mutacije koju treba commitati, zatim titleID - jer će trebati napraviti GET request za detaljnije podatke za taj naslov, te naposljetku, poster path jer svaki searched result na listi ima konstruiran path za povući poster img pa cu ga passati ovdje
+          //Akciji passam payload objekt koji sadrzi ime mutacije koju treba commitati, zatim titleID - jer će trebati napraviti GET request za detaljnije podatke za taj naslov, te poster path jer svaki searched result na listi ima konstruiran path za povući poster img pa cu ga passati ovdje
+          console.log(
+            "ADD TO WATCHLIST JUST RAN - and dispatched 'getDetailedTitleInfo'"
+          );
           this.getDetailedTitleInfo({
             mutationName: "updateWatchlist",
             titleID: recievedTitleID,
-            poster: title.fullPosterPath
+            poster: title.fullPosterPath,
           });
         }
       }
     },
 
-    performAllowedAction: function(event) {
+    performAllowedAction: function (event) {
       setTimeout(() => {
         event.target.style.pointerEvents = "auto";
       }, 750);
@@ -90,8 +92,8 @@ export default {
       if (this.isAuthenticated && !this.isOnWatchlist) {
         return this.addToWatchlist(this.recievedTitleID);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

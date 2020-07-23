@@ -47,7 +47,7 @@
         <router-link :to="{name: 'titleReview'}">REVIEW</router-link>
       </nav>
       <nav class="overview-controls" v-else>
-        <router-link :to="{name: 'watchlistTitleStory'}">STORY</router-link>
+        <router-link :to="{name: 'watchlistTitleStory'}" exact>STORY</router-link>
         <router-link :to="{name: 'watchlistTitleGallery'}">GALLERY</router-link>
         <router-link :to="{name: 'watchlistTitleReview'}">REVIEW</router-link>
       </nav>
@@ -67,7 +67,7 @@ export default {
   data() {
     return {
       overviewDisplayed: true,
-      alreadyAdded: false
+      alreadyAdded: false,
     };
   },
   computed: {
@@ -78,20 +78,19 @@ export default {
       "getCast",
       "getGenres",
       "getWatchlist",
-      "isAuthenticated"
+      "isAuthenticated",
     ]),
     //Returns only the year of the release date
-    extractYear: function() {
+    extractYear: function () {
       const date = this.getSelectedTitle.releaseDate;
       const year = date.split("-");
       return year[0];
-    }
+    },
   },
 
   methods: {
-    ...mapActions(["addToWatchlist", "closeSelectedTitle"])
-
-  }
+    ...mapActions(["addToWatchlist", "closeSelectedTitle"]),
+  },
 };
 </script>
 
@@ -205,53 +204,7 @@ export default {
     }
   }
 }
-
-.added {
-  pointer-events: none;
-  background: white;
-  color: $accentColor;
-}
-
-.animated {
-  animation: flipButton 750ms linear 1 forwards;
-}
-
-.fade-enter {
-  opacity: 0;
-}
-.fade-enter-active {
-  transition: opacity 300ms;
-}
-.fade-leave-active {
-  transition: opacity 300ms;
-  opacity: 0;
-}
-
-.active {
-  color: $activeColor;
-}
-
-@keyframes flipButton {
-  0% {
-    background-color: $accentColor;
-  }
-  10% {
-    background-color: white;
-  }
-
-  25% {
-    color: transparent;
-  }
-
-  50% {
-    color: transparent;
-  }
-
-  75% {
-    color: $accentColor;
-  }
-
-  100% {
-  }
+.router-link-active {
+  color: white !important;
 }
 </style>

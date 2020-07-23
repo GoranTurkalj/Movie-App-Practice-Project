@@ -4,7 +4,7 @@
     <transition-group
       @before-leave="beforeLeave"
       type="animation"
-      name="slide"
+      :name="determinedTransition"
       tag="ul"
       id="movie-list"
       @click.native="displayTitle"
@@ -27,23 +27,26 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   props: {
     titlesArray: {
-      type: Array
+      type: Array,
     },
     displayTitle: {
-      type: Function
-    }
+      type: Function,
+    },
   },
 
   methods: {
-    beforeLeave: function(el) {
+    beforeLeave: function (el) {
       el.style.left = el.offsetLeft + "px";
       el.style.top = el.offsetTop + "px";
-    }
+    },
   },
 
   computed: {
-    ...mapGetters(["getSelectedTitle"])
-  }
+    ...mapGetters(["getSelectedTitle"]),
+    determinedTransition: function () {
+      return this.$route.name === "home" ? "" : "slide";
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

@@ -2,16 +2,10 @@
   <header id="main-header">
     <nav class="main-nav">
       <ul class="nav-list nav-list--left">
-        <router-link to="/" class="nav-item" exact tag="li" active-class="active">
+        <router-link to="/" class="nav-item" exact tag="li">
           <a>HOME</a>
         </router-link>
-        <router-link
-          v-if="isAuthenticated"
-          to="/watchlist"
-          class="nav-item"
-          tag="li"
-          active-class="active"
-        >
+        <router-link v-if="isAuthenticated" to="/watchlist" class="nav-item" tag="li">
           <a>WATCHLIST</a>
         </router-link>
       </ul>
@@ -20,22 +14,10 @@
         <h1 id="app-title">MOVIE APP</h1>
       </div>
       <ul class="nav-list nav-list--right">
-        <router-link
-          v-if="!isAuthenticated"
-          to="/signup"
-          class="nav-item"
-          tag="li"
-          active-class="active"
-        >
+        <router-link v-if="!isAuthenticated" to="/signup" class="nav-item" tag="li">
           <a>SIGN UP</a>
         </router-link>
-        <router-link
-          v-if="!isAuthenticated"
-          to="/signin"
-          class="nav-item"
-          tag="li"
-          active-class="active"
-        >
+        <router-link v-if="!isAuthenticated" to="/signin" class="nav-item" tag="li">
           <a>SIGN IN</a>
         </router-link>
         <router-link
@@ -43,10 +25,9 @@
           to="/signin"
           class="nav-item"
           tag="li"
-          active-class="active"
           @click.native="logOutUser"
         >
-          <a>LOG OUT, {{getUser.name}}</a>
+          <a>LOG OUT</a>
         </router-link>
       </ul>
     </nav>
@@ -56,11 +37,11 @@
 import { mapGetters, mapActions } from "vuex";
 export default {
   computed: {
-    ...mapGetters(["isAuthenticated", "getUser"])
+    ...mapGetters(["isAuthenticated"]),
   },
   methods: {
-    ...mapActions(["closeSelectedTitle", "logOutUser"])
-  }
+    ...mapActions(["closeSelectedTitle", "logOutUser"]),
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -75,7 +56,6 @@ export default {
   height: 100%;
   display: flex;
   justify-content: space-between;
-  
 }
 
 .nav-list {
@@ -83,7 +63,6 @@ export default {
   list-style-type: none;
   display: flex;
   align-items: center;
-  
 }
 
 .nav-item a {
@@ -137,7 +116,7 @@ export default {
   @include orangeGreyText();
 }
 
-.active a {
-  color: $activeColor;
+.router-link-active a {
+  color: white;
 }
 </style>

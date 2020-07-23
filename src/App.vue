@@ -2,9 +2,9 @@
   <div id="app">
     <app-header></app-header>
     <transition name="fade">
-       <app-backdrop v-if="$store.state.confirmPrompt"></app-backdrop>
+      <app-backdrop v-if="$store.state.confirmPrompt"></app-backdrop>
     </transition>
-   
+
     <transition name="fade" mode="out-in">
       <router-view></router-view>
     </transition>
@@ -16,8 +16,8 @@ import Header from "./components/Header.vue";
 
 export default {
   components: {
-    appHeader: Header
-  }
+    appHeader: Header,
+  },
 };
 </script>
 
@@ -34,10 +34,6 @@ body {
   overflow-y: scroll;
 }
 
-.active {
-  color: red;
-}
-
 #app {
   width: 100vw;
   min-height: 100vh;
@@ -48,15 +44,5 @@ body {
   background-attachment: fixed;
 }
 
-.fade-enter {
-  opacity: 0;
-}
-.fade-enter-active {
-  transition: opacity 250ms;
-}
 
-.fade-leave-active {
-  opacity: 0;
-  transition: opacity 250ms;
-}
 </style>

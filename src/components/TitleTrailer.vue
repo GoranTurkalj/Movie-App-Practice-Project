@@ -18,14 +18,14 @@ export default {
   mixins: [routeGuardMixin],
   computed: {
     ...mapGetters(["getSelectedTitleVideos"]),
-    displayTrailer: function() {
+    displayTrailer: function () {
       return `https://www.youtube.com/embed/${this.getSelectedTitleVideos}?autoplay=1&modestbranding=1&rel=0&loop=1&playlist=${this.getSelectedTitleVideos}`;
-    }
+    },
   },
 
   methods: {
-    ...mapActions(["closeSelectedTitle"])
-  }
+    ...mapActions(["closeSelectedTitle"]),
+  },
 };
 </script>
 <style lang="scss" scoped>

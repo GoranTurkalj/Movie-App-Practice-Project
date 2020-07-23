@@ -5,20 +5,12 @@
         <img :src="getSelectedTitle.fullPosterPath" alt="selected title image" />
       </div>
       <div class="preview-controls" v-if="!isOnWatchlistRoute">
-        <router-link class="preview-control" to="/title_details" active-class="active">DETAILS</router-link>
-        <router-link class="preview-control" to="/title_trailer" active-class="active">TRAILER</router-link>
+        <router-link class="preview-control" to="/title_details">DETAILS</router-link>
+        <router-link class="preview-control" to="/title_trailer">TRAILER</router-link>
       </div>
       <div class="preview-controls" v-else>
-        <router-link
-          class="preview-control"
-          to="/watchlist/title_details"
-          active-class="active"
-        >DETAILS</router-link>
-        <router-link
-          class="preview-control"
-          to="/watchlist/title_trailer"
-          active-class="active"
-        >TRAILER</router-link>
+        <router-link class="preview-control" to="/watchlist/title_details">DETAILS</router-link>
+        <router-link class="preview-control" to="/watchlist/title_trailer">TRAILER</router-link>
       </div>
     </div>
 
@@ -35,11 +27,11 @@ import { determineRouteMixin } from "../mixins";
 export default {
   mixins: [determineRouteMixin],
   computed: {
-    ...mapGetters(["getSelectedTitle"])
+    ...mapGetters(["getSelectedTitle"]),
   },
   methods: {
-    ...mapActions(["closeSelectedTitle"])
-  }
+    ...mapActions(["closeSelectedTitle"]),
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -132,7 +124,7 @@ export default {
   }
 }
 
-.active {
-  color: $activeColor;
+.router-link-active  {
+  color: white;
 }
 </style>
