@@ -2,9 +2,8 @@
   <div id="app">
     <app-header></app-header>
     <transition name="fade">
-      <app-backdrop v-if="$store.state.confirmPrompt"></app-backdrop>
+      <app-backdrop v-if="getAlertPrompt"></app-backdrop>
     </transition>
-
     <transition name="fade" mode="out-in">
       <router-view></router-view>
     </transition>
@@ -13,10 +12,16 @@
 
 <script>
 import Header from "./components/Header.vue";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
     appHeader: Header,
+  },
+
+  computed: {
+    ...mapGetters(["getAlertPrompt"]),
+    
   },
 };
 </script>
@@ -43,6 +48,4 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
-
-
 </style>

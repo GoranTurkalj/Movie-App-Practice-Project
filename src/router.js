@@ -39,7 +39,7 @@ const routes = [
         children: [
           { path: "story", name: "titleStory", component: StoryPanel },
           { path: "gallery", name: "titleGallery", component: GalleryPanel },
-          { path: "review", name: "titleReview", component: ReviewPanel },
+          // { path: "review", name: "titleReview", component: ReviewPanel },
         ],
       },
       {

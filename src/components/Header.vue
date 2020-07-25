@@ -35,7 +35,9 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
+import {disableFocusMixin} from "../mixins";
 export default {
+  mixins: [disableFocusMixin],
   computed: {
     ...mapGetters(["isAuthenticated"]),
   },

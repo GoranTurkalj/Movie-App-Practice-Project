@@ -15,7 +15,8 @@ export const store = new Vuex.Store({
     resultsList: [],
     selectedTitle: "",
     baseImageURL: "https://image.tmdb.org/t/p/w500",
-    confirmPrompt: false,
+    showBackdrop: false,
+    alertPrompt: false,
     messageDisplayed: false,
   },
   //Getters******************************************************************
@@ -85,6 +86,10 @@ export const store = new Vuex.Store({
       return keywords.length ? keywords.join(", ") : "No available info";
     },
 
+    getReviewText: function(state, getters) {
+      return getters.getSelectedTitle.review;
+    },
+
     //This getter returns video key of the selectedTitle
     getSelectedTitleVideos: function(state) {
       if (state.selectedTitle.videos.results.length) {
@@ -102,8 +107,12 @@ export const store = new Vuex.Store({
       return state.user.watchlist;
     },
 
-    getPrompt: function(state) {
-      return state.confirmPrompt;
+    getBackdrop: function(state) {
+      return state.showBackdrop;
+    },
+
+    getAlertPrompt: function(state) {
+      return state.alertPrompt;
     },
   },
   //Mutations****************************************************************
@@ -174,6 +183,21 @@ export const store = new Vuex.Store({
     //When user confirms watchlist deletion, deleteWatchlistAction commits this mutation
     deleteWatchlist: function(state) {
       state.user.watchlist = [];
+    },
+
+    updateReviewText: function(state, value) {
+      state.selectedTitle.review = value;
+    },
+
+    deleteReview: function(state) {
+      state.selectedTitle.review = "";
+    },
+
+    openAlertPrompt(state) {
+      state.alertPrompt = true;
+    },
+    closeAlertPrompt(state) {
+      state.alertPrompt = false;
     },
   },
 
@@ -403,12 +427,8 @@ export const store = new Vuex.Store({
 
     //Sends a request to the Movie Database
     requestSearchResults: function(context) {
-      if (!this.state.searchedTitle) {
-        alert(
-          "Please type in the name of a movie and then click the SEARCH button!"
-        );
-        return;
-      }
+      if (!this.state.searchedTitle) return;
+
       axios
         .get(
           `https://api.themoviedb.org/3/search/movie?api_key=9e612d73fdfb165c3aa123e0b09d606d&query=${this.state.searchedTitle}`
@@ -541,6 +561,7 @@ export const store = new Vuex.Store({
             votes: data.vote_count,
             cast: data.credits.cast,
             crew: data.credits.crew,
+            review: "",
           };
 
           //Commitati mutaciju updateWatchlist - na cta button click,  ILI committati mutaciju updateSelectedTitle kad se klikne na thumbnail na resultsList.
@@ -595,6 +616,15 @@ export const store = new Vuex.Store({
 
     deleteWatchlistAction: function(context) {
       context.commit("deleteWatchlist");
+    },
+
+    //Dispatched in ReviePanel component as a setter for a computed property
+    setReviewText: function(context, value) {
+      context.commit("updateReviewText", value);
+    },
+
+    deleteReviewAction: function(context) {
+      context.commit("deleteReview");
     },
   },
 });

@@ -44,10 +44,9 @@
       <nav class="overview-controls" v-if="!isOnWatchlistRoute">
         <router-link :to="{name: 'titleStory'}">STORY</router-link>
         <router-link :to="{name: 'titleGallery'}">GALLERY</router-link>
-        <router-link :to="{name: 'titleReview'}">REVIEW</router-link>
       </nav>
       <nav class="overview-controls" v-else>
-        <router-link :to="{name: 'watchlistTitleStory'}" exact>STORY</router-link>
+        <router-link :to="{name: 'watchlistTitleStory'}">STORY</router-link>
         <router-link :to="{name: 'watchlistTitleGallery'}">GALLERY</router-link>
         <router-link :to="{name: 'watchlistTitleReview'}">REVIEW</router-link>
       </nav>

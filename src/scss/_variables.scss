@@ -25,3 +25,22 @@ $accent-red: #c00909;
   min-height: 90vh;
   width: 100%;
 }
+
+//Save and delete buttons
+@mixin controlButtons() {
+  background-color: transparent;
+  border: none;
+  margin-right: 1.5rem;
+  outline: none;
+  cursor: pointer;
+  transition: all 200ms;
+  &:hover,
+  &:active,
+  &:focus {
+    transform: scale(1.2);
+
+    img {
+      filter: brightness(140%);
+    }
+  }
+}

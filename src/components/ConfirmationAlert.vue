@@ -4,28 +4,41 @@
       <h2>Are you sure?</h2>
     </slot>
     <div class="alert-container__controls">
-      <button class="alert-container__control" @click="confirm(); closeConfirmPrompt();">
-        <img src="../assets/ok.svg" alt="ok button icon" />
+      <button class="alert-container__control" @click="confirm">
+        <img src="../assets/ok.svg" alt="confirm button icon" />
       </button>
-      <button class="alert-container__control" @click="closeConfirmPrompt">
+      <button class="alert-container__control" @click="closeAlertPrompt">
         <img src="../assets/remove.svg" alt="abort button icon" />
       </button>
     </div>
   </div>
 </template>
 <script>
+import { mapMutations } from "vuex";
 export default {
   props: {
-    confirm: Function
+    confirm: {
+      type: Function,
+      required: true,
+    },
   },
+
   methods: {
-    closeConfirmPrompt() {
-      this.$store.state.confirmPrompt = false;
-    }
-  }
+    ...mapMutations(["closeAlertPrompt"]),
+  },
 };
 </script>
 <style lang="scss" scoped>
+#backdrop-container {
+  background-color: white;
+  position: fixed;
+  width: 100wv;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
 #alert-container {
   background-color: black;
   border: $borderNormal;
@@ -37,7 +50,7 @@ export default {
   top: 30%;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 51;
+  z-index: 100;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

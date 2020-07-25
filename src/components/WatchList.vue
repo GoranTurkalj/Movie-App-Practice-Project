@@ -6,7 +6,7 @@
           :tabindex="disableFocusMixin"
           class="watchlist-control"
           @click="saveWatchlist"
-          :class="{'disabled-universal': getPrompt || getSelectedTitle}"
+          :class="{'disabled-universal': getAlertPrompt || getSelectedTitle}"
         >
           <img src="../assets/save.svg" alt="save watchlist icon" />
         </button>
@@ -14,16 +14,19 @@
           v-if="getWatchlist && getWatchlist.length"
           :tabindex="disableFocusMixin"
           class="watchlist-control"
-          @click="open"
-          :class="{'disabled-universal': getPrompt || getSelectedTitle}"
+          :class="{'disabled-universal': getAlertPrompt || getSelectedTitle}"
+          @click="openDeleteWatchlistRequest"
         >
           <img src="../assets/delete.svg" alt="delete watchlist icon" />
         </button>
       </div>
     </transition>
     <transition name="fade">
-      <confirmation-alert v-if="$store.state.confirmPrompt" :confirm="deleteWatchlistAction">
-        <h2>Delete your entire watchlist?</h2>
+      <confirmation-alert
+        v-if="isProperRouteMixin('watchlist') && getAlertPrompt"
+        :confirm="deleteWatchlist"
+      >
+        <h2>Delete entire watchlist?</h2>
       </confirmation-alert>
     </transition>
     <transition name="fade" mode="out-in">
@@ -40,7 +43,8 @@
     </transition>
     <transition name="dropIn">
       <app-message v-if="$store.state.messageDisplayed">
-        <h1>Watchlist saved successfully!</h1>
+        <h1 v-if="$route.name === 'watchlistTitleReview'">Review saved successfully!</h1>
+        <h1 v-else>Watchlist saved successfully!</h1>
       </app-message>
     </transition>
     <transition name="fade">
@@ -51,18 +55,25 @@
 
 <script>
 import axios from "axios";
-import { mapGetters, mapActions } from "vuex";
-import { disableFocusMixin } from "../mixins";
+import { mapGetters, mapActions, mapMutations } from "vuex";
+import { disableFocusMixin, isProperRouteMixin } from "../mixins";
 
 export default {
-  mixins: [disableFocusMixin],
+  mixins: [disableFocusMixin, isProperRouteMixin],
   beforeRouteLeave(to, from, next) {
     this.closeSelectedTitle();
+    //close alert prompt 
+    this.closeAlertPrompt(); 
     next();
   },
 
   computed: {
-    ...mapGetters(["getWatchlist", "getUser", "getSelectedTitle", "getPrompt"]),
+    ...mapGetters([
+      "getWatchlist",
+      "getUser",
+      "getSelectedTitle",
+      "getAlertPrompt",
+    ]),
   },
 
   methods: {
@@ -72,9 +83,16 @@ export default {
       "closeSelectedTitle",
       "deleteWatchlistAction",
     ]),
+    ...mapMutations(["openAlertPrompt", "closeAlertPrompt"]),
 
-    open: function () {
-      this.$store.state.confirmPrompt = true;
+    //Sets "deleteWatchlistRequest" to true - shows prompt
+    openDeleteWatchlistRequest() {
+      this.openAlertPrompt();
+    },
+
+    deleteWatchlist() {
+      this.deleteWatchlistAction();
+      this.closeAlertPrompt();
     },
   },
 };
@@ -93,26 +111,12 @@ export default {
 }
 
 .watchlist-control {
-  transition: transform 200ms;
   height: 60%;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  margin-right: 1.5rem;
 
   img {
     height: 100%;
   }
 
-  &:hover,
-  &:active,
-  &:focus {
-    transform: scale(1.2);
-
-    img {
-      filter: brightness(140%);
-    }
-  }
+  @include controlButtons();
 }
 </style>

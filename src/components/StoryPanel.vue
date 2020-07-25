@@ -54,6 +54,7 @@ export default {
   width: 100%;
   color: $textColor;
   padding-top: 1rem;
+  
 
   ul {
     list-style-type: none;

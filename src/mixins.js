@@ -39,9 +39,19 @@ export const isOnWatchlistMixin = {
 export const disableFocusMixin = {
   computed: {
     disableFocusMixin() {
-      if (this.getPrompt || this.getSelectedTitle) {
+      if (this.getAlertPrompt || this.getSelectedTitle) {
         return -1;
       }
+    },
+  },
+};
+
+//isProperRoute - returns true if passed in string of a route name is equal to current route
+
+export const isProperRouteMixin = {
+  methods: {
+    isProperRouteMixin(routeName) {
+      if (routeName === this.$route.name) return true;
     },
   },
 };

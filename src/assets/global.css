@@ -1,4 +1,3 @@
-
 .disabled li {
   filter: grayscale(100);
   pointer-events: none;

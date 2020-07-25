@@ -46,7 +46,7 @@ export default {
   position: fixed;
   left: 5%;
   top: 10vh;
-  z-index: 10;
+  z-index: 51;
   display: flex;
   justify-content: space-between;
 }
@@ -124,7 +124,7 @@ export default {
   }
 }
 
-.router-link-active  {
+.router-link-active {
   color: white;
 }
 </style>

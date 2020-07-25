@@ -43,7 +43,7 @@ export default {
       "isAuthenticated",
       "getWatchlist",
       "getSelectedTitle",
-      "getPrompt",
+      "getAlertPrompt",
     ]),
 
     determineWhenVisible: function () {

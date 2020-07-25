@@ -3,7 +3,7 @@
     :tabindex="disableFocusMixin"
     @click="performAllowedAction"
     class="cta-button"
-    :class="{'cta-button--disabled': !isAuthenticated, 'cta-button--static': isOnSelectedTitle, 'cta-button--watch': isOnWatchlist}"
+    :class="{'cta-button--greyed': !isAuthenticated, 'cta-button--static': isOnSelectedTitle, 'cta-button--watch': isOnWatchlist}"
   >{{displayButtonText}}</button>
 </template>
 <script>
@@ -23,6 +23,7 @@ export default {
       "getWatchlist",
       "isAuthenticated",
       "getSelectedTitle",
+      "getAlertPrompt",
     ]),
 
     displayButtonText: function () {
@@ -129,7 +130,7 @@ export default {
   animation: animateTextWhite 300ms linear 1 forwards;
 }
 
-.cta-button--disabled {
+.cta-button--greyed {
   background-color: rgb(73, 72, 72);
   color: rgb(167, 164, 164);
 }
