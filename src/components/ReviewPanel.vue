@@ -1,23 +1,26 @@
 <template>
   <section id="review-panel">
-    <div class="review-panel__controls">
-      <button
-        :tabindex="disableFocusMixin"
-        class="review-panel__btn"
-        :class="{'disabled-universal': getAlertPrompt}"
-        @click="saveReview"
-      >
-        <img src="../assets/save.svg" alt="save review button icon" />
-      </button>
-      <button
-        :tabindex="disableFocusMixin"
-        v-if="getReviewText.length"
-        class="review-panel__btn"
-        :class="{'disabled-universal': getAlertPrompt}"
-        @click="openDeleteReviewRequest"
-      >
-        <img src="../assets/delete.svg" alt="delete review button icon" />
-      </button>
+    <div class="review-panel__ui">
+      <div class="review-panel__controls">
+        <button
+          :tabindex="disableFocusMixin"
+          class="review-panel__btn"
+          :class="{'disabled-universal': getAlertPrompt}"
+          @click="saveReview"
+        >
+          <img src="../assets/save.svg" alt="save review button icon" />
+        </button>
+        <button
+          :tabindex="disableFocusMixin"
+          v-if="getReviewText.length"
+          class="review-panel__btn"
+          :class="{'disabled-universal': getAlertPrompt}"
+          @click="openDeleteReviewRequest"
+        >
+          <img src="../assets/delete.svg" alt="delete review button icon" />
+        </button>
+      </div>
+      <user-rating></user-rating>
     </div>
     <textarea
       class="review-panel__area"
@@ -38,11 +41,16 @@
   </section>
 </template>
 <script>
+import UserRating from "./UserRating.vue";
 import { mapGetters, mapActions, mapMutations } from "vuex";
 import { disableFocusMixin, isProperRouteMixin } from "../mixins";
 
 export default {
   mixins: [disableFocusMixin, isProperRouteMixin],
+
+  components: {
+    userRating: UserRating,
+  },
 
   beforeRouteLeave(to, from, next) {
     this.closeAlertPrompt();
@@ -103,9 +111,17 @@ export default {
   padding-top: 1rem;
 }
 
+.review-panel__ui {
+   display: flex; 
+   justify-content: space-between;
+   align-items: center;
+ 
+}
+
 .review-panel__controls {
   display: flex;
   align-items: center;
+ 
 }
 .review-panel__btn {
   width: 1.5rem;

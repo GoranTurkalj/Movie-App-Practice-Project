@@ -15,7 +15,6 @@ export const store = new Vuex.Store({
     resultsList: [],
     selectedTitle: "",
     baseImageURL: "https://image.tmdb.org/t/p/w500",
-    showBackdrop: false,
     alertPrompt: false,
     messageDisplayed: false,
   },
@@ -107,12 +106,12 @@ export const store = new Vuex.Store({
       return state.user.watchlist;
     },
 
-    getBackdrop: function(state) {
-      return state.showBackdrop;
-    },
-
     getAlertPrompt: function(state) {
       return state.alertPrompt;
+    },
+
+    getUserRating: function(state) {
+      return state.selectedTitle.userRating;
     },
   },
   //Mutations****************************************************************
@@ -198,6 +197,10 @@ export const store = new Vuex.Store({
     },
     closeAlertPrompt(state) {
       state.alertPrompt = false;
+    },
+
+    setUserRating(state, value){
+      state.selectedTitle.userRating = +value; 
     },
   },
 
@@ -562,6 +565,7 @@ export const store = new Vuex.Store({
             cast: data.credits.cast,
             crew: data.credits.crew,
             review: "",
+            userRating: "",
           };
 
           //Commitati mutaciju updateWatchlist - na cta button click,  ILI committati mutaciju updateSelectedTitle kad se klikne na thumbnail na resultsList.

@@ -33,7 +33,7 @@
       </li>
       <li class="title-list__item">
         Release Date:
-        <span>{{getSelectedTitle.releaseDate}}</span>
+        <span>{{getSelectedTitle.releaseDate | toNicerDate}}</span>
       </li>
       <li class="title-list__item">
         Run Time:
@@ -62,6 +62,18 @@ import { determineRouteMixin, routeGuardMixin } from "../mixins";
 
 export default {
   mixins: [determineRouteMixin, routeGuardMixin],
+
+  filters: {
+    toNicerDate(value) {
+      const date = new Date(value);
+      //I want a date to appear like this: April 4th 1992
+      return date.toLocaleString("en-EN", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+    },
+  },
 
   data() {
     return {
