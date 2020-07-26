@@ -1,5 +1,5 @@
 <template>
-  <header id="main-header">
+  <header class="main-header" :class="{dark: $route.name === 'watchnow'}">
     <nav class="main-nav">
       <ul class="nav-list nav-list--left">
         <router-link to="/" class="nav-item" exact tag="li">
@@ -35,7 +35,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
-import {disableFocusMixin} from "../mixins";
+import { disableFocusMixin } from "../mixins";
 export default {
   mixins: [disableFocusMixin],
   computed: {
@@ -47,11 +47,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-#main-header {
+.main-header {
   height: 10vh;
   width: 100vw;
   padding: 0 3rem;
   background-color: rgba(0, 0, 0, 0.5);
+  transition: background-color 300ms;
 }
 
 .main-nav {
@@ -118,7 +119,16 @@ export default {
   @include orangeGreyText();
 }
 
+.dark {
+  background-color: black;
+}
 .router-link-active a {
   color: white;
 }
+
+//Media Queries XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+ @media only screen and (max-width: 970px) {
+
+   
+ }
 </style>

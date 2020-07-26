@@ -55,10 +55,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.screen {
-  position: fixed;
+.screen { 
   width: 100%;
-  height: 90vh;
+  height: 80vh;
   background-color: black;
 
   iframe {

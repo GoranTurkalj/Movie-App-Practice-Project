@@ -30,7 +30,7 @@
 import { mapGetters } from "vuex";
 
 export default {
-  mounted: function() {
+  mounted: function () {
     this.track = this.$refs.carouselList;
 
     if (!this.track) {
@@ -47,7 +47,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["getSelectedTitleImages"])
+    ...mapGetters(["getSelectedTitleImages"]),
   },
 
   data() {
@@ -56,12 +56,12 @@ export default {
       track: "",
       currentSlide: "",
       nextSlide: "",
-      previousSlide: ""
+      previousSlide: "",
     };
   },
 
   methods: {
-    moveToNext: function() {
+    moveToNext: function () {
       this.currentSlide = this.track.querySelector(".current-slide");
 
       if (!this.currentSlide || this.slides.length <= 1) {
@@ -84,7 +84,7 @@ export default {
       this.currentSlide.classList.remove("current-slide");
     },
 
-    moveToPrevious: function() {
+    moveToPrevious: function () {
       this.currentSlide = this.track.querySelector(".current-slide");
 
       if (!this.currentSlide || this.slides.length <= 1) {
@@ -103,8 +103,8 @@ export default {
 
       this.previousSlide.classList.add("current-slide");
       this.currentSlide.classList.remove("current-slide");
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -164,6 +164,9 @@ export default {
   width: 100%;
   list-style-type: none;
   position: relative;
+  display: flex;
+  align-items: center;
+  background-color: green;
 }
 
 .carousel__item {
@@ -172,10 +175,13 @@ export default {
   min-width: 100%;
   height: 100%;
   position: absolute;
+  display: flex;
+  align-items: center;
+  border: 1px solid red;
 
   img {
     width: 100%;
-    min-height: 100%;
+    height: 90%;
   }
 }
 
@@ -190,6 +196,23 @@ export default {
 
 .next-slide {
   left: 100%;
+}
+
+//MEDIA QUERIES xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+@media only screen and (max-width: 1300px) {
+  .carousel__item {
+    min-width: 100%;
+    height: auto; //From 100%,
+    position: absolute;
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 100%;
+      height: 90%;
+    }
+  }
 }
 </style>
 

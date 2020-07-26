@@ -143,4 +143,18 @@ export default {
     color: white;
   }
 }
+
+//MEDIA QUERIES xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+@media only screen and (max-width: 1300px) {
+  .cta-button--static {
+    position: absolute; // Dodano
+    top: 4.5rem; //Dodano
+    left: -19rem; // dodano
+    width: 14rem;
+    margin-top: 2rem;
+    border-radius: 0.5rem;
+    border: 2px solid rgb(231, 214, 182);
+  }
+}
 </style>

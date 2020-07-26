@@ -7,21 +7,23 @@
     <transition name="fade" mode="out-in">
       <router-view></router-view>
     </transition>
+    <app-footer></app-footer>
   </div>
 </template>
 
 <script>
 import Header from "./components/Header.vue";
+import Footer from "./components/Footer.vue";
 import { mapGetters } from "vuex";
 
 export default {
   components: {
     appHeader: Header,
+    appFooter: Footer,
   },
 
   computed: {
     ...mapGetters(["getAlertPrompt"]),
-    
   },
 };
 </script>
@@ -48,4 +50,6 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
+
+
 </style>

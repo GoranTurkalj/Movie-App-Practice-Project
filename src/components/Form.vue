@@ -142,7 +142,7 @@ export default {
 }
 
 h2 {
-  margin: 1rem 0;
+  margin: 1rem 0 0.5rem 0;
   text-align: center;
   color: $accentColor;
   font-family: "Bungee Inline";
@@ -160,7 +160,7 @@ label {
 input {
   font-size: 1.1rem;
   padding: 0.2rem;
-  margin: 0.5rem 0 2.5rem 0;
+  margin: 0.5rem 0 2.4rem 0;
   background-color: black;
   border: none;
   border-bottom: 1px solid rgb(66, 66, 66);
@@ -172,6 +172,7 @@ input {
     border-bottom: 1px solid white;
   }
 }
+
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -187,7 +188,7 @@ input:-webkit-autofill {
 
 button {
   background-color: $accentColor;
-  margin: 2rem auto;
+  margin: 1.75rem auto;
   width: 75%;
   color: black;
   outline: none;
@@ -216,7 +217,7 @@ button {
   border-bottom: 1px solid red;
 }
 .valid-input {
-  border-bottom: 1px solid #35a70c;
+  border-bottom: 1px solid $btnBackgroundGreen;
 }
 
 .disabled-submit {

@@ -127,4 +127,49 @@ export default {
 .router-link-active {
   color: white;
 }
+
+//Media Queries XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+@media only screen and (max-width: 1300px) {
+  .selected-card {
+    width: 100%; // changed from 90%
+    height: 100%; // changed from 80%;
+    background-color: rgba(0, 0, 0, 0.9);
+    padding: 1rem;
+    color: $accentColor;
+    border: none; //from $borderNormal
+    border-radius: 0; // from 1rem
+    position: fixed;
+    left: 0; // changed from 5%
+    top: 0; // changed from 10vh
+    z-index: 51;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .selected-card__preview {
+    height: 100%;
+    width: 22rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; //from space-between
+  }
+
+  .preview-img {
+    width: 22rem;
+    height: 500px;
+    border-radius: 8px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .preview-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem; // dodano
+  }
+}
 </style>
