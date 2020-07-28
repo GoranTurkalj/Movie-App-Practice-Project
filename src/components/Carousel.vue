@@ -166,22 +166,19 @@ export default {
   position: relative;
   display: flex;
   align-items: center;
-  background-color: green;
 }
 
 .carousel__item {
   transition: all 300ms ease-in;
   opacity: 0;
-  min-width: 100%;
-  height: 100%;
+  height: 80%;
   position: absolute;
   display: flex;
   align-items: center;
-  border: 1px solid red;
 
   img {
     width: 100%;
-    height: 90%;
+    height: 100%;
   }
 }
 
@@ -202,15 +199,10 @@ export default {
 
 @media only screen and (max-width: 1300px) {
   .carousel__item {
-    min-width: 100%;
-    height: auto; //From 100%,
-    position: absolute;
-    display: flex;
-    align-items: center;
+   min-width: 100%;
 
     img {
-      width: 100%;
-      height: 90%;
+      object-fit: contain;
     }
   }
 }

@@ -222,26 +222,10 @@ export default {
 //MEDIA QUERIES xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 @media only screen and (max-width: 1300px) {
-  .title-detail-container {
-    position: relative;
-    width: calc(100% - 23rem);
-    height: 100%;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    // background-color: rgb(74, 74, 116); //test
-  }
-
   .title-name {
-    font-size: 2rem;
     position: absolute; //Dodano
     top: 0; //Dodano
     left: -23rem; //Dodano
-  }
-
-  .info-year {
-    @include orangeGreyText();
   }
 
   .rating-container {
@@ -249,35 +233,12 @@ export default {
     top: 2rem; //Dodano
     left: -23rem; //Dodano
     width: 23rem; // from 40%;
-    margin-top: 1rem;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-
-    img {
-      width: 2rem;
-      height: 2rem;
-    }
-
-    span {
-      padding-left: 1.5rem;
-      font-size: 2rem;
-      font-weight: bold;
-      @include orangeGreyText();
-    }
-
-    #votes {
-      font-size: 1.1rem;
-      font-weight: 500;
-    }
   }
 
   .title-list {
     position: absolute; //Dodano
     top: 60%; //Dodano
     left: 0; // Dodano
-    margin-top: 1.5rem;
-    list-style-type: none;
     width: 100%; // from 40%;
     height: min-content;
     display: flex; //dodano
@@ -289,25 +250,8 @@ export default {
     min-width: 15rem; //dodano
     width: min-content; //dodano
     height: min-content; //dodano
-    color: $accentColor;
-    font-size: 1.2rem;
     padding-bottom: 1.5rem; //from 0.9rem
     padding-right: 2rem; //dpdamp
-    span {
-      color: $textColor;
-      font-size: 1rem;
-    }
-
-    a {
-      color: $textColor;
-      font-size: 1rem;
-
-      &:hover,
-      &:active,
-      &:focus {
-        color: $accentColor;
-      }
-    }
   }
 
   .overview-panel {
@@ -317,38 +261,7 @@ export default {
     right: 0;
     left: 0; //dodano
     width: 100%; //from 55%;
-    height: 60%; //from 80%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .overview-controls {
-    height: 10%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid $accentColor;
-
-    a {
-      text-decoration: none;
-      transition: all 200ms;
-      color: $accentColor;
-      padding-right: 1.5rem;
-      background-color: transparent;
-      border-bottom: 1px solid transparent;
-      cursor: pointer;
-      font-size: 1rem;
-      font-family: "Bungee Inline";
-      line-height: 1;
-      letter-spacing: 1px;
-
-      &:hover,
-      &:active,
-      &:focus {
-        color: white;
-      }
-    }
+    height: 50%; //from 80%;
   }
 }
 </style>
