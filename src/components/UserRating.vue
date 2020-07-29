@@ -104,4 +104,21 @@ li:hover ~ li .rating-star {
     fill: $userRatingColor;
   }
 }
+
+@media only screen and (max-width: 475px) {
+  #user-rating-container {
+    height: 1rem;
+  }
+
+  ul {
+    flex-wrap: nowrap;
+  }
+
+  li {
+   padding-right: 0.3rem;
+  }
+}
+
+
+
 </style>

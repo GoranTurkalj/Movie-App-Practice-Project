@@ -159,5 +159,26 @@ export default {
   background-color: $accentColor;
   border-radius: 0.5rem;
 }
+
+
+@media only screen and (max-width: 475px) {
+   
+   .review-panel__ui {
+     flex-direction: column;
+     justify-content: space-between;
+   }
+
+   .review-panel__controls {
+     margin-bottom: 1rem;
+   }
+
+   .review-panel__area {
+     font-size: 1rem;
+   }
+
+}
+
+
+
 </style>
 

@@ -38,7 +38,10 @@ export default {
 
 body {
   overflow-x: hidden;
-  overflow-y: scroll;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }
 
 #app {
@@ -50,6 +53,4 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
-
-
 </style>

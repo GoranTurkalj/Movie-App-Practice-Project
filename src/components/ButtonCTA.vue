@@ -157,4 +157,14 @@ export default {
     border: 2px solid rgb(231, 214, 182);
   }
 }
+
+@media only screen and (max-width: 990px) {
+
+  .cta-button--static {
+    position: static;
+    width: 50%;
+    min-width: 12rem;
+    max-width: 20rem;
+  }
+}
 </style>

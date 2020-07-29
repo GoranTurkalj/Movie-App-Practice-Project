@@ -37,7 +37,7 @@ export default {
 <style lang="scss" scoped>
 .selected-card {
   width: 90%;
-  height: 80%;
+  height: 87%;
   background-color: rgba(0, 0, 0, 0.9);
   padding: 1rem;
   color: $accentColor;
@@ -78,7 +78,6 @@ export default {
 .preview-control {
   transition: transform 200ms;
   width: 45%;
-
   padding-bottom: 0;
   background-color: transparent;
   color: $accentColor;
@@ -135,12 +134,8 @@ export default {
     height: 100%; // changed from 80%;
     border: none; //from $borderNormal
     border-radius: 0; // from 1rem
-    position: fixed;
     left: 0; // changed from 5%
     top: 0; // changed from 10vh
-    z-index: 51;
-    display: flex;
-    justify-content: space-between;
   }
 
   .selected-card__preview {
@@ -153,5 +148,45 @@ export default {
 }
 
 @media only screen and (max-width: 990px) {
+  .selected-card {
+    overflow-y: auto; // ovo je ok, ne micati zasad
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .selected-card::-webkit-scrollbar {
+    display: none;
+  }
+
+  .selected-card__preview {
+    width: 100%; // from 22rem
+    align-items: center;
+  }
+
+  .preview-img {
+    width: 100%; //s 22 rem
+    height: 100%; // s 500px
+
+    img {
+      object-fit: contain; //s 100 / 100
+    }
+  }
+
+  .preview-controls {
+    justify-content: space-between;
+    width: min-content;
+    margin-bottom: 2rem;
+  }
+
+  .preview-control {
+    width: min-content;
+  }
+
+  .preview-control:first-of-type {
+    margin-right: 1.5rem;
+  }
+  .preview-control:last-of-type {
+    margin-left: 1.5rem;
+  }
 }
 </style>

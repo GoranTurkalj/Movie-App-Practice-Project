@@ -60,4 +60,12 @@ export default {
     list-style-type: none;
   }
 }
+
+
+@media only screen and (max-width: 475px) {
+
+    .title-list__item {
+      text-align: center;
+    }
+}
 </style>

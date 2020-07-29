@@ -29,14 +29,17 @@
       </li>
       <li class="title-list__item">
         Genres:
+        <br />
         <span>{{getGenres || "No available info"}}</span>
       </li>
       <li class="title-list__item">
         Release Date:
+        <br />
         <span>{{getSelectedTitle.releaseDate | toNicerDate}}</span>
       </li>
       <li class="title-list__item">
         Run Time:
+        <br />
         <span>{{getSelectedTitle.runtime}} min</span>
       </li>
     </ul>
@@ -223,45 +226,110 @@ export default {
 
 @media only screen and (max-width: 1300px) {
   .title-name {
-    position: absolute; //Dodano
-    top: 0; //Dodano
-    left: -23rem; //Dodano
+    position: absolute;
+    top: 0;
+    left: -23rem;
   }
 
   .rating-container {
-    position: absolute; //Dodano
-    top: 2rem; //Dodano
-    left: -23rem; //Dodano
-    width: 23rem; // from 40%;
+    position: absolute;
+    top: 2rem;
+    left: -23rem;
+    width: 23rem;
   }
 
   .title-list {
-    position: absolute; //Dodano
-    top: 60%; //Dodano
-    left: 0; // Dodano
-    width: 100%; // from 40%;
+    position: absolute;
+    top: 60%;
+    left: 0;
+    width: 100%;
     height: min-content;
-    display: flex; //dodano
-    flex-wrap: wrap; //Dodano
-    align-items: flex-start; //dodano
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
   }
 
   .title-list__item {
-    min-width: 15rem; //dodano
-    width: min-content; //dodano
-    height: min-content; //dodano
-    padding-bottom: 1.5rem; //from 0.9rem
-    padding-right: 2rem; //dpdamp
+    min-width: 17rem;
+    width: min-content;
+    height: min-content;
+    padding-bottom: 1.5rem;
+    padding-right: 2rem;
   }
 
   .overview-panel {
     position: absolute;
     bottom: 0;
-    top: 2.7rem; //dodano
+    top: 2.7rem;
     right: 0;
-    left: 0; //dodano
-    width: 100%; //from 55%;
-    height: 50%; //from 80%;
+    left: 0;
+    width: 100%;
+    height: 50%;
+  }
+}
+
+@media only screen and (max-width: 990px) {
+  .title-detail-container {
+    width: 100%;
+    height: min-content;
+    align-items: center;
+  }
+
+  .title-name {
+    position: static;
+    text-align: center;
+  }
+
+  .rating-container {
+    position: static;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: space-between;
+
+    img {
+      margin-bottom: 1rem;
+    }
+    span {
+      padding: 0;
+    }
+  }
+
+  .title-list {
+    width: 100%;
+    position: static;
+    margin: 4rem 0;
+    justify-content: center;
+  }
+
+  .title-list__item {
+    text-align: center;
+  }
+
+  .overview-panel {
+    position: static;
+    width: 100%;
+    min-height: 30rem;
+  }
+
+  .overview-controls {
+    justify-content: center;
+  }
+}
+
+@media only screen and (max-width: 475px) {
+  .title-name {
+    font-size: 1.5rem;
+  }
+
+  .rating-container {
+    span {
+      font-size: 1.2rem;
+    }
+
+    #votes {
+      font-size: 1rem;
+    }
   }
 }
 </style>
