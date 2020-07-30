@@ -37,4 +37,19 @@ p {
   letter-spacing: 1px;
   text-align: center;
 }
+
+@media only screen and (max-width: 695px) {
+  #message-container {
+    width: 100%;
+    left: 0;
+    border-left: none;
+    border-right: none;
+    border-radius: 0; 
+  }
+}
+@media only screen and (max-width: 395px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+}
 </style>

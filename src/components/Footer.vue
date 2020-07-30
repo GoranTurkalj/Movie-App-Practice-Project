@@ -30,12 +30,23 @@ export default {};
 p {
   color: $textColor;
   font-size: 0.8rem;
+  text-align: center;
 }
 
 .fade-away {
   img,
   p {
     transform: scale(0);
+  }
+}
+
+@media only screen and (max-width: 430px) {
+  .attribution-logo {
+    height: 0.5rem;
+  }
+
+  p {
+    font-size: 0.5rem;
   }
 }
 </style>

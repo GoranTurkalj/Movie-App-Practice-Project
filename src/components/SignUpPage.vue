@@ -28,4 +28,10 @@ export default {
 #sign-up-page {
   @include basicPageStyle();
 }
+
+@media only screen and (max-width: 495px) {
+  #sign-up-page {
+     @include tinyPadding(); 
+  }
+}
 </style>

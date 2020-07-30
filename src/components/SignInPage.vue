@@ -29,4 +29,10 @@ export default {
 #sign-in-page {
   @include basicPageStyle();
 }
+
+@media only screen and (max-width: 495px) {
+  #sign-in-page {
+    @include tinyPadding(); 
+  }
+}
 </style>

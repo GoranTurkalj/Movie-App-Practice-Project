@@ -101,4 +101,13 @@ h2 {
     transform: scale(1.3);
   }
 }
+
+@media only screen and (max-width: 430px) {
+  #alert-container {
+    border-right: none;
+    border-left: none;
+    border-radius: 0;
+    width: 100%;
+  }
+}
 </style>

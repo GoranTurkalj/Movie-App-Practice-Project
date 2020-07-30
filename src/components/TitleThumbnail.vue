@@ -60,19 +60,20 @@ export default {
 <style lang="scss" scoped>
 .movie-item {
   position: relative;
-  width: 250px;
-  height: 400px;
+  width: 300px;
+  height: 450px;
   border: 2px solid black;
   background-color: black;
   border-radius: 0.5rem;
   transition: all 500ms;
-  margin-right: 2.5rem;
+  margin-right: 4rem;
   margin-bottom: 2.5rem;
   box-shadow: 2px 2px 4px 4px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   align-items: center;
   overflow: hidden;
+  
   &:hover {
     transform: scale(1.1);
     border: 2px solid white;
@@ -142,4 +143,52 @@ export default {
     color: $textColor;
   }
 }
+
+
+@media only screen and (max-width: 1190px) {
+
+  .movie-item {
+     width: 250px; 
+     height: 400px;
+     margin-right: 2.5rem;
+  }
+}
+
+
+@media only screen and (max-width: 970px) {
+
+  .movie-item {
+     width: 200px; 
+     height: 350px;
+     margin-right: 2rem;
+  }
+}
+@media only screen and (max-width: 795px) {
+
+  .movie-item {
+     width: 175px; 
+     height: 300px; 
+     margin-right: 1.5rem;
+
+  }
+}
+
+@media only screen and (max-width: 695px) {
+
+  .movie-item {
+     width: 300px; 
+     height: 450px;
+     margin-right: 0;
+  }
+}
+@media only screen and (max-width: 395px) {
+
+  .movie-item {
+     width: 250px; 
+     height: 400px;
+    
+  }
+}
+
+
 </style>

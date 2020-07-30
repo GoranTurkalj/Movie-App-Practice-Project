@@ -59,29 +59,29 @@ import {
   email,
   minLength,
   maxLength,
-  sameAs
+  sameAs,
 } from "vuelidate/lib/validators";
 export default {
   validations: {
     name: {
       required,
       minimumLength: minLength(3),
-      maximumLength: maxLength(12)
+      maximumLength: maxLength(12),
     },
 
     email: {
       required,
-      email
+      email,
     },
     password: {
       required,
       minimumLength: minLength(6),
-      maximumLength: maxLength(12)
+      maximumLength: maxLength(12),
     },
 
     confirmPassword: {
-      sameAs: sameAs("password")
-    }
+      sameAs: sameAs("password"),
+    },
   },
 
   data() {
@@ -89,13 +89,13 @@ export default {
       name: "",
       email: "",
       password: "",
-      confirmPassword: ""
+      confirmPassword: "",
     };
   },
 
   methods: {
     //Depending on current route, so either /signup or /signin, onSubmit will execute a different method
-    onSubmit: function() {
+    onSubmit: function () {
       console.log(this.$route.name);
       if (this.$route.name === "signup") {
         this.signUpUser();
@@ -104,22 +104,22 @@ export default {
       }
     },
 
-    signUpUser: function() {
+    signUpUser: function () {
       this.$store.dispatch("signUpAction", {
         name: this.name,
         email: this.email,
-        password: this.password
+        password: this.password,
       });
     },
 
-    signInUser: function() {
+    signInUser: function () {
       this.$store.dispatch("signInAction", {
         name: this.name,
         email: this.email,
-        password: this.password
+        password: this.password,
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -172,7 +172,6 @@ input {
     border-bottom: 1px solid white;
   }
 }
-
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -230,5 +229,22 @@ button {
   left: 0;
   top: 63%;
   color: $accentColor;
+}
+
+@media only screen and (max-width: 495px) {
+  .main-form {
+    min-width: 100%;
+  }
+
+  label {
+    font-size: 1rem;
+  }
+
+  input {
+    font-size: 1rem;
+  }
+  p {
+    font-size: 0.8rem;
+  }
 }
 </style>

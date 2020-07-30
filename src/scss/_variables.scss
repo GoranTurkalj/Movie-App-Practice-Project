@@ -6,7 +6,7 @@ $btnBackgroundGreen: rgb(5, 70, 5);
 $borderNormal: 2px solid $accentColor;
 $borderThin: 1px solid $accentColor;
 $accent-red: #c00909;
-$userRatingColor: gold; 
+$userRatingColor: gold;
 
 //Mixins
 @mixin orangeGreyText() {
@@ -44,4 +44,16 @@ $userRatingColor: gold;
       filter: brightness(140%);
     }
   }
+}
+
+@mixin repositionMobile() {
+  position: absolute;
+  left: 0;
+  top: 10vh;
+  z-index: 40;
+}
+
+@mixin tinyPadding {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 }

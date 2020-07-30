@@ -61,5 +61,12 @@ export default {
   flex-wrap: wrap;
   margin-top: 3rem;
 }
+
+@media only screen and (max-width: 695px) {
+  #movie-list {
+    flex-direction: column;
+    align-items: center;
+  }
+}
 </style>
 

@@ -70,4 +70,20 @@ p {
     transform: rotateZ(-20deg);
   }
 }
+
+@media only screen and (max-width: 395px) {
+  h2 {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+
+  hr {
+    width: 100%;
+  }
+
+  p {
+    font-size: 1rem;
+    text-align: center;
+  }
+}
 </style>

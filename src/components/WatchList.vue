@@ -62,8 +62,8 @@ export default {
   mixins: [disableFocusMixin, isProperRouteMixin],
   beforeRouteLeave(to, from, next) {
     this.closeSelectedTitle();
-    //close alert prompt 
-    this.closeAlertPrompt(); 
+    //close alert prompt
+    this.closeAlertPrompt();
     next();
   },
 
@@ -118,5 +118,21 @@ export default {
   }
 
   @include controlButtons();
+}
+
+@media only screen and (max-width: 695px) {
+  #watchlist-controls {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@media only screen and (max-width: 395px) {
+  #watchlist {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
 }
 </style>

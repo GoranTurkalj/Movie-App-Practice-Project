@@ -23,8 +23,8 @@
 import { mapGetters } from "vuex";
 export default {
   computed: {
-    ...mapGetters(["getSelectedTitle"])
-  }
+    ...mapGetters(["getSelectedTitle"]),
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -54,18 +54,15 @@ export default {
   width: 100%;
   color: $textColor;
   padding-top: 1rem;
-  
 
   ul {
     list-style-type: none;
   }
 }
 
-
 @media only screen and (max-width: 475px) {
-
-    .title-list__item {
-      text-align: center;
-    }
+  .title-list__item {
+    text-align: center;
+  }
 }
 </style>

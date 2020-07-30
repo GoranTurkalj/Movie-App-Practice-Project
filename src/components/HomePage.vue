@@ -22,18 +22,18 @@
         </p>
         <p slot="info-tip-2" v-show="!getUser.name">
           To use the watchlist, just
-          <router-link to="/signin">sign-in</router-link> to your account.
+          <router-link to="/signin">sign-in</router-link>to your account.
           <br />If you don't have an account, create one by
-          <router-link to="/signup">signing-up</router-link> now.
+          <router-link to="/signup">signing-up</router-link>now.
         </p>
       </general-info>
       <movie-list v-else :titlesArray="getResultsList" :displayTitle="showFullTitle"></movie-list>
     </transition>
-     <transition name="dropIn">
-         <app-message v-if="$store.state.messageDisplayed">
+    <transition name="dropIn">
+      <app-message v-if="$store.state.messageDisplayed">
         <p slot="app-message">To access the watchlist, you need to sign up or sign in!</p>
       </app-message>
-      </transition>
+    </transition>
     <transition name="fade">
       <selected-card v-if="getSelectedTitle"></selected-card>
     </transition>
@@ -50,7 +50,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["getResultsList", "getSelectedTitle", "getUser"])
+    ...mapGetters(["getResultsList", "getSelectedTitle", "getUser"]),
   },
   methods: {
     //Updating searchedTitle in the state
@@ -58,9 +58,9 @@ export default {
     ...mapActions([
       "requestSearchResults",
       "showFullTitle",
-      "closeSelectedTitle"
-    ])
-  }
+      "closeSelectedTitle",
+    ]),
+  },
 };
 </script>
 
@@ -75,7 +75,7 @@ export default {
 
 .search-input {
   height: 100%;
-  width: 35%;
+  width: 50%;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   padding: 0.5rem;
@@ -119,5 +119,21 @@ export default {
     background-size: 55%;
   }
 }
+@media only screen and (max-width: 520px) {
+  .search-input {
+    font-size: 0.8rem;
+    width: 85%;
+  }
 
+  #search-btn {
+    width: 15%;
+  }
+}
+
+@media only screen and (max-width: 395px) {
+  #homepage {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
 </style>

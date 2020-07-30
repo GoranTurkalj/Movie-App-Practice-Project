@@ -302,9 +302,7 @@ export default {
     justify-content: center;
   }
 
-  .title-list__item {
-    text-align: center;
-  }
+  
 
   .overview-panel {
     position: static;
@@ -314,6 +312,14 @@ export default {
 
   .overview-controls {
     justify-content: center;
+  }
+}
+
+
+@media only screen and (max-width: 575px){
+
+  .title-list__item {
+    text-align: center;
   }
 }
 
