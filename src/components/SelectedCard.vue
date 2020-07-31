@@ -37,14 +37,17 @@ export default {
 <style lang="scss" scoped>
 .selected-card {
   width: 90%;
+  max-width: 90rem;
   height: 87%;
+  max-height: 56.25rem;
   background-color: rgba(0, 0, 0, 0.9);
   padding: 1rem;
   color: $accentColor;
   border: $borderNormal;
   border-radius: 1rem;
   position: fixed;
-  left: 5%;
+  left: 50%;
+  transform: translateX(-50%);
   top: 10vh;
   z-index: 51;
   display: flex;
@@ -130,26 +133,27 @@ export default {
 //Media Queries XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 @media only screen and (max-width: 1300px) {
   .selected-card {
-    width: 100%; // changed from 90%
-    height: 100%; // changed from 80%;
-    border: none; //from $borderNormal
-    border-radius: 0; // from 1rem
-    left: 0; // changed from 5%
-    top: 0; // changed from 10vh
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 0;
+    left: 0;
+    top: 0;
+    transform: translateX(0);
   }
 
   .selected-card__preview {
-    justify-content: flex-end; //from space-between
+    justify-content: flex-end;
   }
 
   .preview-controls {
-    margin-top: 1.5rem; // dodano
+    margin-top: 1.5rem;
   }
 }
 
 @media only screen and (max-width: 990px) {
   .selected-card {
-    overflow-y: auto; // ovo je ok, ne micati zasad
+    overflow-y: auto;
     flex-direction: column;
     align-items: center;
   }
@@ -159,16 +163,16 @@ export default {
   }
 
   .selected-card__preview {
-    width: 100%; // from 22rem
+    width: 100%;
     align-items: center;
   }
 
   .preview-img {
-    width: 100%; //s 22 rem
-    height: 100%; // s 500px
+    width: 100%;
+    height: 100%;
 
     img {
-      object-fit: contain; //s 100 / 100
+      object-fit: contain;
     }
   }
 

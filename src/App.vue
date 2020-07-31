@@ -38,6 +38,7 @@ export default {
 
 body {
   overflow-x: hidden;
+  background-color: black;
 }
 
 body::-webkit-scrollbar {
@@ -46,12 +47,24 @@ body::-webkit-scrollbar {
 
 #app {
   width: 100vw;
+  max-width: 100rem;
+  margin: 0 auto;
   min-height: 100vh;
   background-image: url("./assets/home-background.jpg");
-  background-position: 0% 5%;
+  background-position: 0% 0%;
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
 
+@media only screen and (max-width: 1500px) {
+  #app {
+    background-position: 100% 0%;
+  }
+}
+@media only screen and (max-width: 795px) {
+  #app {
+    background-position: 0% 0%;
+  }
+}
 </style>

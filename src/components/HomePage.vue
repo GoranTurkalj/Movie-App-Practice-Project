@@ -116,7 +116,7 @@ export default {
   outline: none;
 
   &:hover {
-    background-size: 55%;
+    background-size: 50%;
   }
 }
 @media only screen and (max-width: 520px) {

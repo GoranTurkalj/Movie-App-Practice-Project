@@ -5,10 +5,10 @@
       <h1 id="app-title-mobile">MOVIE APP</h1>
     </div>
     <button class="hamburger-menu" @click="toggleMenu">
-      <img src="../assets/hamburger.svg" alt="hamburger menu icon" />
+      <img src="../assets/hamburger.svg" alt="hamburger menu icon" :class="{skewed: showMenu}" />
     </button>
 
-    <nav class="main-nav" :class="{'main-nav-mobile': isMobile && showMenu}">
+    <nav ref="mainNav" class="main-nav" @click="closeMenuOnClick">
       <ul class="nav-list nav-list--left">
         <router-link to="/" class="nav-item" exact tag="li">
           <a>HOME</a>
@@ -52,6 +52,12 @@ export default {
       this.windowWidth = window.innerWidth;
       if (!this.isMobile) {
         this.showMenu = false;
+        this.$refs.mainNav.style.display = "flex";
+        this.$refs.mainNav.classList.remove("main-nav--visible");
+      } else if (this.isMobile && this.showMenu) {
+        this.$refs.mainNav.style.display = "flex";
+      } else if (this.isMobile && !this.showMenu) {
+        this.$refs.mainNav.style.display = "none";
       }
     });
   },
@@ -72,6 +78,30 @@ export default {
     ...mapActions(["closeSelectedTitle", "logOutUser"]),
     toggleMenu() {
       this.showMenu = !this.showMenu;
+      if (this.isMobile && this.showMenu) {
+        this.$refs.mainNav.style.display = "flex";
+        setTimeout(() => {
+          this.$refs.mainNav.classList.add("main-nav--visible");
+        }, 10);
+      } else if (this.isMobile && !this.showMenu) {
+        this.closeMobileMenu();
+      }
+    },
+
+    closeMenuOnClick(event) {
+      if (this.isMobile && event.target.tagName === "A") {
+        this.showMenu = false;
+        this.closeMobileMenu();
+      }
+    },
+
+    closeMobileMenu() {
+      //ako smo na mobile veličini i event target je link, onda zatvoriti menu nakon klika
+      this.$refs.mainNav.classList.remove("main-nav--visible");
+      //Delay zbog tranzicije kod micanja klase, zatim display none.
+      setTimeout(() => {
+        this.$refs.mainNav.style.display = "none";
+      }, 300);
     },
   },
 };
@@ -79,7 +109,7 @@ export default {
 <style lang="scss" scoped>
 .main-header {
   height: 10vh;
-  width: 100vw;
+  width: 100%;
   padding: 0 3rem;
   background-color: rgba(0, 0, 0, 0.5);
   transition: background-color 300ms;
@@ -96,6 +126,7 @@ export default {
   img {
     width: 100%;
     height: 100%;
+    transition: transform 300ms;
   }
 }
 
@@ -210,13 +241,19 @@ export default {
     justify-content: center;
     background-color: rgb(0, 0, 0);
     width: 100%;
-    height: 20vh;
-    border-radius: 0 0 60vh 60vh;
-    transition: border-radius 300ms;
+    height: 0;
+    opacity: 0;
+    border-radius: 0 0 5rem 5rem;
+    transition: all 300ms;
   }
 
-  .main-nav-mobile {
-    display: flex;
+  .main-nav--visible {
+    opacity: 1;
+    height: 30vh;
+  }
+
+  .skewed {
+    transform: skewX(45deg);
   }
 
   #title-container {
@@ -267,9 +304,6 @@ export default {
     padding: 0 1.5rem;
   }
 
-  .main-nav {
-    border-radius: 0 0 2rem 2rem;
-  }
   #app-title-mobile {
     font-size: 1rem;
   }

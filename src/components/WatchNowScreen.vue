@@ -94,4 +94,10 @@ export default {
     transform: translateX(0) rotateY(0deg);
   }
 }
+
+@media only screen and (max-width: 530px) {
+  .message-letter {
+    font-size: 1.2rem;
+  }
+}
 </style>

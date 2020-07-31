@@ -175,10 +175,11 @@ export default {
   position: absolute;
   display: flex;
   align-items: center;
+  justify-content: center;
+  min-width: 100%;
 
   img {
-    width: 100%;
-    height: 100%;
+    object-fit: contain;
   }
 }
 
@@ -197,12 +198,10 @@ export default {
 
 //MEDIA QUERIES xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
-@media only screen and (max-width: 1300px) {
+@media only screen and (max-width: 600px) {
   .carousel__item {
-   min-width: 100%;
-
     img {
-      object-fit: contain;
+      width: 100%;
     }
   }
 }
