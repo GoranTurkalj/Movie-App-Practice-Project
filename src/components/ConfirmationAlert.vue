@@ -1,5 +1,5 @@
 <template>
-  <div id="alert-container">
+  <div id="alert-container" :style="{top: adjustedPosition}">
     <slot>
       <h2>Are you sure?</h2>
     </slot>
@@ -14,12 +14,38 @@
   </div>
 </template>
 <script>
-import { mapMutations } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 export default {
   props: {
     confirm: {
       type: Function,
       required: true,
+    },
+  },
+
+  mounted: function () {
+    window.addEventListener("resize", () => {
+      this.windowWidth = window.innerWidth;
+    });
+  },
+
+  data() {
+    return {
+      windowWidth: window.innerWidth,
+    };
+  },
+  computed: {
+    ...mapGetters(["getScrollDistance"]),
+    //Uzima u obzir koliko je skrolan selectedCard pa pomakne alert window sukladno tomu
+    adjustedPosition() {
+      if (
+        this.windowWidth <= 990 &&
+        this.$route.name === "watchlistTitleReview"
+      ) {
+        return this.getScrollDistance + 200 + "px";
+      } else {
+        return "30%";
+      }
     },
   },
 

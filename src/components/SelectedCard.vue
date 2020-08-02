@@ -1,5 +1,5 @@
 <template>
-  <div class="selected-card">
+  <div class="selected-card" ref="selectedCard">
     <div class="selected-card__preview">
       <div class="preview-img">
         <img :src="getSelectedTitle.fullPosterPath" alt="selected title image" />
@@ -26,11 +26,18 @@ import { determineRouteMixin } from "../mixins";
 
 export default {
   mixins: [determineRouteMixin],
+
+  mounted: function () {
+    this.$refs.selectedCard.addEventListener("scroll", () => {
+      //Dispatch action which commits refreshScrollDistance mutation
+      this.updateScrollDistance(this.$refs.selectedCard.scrollTop);
+    });
+  },
   computed: {
     ...mapGetters(["getSelectedTitle"]),
   },
   methods: {
-    ...mapActions(["closeSelectedTitle"]),
+    ...mapActions(["closeSelectedTitle", "updateScrollDistance"]),
   },
 };
 </script>

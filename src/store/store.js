@@ -2,20 +2,30 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 import router from "../router";
+import resultsList from "./modules/resultsList";
+import selectedTitle from "./modules/selectedTitle";
+import alertPrompt from "./modules/alertPrompt";
+import scrollDistance from "./modules/scrollDistance";
 
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
+  //Imported modules*******************************************************
+
+  modules: {
+    resultsList,
+    selectedTitle,
+    alertPrompt,
+    scrollDistance, //distance which is scrolled on selectedCard component when window.innerWidth is less than 990px, so that the position of confirmationAlert component can be adjusted when on review panel.
+  },
+
   // State*******************************************************************
   state: {
     token: null,
     userId: null,
     user: "",
     searchedTitle: "",
-    resultsList: [],
-    selectedTitle: "",
     baseImageURL: "https://image.tmdb.org/t/p/w500",
-    alertPrompt: false,
     messageDisplayed: false,
   },
   //Getters******************************************************************
@@ -32,86 +42,8 @@ export const store = new Vuex.Store({
       return state.searchedTitle;
     },
 
-    getResultsList: function(state) {
-      return state.resultsList;
-    },
-
-    getSelectedTitle: function(state) {
-      return state.selectedTitle;
-    },
-
-    getDirector: function(state, getters) {
-      const crew = getters.getSelectedTitle.crew;
-      const directors = [];
-      for (const person of crew) {
-        if (person.job === "Director") {
-          directors.push(person.name);
-        }
-      }
-      return directors.length ? directors.join(", ") : "No available info";
-    },
-
-    getProducer: function(state, getters) {
-      const crew = getters.getSelectedTitle.crew;
-      const producers = [];
-      for (const person of crew) {
-        if (producers.length < 3 && person.job === "Executive Producer") {
-          producers.push(person.name);
-        }
-      }
-      return producers.length ? producers.join(", ") : "No available info";
-    },
-
-    getCast: function(state, getters) {
-      const cast = getters.getSelectedTitle.cast;
-      const mainCast = [];
-
-      for (const person of cast) {
-        if (cast.length && mainCast.length < 4) {
-          mainCast.push(person.name);
-        }
-      }
-
-      return mainCast.length ? mainCast.join(", ") : "No available info";
-    },
-
-    getGenres: function(state, getters) {
-      const genres = getters.getSelectedTitle.genres;
-      const keywords = [];
-      for (const genre of genres) {
-        keywords.push(genre.name);
-      }
-
-      return keywords.length ? keywords.join(", ") : "No available info";
-    },
-
-    getReviewText: function(state, getters) {
-      return getters.getSelectedTitle.review;
-    },
-
-    //This getter returns video key of the selectedTitle
-    getSelectedTitleVideos: function(state) {
-      if (state.selectedTitle.videos.results.length) {
-        return state.selectedTitle.videos.results[0].key;
-      } else {
-        return null;
-      }
-    },
-
-    getSelectedTitleImages: function(state) {
-      return state.selectedTitle.images;
-    },
-
     getWatchlist: function(state) {
       return state.user.watchlist;
-    },
-
-    getAlertPrompt: function(state) {
-      return state.alertPrompt;
-    },
-
-    getUserRating: function(state) {
-      return state.selectedTitle.userRating;
     },
   },
   //Mutations****************************************************************
@@ -142,30 +74,6 @@ export const store = new Vuex.Store({
       state.searchedTitle = $event.target.value;
     },
 
-    //This mutation will fire from inside requestSearchResults action - when we get back the response from Movie Database.
-    updateSearchResults: function(state, newList) {
-      state.resultsList = newList;
-    },
-
-    //Clears resultsList - commited in
-    clearSearchResults: function(state) {
-      state.resultsList = [];
-    },
-
-    //Committed in
-    updateSelectedTitle: function(state, newTitle) {
-      state.selectedTitle = newTitle;
-      console.log(
-        "Selected title was just MUTATED to this: ",
-        state.selectedTitle
-      );
-    },
-
-    //This mutations sets selectedTitle to "" after the close button is clicked on the SelectedCard component
-    clearSelectedTitle: function(state) {
-      state.selectedTitle = "";
-    },
-
     //When "Add to watchlist" button is pressed - the addedTitle data is added as an object to the user's watchlist array
     updateWatchlist: function(state, addedTitle) {
       state.user.watchlist.push(addedTitle);
@@ -182,25 +90,6 @@ export const store = new Vuex.Store({
     //When user confirms watchlist deletion, deleteWatchlistAction commits this mutation
     deleteWatchlist: function(state) {
       state.user.watchlist = [];
-    },
-
-    updateReviewText: function(state, value) {
-      state.selectedTitle.review = value;
-    },
-
-    deleteReview: function(state) {
-      state.selectedTitle.review = "";
-    },
-
-    openAlertPrompt(state) {
-      state.alertPrompt = true;
-    },
-    closeAlertPrompt(state) {
-      state.alertPrompt = false;
-    },
-
-    setUserRating(state, value){
-      state.selectedTitle.userRating = +value; 
     },
   },
 
@@ -258,7 +147,7 @@ export const store = new Vuex.Store({
         .catch((err) => console.log(err));
     },
 
-    //Ova akcija će fetchati usera iz Firebase Databasea - dispatcham je unutar SignUP i SignIn akcija na kraju - recimo da zelim odmah po ulogiranji prikazat info od usera koji je kreiran
+    //Ova akcija će fetchati usera iz Firebase Databasea - dispatcham je unutar SignUP i SignIn akcija na kraju - recimo da zelim odmah po loginu fetchati watchlist od usera koji se ulogirao
     fetchUserData: function(context) {
       //Check je li token već u stateu
       if (!context.state.token) {
@@ -428,36 +317,6 @@ export const store = new Vuex.Store({
       }, expirationTime * 1000); //response daje expiration time u sekundamaa pa ovdje treba prebaciti u ms
     },
 
-    //Sends a request to the Movie Database
-    requestSearchResults: function(context) {
-      if (!this.state.searchedTitle) return;
-
-      axios
-        .get(
-          `https://api.themoviedb.org/3/search/movie?api_key=9e612d73fdfb165c3aa123e0b09d606d&query=${this.state.searchedTitle}`
-        )
-        .then((response) => {
-          const results = response.data.results;
-
-          //Filtering out titles which have a poster_path
-
-          const filteredResults = results.filter((title) => {
-            if (title.poster_path) {
-              return title;
-            }
-          });
-          //For every element in results - build the entire poster image URL
-          filteredResults.forEach((title) => {
-            title.fullPosterPath = `${this.state.baseImageURL}${title.poster_path}`;
-          });
-
-          context.commit("updateSearchResults", filteredResults);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-
     //Displays more options and details for the clicked title - this action fires when a title img is clicked on.
     showFullTitle: function({ dispatch, getters }, $event) {
       if (
@@ -480,7 +339,6 @@ export const store = new Vuex.Store({
       }
     },
 
-    //This action is dispatche
     showFullWatchlistTitle: function({ commit, getters }, $event) {
       if (
         $event.target.tagName === "IMG" &&
@@ -497,30 +355,6 @@ export const store = new Vuex.Store({
             commit("updateSelectedTitle", title);
             router.push("/watchlist/title_details");
           }
-        }
-      }
-    },
-
-    //This action commits a mutation which sets the selectedTitle to "" and this will close SelectedCard component
-    //Pokrećem je kad kliknem na X na selectedCard, zatim u TitleDetails i TitleVideo preko importanog mixina kad se klika na određene rute.
-    closeSelectedTitle: function(context, $event) {
-      context.commit("clearSelectedTitle");
-
-      //Ako je baš kliknut button na selectedCard onda izvrtiti switch statement
-      if ($event) {
-        switch (router.currentRoute.name) {
-          case "titleStory":
-          case "titleGallery":
-          case "titleReview":
-          case "titleTrailer":
-            router.replace("/");
-            break;
-          case "watchlistTitleStory":
-          case "watchlistTitleGallery":
-          case "watchlistTitleReview":
-          case "watchlistTitleTrailer":
-            router.replace("/watchlist");
-            break;
         }
       }
     },
@@ -570,12 +404,7 @@ export const store = new Vuex.Store({
 
           //Commitati mutaciju updateWatchlist - na cta button click,  ILI committati mutaciju updateSelectedTitle kad se klikne na thumbnail na resultsList.
           context.commit(mutationName, newTitleData);
-          console.log(
-            "GET DETAILED INFO  just ran and commitetd this mutation: ",
-            mutationName,
-            " and this data: ",
-            newTitleData
-          );
+
           if (mutationName === "updateSelectedTitle") {
             router.push("/title_details");
           }

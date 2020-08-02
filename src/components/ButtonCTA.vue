@@ -159,12 +159,22 @@ export default {
 }
 
 @media only screen and (max-width: 990px) {
-
   .cta-button--static {
     position: static;
     width: 50%;
     min-width: 12rem;
     max-width: 20rem;
+  }
+}
+
+@media only screen and (max-width: 970px) {
+  .cta-button {
+    font-size: 0.8rem;
+  }
+}
+@media only screen and (max-width: 695px) {
+  .cta-button {
+    font-size: 1rem;
   }
 }
 </style>

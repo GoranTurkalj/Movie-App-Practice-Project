@@ -112,16 +112,14 @@ export default {
 }
 
 .review-panel__ui {
-   display: flex; 
-   justify-content: space-between;
-   align-items: center;
- 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .review-panel__controls {
   display: flex;
   align-items: center;
- 
 }
 .review-panel__btn {
   width: 1.5rem;
@@ -160,25 +158,19 @@ export default {
   border-radius: 0.5rem;
 }
 
-
 @media only screen and (max-width: 475px) {
-   
-   .review-panel__ui {
-     flex-direction: column;
-     justify-content: space-between;
-   }
+  .review-panel__ui {
+    flex-direction: column;
+    justify-content: space-between;
+  }
 
-   .review-panel__controls {
-     margin-bottom: 1rem;
-   }
+  .review-panel__controls {
+    margin-bottom: 1rem;
+  }
 
-   .review-panel__area {
-     font-size: 1rem;
-   }
-
+  .review-panel__area {
+    font-size: 1rem;
+  }
 }
-
-
-
 </style>
 
