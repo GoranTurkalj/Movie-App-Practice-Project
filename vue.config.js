@@ -9,7 +9,5 @@ module.exports = {
     },
   },
 
-   publicPath: "https://goranturkalj.github.io/Movie-App-Practice-Project",
-  //publicPath: "/Movie-App-Practice-Project/",
- // publicPath: "https://goranturkalj.github.io/",
+  publicPath: "/Movie-App-Practice-Project/",
 };
