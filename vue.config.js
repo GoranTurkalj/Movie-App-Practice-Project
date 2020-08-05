@@ -9,5 +9,7 @@ module.exports = {
     },
   },
 
-  publicPath: process.env.NODE_ENV === "production" ? "" : "/",
+   publicPath: "https://goranturkalj.github.io/Movie-App-Practice-Project",
+  //publicPath: "/Movie-App-Practice-Project/",
+ // publicPath: "https://goranturkalj.github.io/",
 };

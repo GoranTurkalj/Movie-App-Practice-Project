@@ -132,7 +132,7 @@ const routes = [
 
 const router = new VueRouter({
   routes,
-  mode: "history",
+  //mode: "history",
 });
 
 //Prvo sam probao u created() u App.vue dispatchati attemptAutoLogin - no ako user pokuša autologin dok je na /watchlist routeu koji je zaštićen s beforeEnter guardom koji gleda postoji li token ili ne - bit će prebačen na /signin makar validan token postojao u localStorageu
