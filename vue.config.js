@@ -9,8 +9,5 @@ module.exports = {
     },
   },
 
-  publicPath:
-    process.env.NODE_ENV === "production"
-      ? "/Movie-App-Practice-Project/"
-      : "/",
+  publicPath: process.env.NODE_ENV === "production" ? "" : "/",
 };
