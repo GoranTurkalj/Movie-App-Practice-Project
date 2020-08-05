@@ -5,9 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "deploy": "gh-pages -d dist"
+   
   },
-  "homepage": "https://goranturkalj.github.io/Movie-App-Practice-Project/",
+ 
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
