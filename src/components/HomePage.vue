@@ -22,9 +22,9 @@
         </p>
         <p slot="info-tip-2" v-show="!getUser.name">
           To use the watchlist, just
-          <router-link to="/signin">sign-in</router-link>to your account.
+          <router-link to="/signin">sign-in </router-link>to your account.
           <br />If you don't have an account, create one by
-          <router-link to="/signup">signing-up</router-link>now.
+          <router-link to="/signup">signing-up</router-link> now.
         </p>
       </general-info>
       <movie-list v-else :titlesArray="getResultsList" :displayTitle="showFullTitle"></movie-list>
