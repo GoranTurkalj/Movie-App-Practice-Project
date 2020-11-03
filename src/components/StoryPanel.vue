@@ -14,7 +14,7 @@
       <li class="title-list__item">
         Homepage:
         <br />
-        <a :href="getSelectedTitle.homepage">{{getSelectedTitle.homepage || "Not available"}}</a>
+        <a class="homepage-link" :href="getSelectedTitle.homepage">{{getSelectedTitle.homepage || "Not available"}}</a>
       </li>
     </ul>
   </section>
@@ -49,16 +49,21 @@ export default {
   }
 }
 
+.homepage-link {
+  word-break: break-all;
+}
+
 .story-panel {
   height: 90%;
   width: 100%;
   color: $textColor;
-  padding-top: 1rem;
+ 
 
   ul {
     list-style-type: none;
   }
 }
+
 
 @media only screen and (max-width: 475px) {
   .title-list__item {

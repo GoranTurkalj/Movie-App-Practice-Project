@@ -1,4 +1,5 @@
 <template>
+  <div class="screen-wrapper">
   <div class="screen">
     <transition name="fade" mode="out-in">
       <p class="message" v-if="messageVisible">
@@ -17,6 +18,7 @@
         allowfullscreen
       ></iframe>
     </transition>
+  </div>
   </div>
 </template>
 <script>
@@ -55,14 +57,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.screen-wrapper {
+  width: 100%; 
+  height: 80vh;
+}
 .screen { 
   width: 100%;
-  height: 80vh;
+  height: 0;
   background-color: black;
+  padding-bottom: 56.25%; 
 
   iframe {
     width: 100%;
     height: 100%;
+    position: absolute; 
   }
 }
 

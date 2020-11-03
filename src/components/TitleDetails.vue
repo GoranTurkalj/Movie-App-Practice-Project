@@ -117,6 +117,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+ 
 }
 
 .title-name {
@@ -184,25 +185,27 @@ export default {
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 55%;
+  width: 55%; 
   height: 80%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+ 
 }
 
 .overview-controls {
-  height: 10%;
+  height: fit-content;
   width: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
   border-bottom: 1px solid $accentColor;
 
   a {
     text-decoration: none;
     transition: all 200ms;
     color: $accentColor;
-    padding-right: 1.5rem;
+    margin-right: 1.5rem;
     background-color: transparent;
     border-bottom: 1px solid transparent;
     cursor: pointer;
@@ -224,6 +227,36 @@ export default {
 
 //MEDIA QUERIES xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
+
+//1920px
+@media only screen and (min-width: 120rem)  {
+  
+  .overview-panel {
+    width: calc(55% + 7vw); 
+    height: 90%; 
+  }
+}
+
+//2560px
+@media only screen and (min-width: 160rem)  {
+  
+  .overview-panel {
+    width: calc(55% + 12vw); 
+   
+  }
+}
+
+//2960px {
+@media only screen and (min-width: 185rem) {
+  
+  .overview-panel {
+    width: 76%;
+  }
+}
+
+
+
+
 @media only screen and (max-width: 1300px) {
   .title-name {
     position: absolute;
@@ -240,13 +273,14 @@ export default {
 
   .title-list {
     position: absolute;
-    top: 60%;
+    top: 63%;
     left: 0;
     width: 100%;
     height: min-content;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
+    margin-top: 0; 
   }
 
   .title-list__item {
@@ -264,7 +298,8 @@ export default {
     right: 0;
     left: 0;
     width: 100%;
-    height: 50%;
+    height: 55%;
+  
   }
 }
 
@@ -302,8 +337,6 @@ export default {
     justify-content: center;
   }
 
-  
-
   .overview-panel {
     position: static;
     width: 100%;
@@ -312,14 +345,19 @@ export default {
 
   .overview-controls {
     justify-content: center;
+
+    a {
+      margin: 0 1.5rem;
+    }
   }
 }
 
 
-@media only screen and (max-width: 575px){
+@media only screen and (max-width: 576px){
 
   .title-list__item {
     text-align: center;
+    padding-right: 0;
   }
 }
 

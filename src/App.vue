@@ -47,7 +47,6 @@ body::-webkit-scrollbar {
 
 #app {
   width: 100vw;
-  max-width: 100rem;
   margin: 0 auto;
   min-height: 100vh;
   background-image: url("./assets/home-background.jpg");

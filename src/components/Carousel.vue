@@ -74,12 +74,6 @@ export default {
         this.nextSlide = this.slides[0];
       }
 
-      //Add the next-slide class to get the effect of movement
-      this.nextSlide.classList.add("next-slide");
-      setTimeout(() => {
-        this.nextSlide.classList.remove("next-slide");
-      });
-
       this.nextSlide.classList.add("current-slide");
       this.currentSlide.classList.remove("current-slide");
     },
@@ -96,11 +90,7 @@ export default {
       if (!this.previousSlide) {
         this.previousSlide = this.slides[this.slides.length - 1];
       }
-      this.previousSlide.classList.add("previous-slide");
-      setTimeout(() => {
-        this.previousSlide.classList.remove("previous-slide");
-      });
-
+     
       this.previousSlide.classList.add("current-slide");
       this.currentSlide.classList.remove("current-slide");
     },
@@ -112,6 +102,7 @@ export default {
   width: 100%;
   height: 100%;
   position: relative;
+  
 }
 .carousel {
   width: 90%;
@@ -179,32 +170,16 @@ export default {
   min-width: 100%;
 
   img {
-    object-fit: contain;
+    width: 100%; 
+    height: auto; 
+   
   }
 }
 
 .current-slide {
   opacity: 1;
-  left: 0;
 }
 
-.previous-slide {
-  left: -100%;
-}
-
-.next-slide {
-  left: 100%;
-}
-
-//MEDIA QUERIES xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-
-@media only screen and (max-width: 600px) {
-  .carousel__item {
-    img {
-      width: 100%;
-    }
-  }
-}
 </style>
 
 

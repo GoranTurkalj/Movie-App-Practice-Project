@@ -1,7 +1,7 @@
 <template>
   <div class="selected-card" ref="selectedCard">
-    <div class="selected-card__preview">
-      <div class="preview-img">
+    <div class="selected-card__preview" >
+      <div class="preview-img" :class="{'preview-img--top': onTrailerRoute }">
         <img :src="getSelectedTitle.fullPosterPath" alt="selected title image" />
       </div>
       <div class="preview-controls" v-if="!isOnWatchlistRoute">
@@ -13,7 +13,6 @@
         <router-link class="preview-control" to="/watchlist/title_trailer">TRAILER</router-link>
       </div>
     </div>
-
     <router-view></router-view>
     <button class="close-btn" @click="closeSelectedTitle">
       <img src="../assets/close.svg" alt="close icon" />
@@ -35,6 +34,12 @@ export default {
   },
   computed: {
     ...mapGetters(["getSelectedTitle"]),
+     
+     //Returns route name and if it is one of these two, a class .preview-img--top gets applied to .preview-img div.
+     onTrailerRoute: function(){
+       return this.$route.name === "titleTrailer" || this.$route.name === "watchlistTitleTrailer";
+     }
+
   },
   methods: {
     ...mapActions(["closeSelectedTitle", "updateScrollDistance"]),
@@ -44,9 +49,8 @@ export default {
 <style lang="scss" scoped>
 .selected-card {
   width: 90%;
-  max-width: 90rem;
-  height: 87%;
-  max-height: 56.25rem;
+  height: 75%;
+  min-height: 42.25rem;  
   background-color: rgba(0, 0, 0, 0.9);
   padding: 1rem;
   color: $accentColor;
@@ -137,7 +141,24 @@ export default {
   color: white;
 }
 
-//Media Queries XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+//****************** MEDIA QUERIES ********************************//
+
+
+//1632px
+@media only screen and (min-width: 102rem) { 
+   
+  
+  .selected-card__preview {
+     justify-content: flex-start;
+  }
+
+  .preview-control {
+    margin-top: 2rem; 
+  }
+}
+
+
+
 @media only screen and (max-width: 1300px) {
   .selected-card {
     width: 100%;
@@ -150,10 +171,22 @@ export default {
   }
 
   .selected-card__preview {
-    justify-content: flex-end;
+    justify-content: flex-start;
+  }
+
+//Gets applied to .preview-img only on trailer route
+ 
+
+  .preview-img {
+    margin-top: 11rem;
+  }
+  
+  .preview-img--top {
+    margin-top: 0; 
   }
 
   .preview-controls {
+
     margin-top: 1.5rem;
   }
 }
@@ -171,10 +204,13 @@ export default {
 
   .selected-card__preview {
     width: 100%;
+    height: 100vh;
     align-items: center;
+    
   }
 
   .preview-img {
+    margin-top: 0;
     width: 100%;
     height: 100%;
 

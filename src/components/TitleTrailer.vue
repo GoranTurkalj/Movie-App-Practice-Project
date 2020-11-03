@@ -29,13 +29,16 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+
 #title-video-container {
-  width: calc(100% - 23rem);
-  height: 100%;
+  width: calc(100% - 23rem); 
+  height: auto;
+ 
 }
 
+//iframe
 #player {
-  width: 100%;
+  width: 100%; 
   height: 100%;
 }
 
@@ -43,7 +46,7 @@ export default {
  @media only screen and (max-width: 990px) {
 
    #title-video-container {
-     width: 100%;
+     width: 100vw;
      min-height: 25rem;
    }
  }

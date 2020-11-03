@@ -108,7 +108,7 @@ export default {
 #review-panel {
   width: 100%;
   height: 90%;
-  padding-top: 1rem;
+ 
 }
 
 .review-panel__ui {
@@ -157,6 +157,21 @@ export default {
   background-color: $accentColor;
   border-radius: 0.5rem;
 }
+
+
+//******* MEDIA QUERIES *****************//
+
+//2560px 
+@media only screen and (min-width: 160rem) {
+
+ .review-panel__ui {
+   justify-content: flex-start;
+ }
+
+ 
+
+}
+
 
 @media only screen and (max-width: 475px) {
   .review-panel__ui {
