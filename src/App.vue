@@ -70,7 +70,9 @@ body::-webkit-scrollbar {
 }
 @media only screen and (max-width: 795px) {
   #app {
-    background-position: 0% 0%;
+    background-position: 0% 50%;
+    background-size: cover; 
+    background-attachment: scroll;
   }
 }
 </style>
