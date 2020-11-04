@@ -65,6 +65,7 @@ export default {
 }
 
 
+
 @media only screen and (max-width: 475px) {
   .title-list__item {
     text-align: center;

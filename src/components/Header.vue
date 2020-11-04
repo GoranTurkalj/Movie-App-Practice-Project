@@ -225,6 +225,7 @@ export default {
   .main-header {
     background-color: black;
     justify-content: space-between;
+    height: 3.75rem; //Header gets fixed height and navbar has absolute position from top 3.75rem
   }
 
   .hamburger-menu {
@@ -236,7 +237,7 @@ export default {
     display: none;
     z-index: 60;
     right: 0;
-    top: 10vh;
+    top: 3.75rem;
     flex-direction: column;
     justify-content: center;
     background-color: rgb(0, 0, 0);
@@ -245,11 +246,13 @@ export default {
     opacity: 0;
     border-radius: 0 0 5rem 5rem;
     transition: all 300ms;
+   
   }
 
   .main-nav--visible {
     opacity: 1;
-    height: 30vh;
+    height: 50vh;
+    min-height: 180px; 
   }
 
   .skewed {
@@ -288,6 +291,7 @@ export default {
 
   .nav-item a {
     margin-right: 0;
+    margin-bottom: 1rem; 
   }
 
   .nav-list--right {

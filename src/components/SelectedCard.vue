@@ -196,6 +196,7 @@ export default {
     overflow-y: auto;
     flex-direction: column;
     align-items: center;
+    min-height: min-content; //allows for content of the card to be shown on really small device height
   }
 
   .selected-card::-webkit-scrollbar {

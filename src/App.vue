@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :style="watchMovieStyle">
     <app-header></app-header>
     <transition name="fade">
       <app-backdrop v-if="getAlertPrompt"></app-backdrop>
@@ -24,6 +24,10 @@ export default {
 
   computed: {
     ...mapGetters(["getAlertPrompt"]),
+    watchMovieStyle: function () {
+      //when watching a movie, #app loses bg image and instead body color is shown which is black
+      return this.$route.name === 'watchnow' ? {backgroundImage: "none"} : {backgroundColor: "black"}; 
+    }
   },
 };
 </script>

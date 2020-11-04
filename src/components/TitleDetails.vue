@@ -117,7 +117,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
- 
+  
 }
 
 .title-name {
@@ -187,9 +187,10 @@ export default {
   right: 0;
   width: 55%; 
   height: 80%;
+  min-height: fit-content;
   display: flex;
   flex-direction: column;
- 
+  
 }
 
 .overview-controls {
@@ -258,6 +259,11 @@ export default {
 
 
 @media only screen and (max-width: 1300px) {
+
+  .title-detail-container {
+    justify-content: flex-start;
+  }
+
   .title-name {
     position: absolute;
     top: 0;
@@ -272,15 +278,13 @@ export default {
   }
 
   .title-list {
-    position: absolute;
-    top: 63%;
-    left: 0;
     width: 100%;
     height: min-content;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
-    margin-top: 0; 
+    margin-top: 3.5rem; 
+   
   }
 
   .title-list__item {
@@ -292,14 +296,12 @@ export default {
   }
 
   .overview-panel {
-    position: absolute;
-    bottom: 0;
-    top: 2.7rem;
-    right: 0;
-    left: 0;
+    position: relative; 
+    margin-top: 2rem;
     width: 100%;
     height: 55%;
-  
+    
+    
   }
 }
 
@@ -308,6 +310,7 @@ export default {
     width: 100%;
     height: min-content;
     align-items: center;
+    justify-content: flex-start;
   }
 
   .title-name {
@@ -338,7 +341,7 @@ export default {
   }
 
   .overview-panel {
-    position: static;
+    margin-top: 0; 
     width: 100%;
     min-height: 30rem;
   }

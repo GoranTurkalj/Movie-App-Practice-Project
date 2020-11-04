@@ -67,7 +67,7 @@ export default {
   height: 0;
   background-color: black;
   padding-bottom: 56.25%; 
-
+  
   iframe {
     width: 100%;
     height: 100%;

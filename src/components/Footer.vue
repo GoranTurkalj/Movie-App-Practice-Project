@@ -13,23 +13,29 @@ export default {};
 
 <style lang="scss" scoped>
 .main-footer {
-  height: 10vh;
+  height: min-content;
+  min-height: 10vh;
   width: 100%;
   background-color: black;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   transition: all 300ms;
+
+  & > * {
+    padding: 0.25rem 0;
+  }
 }
 
 .attribution-logo {
   height: 1rem;
+  
 }
 
 p {
   color: $textColor;
-  font-size: 0.8rem;
+  font-size: 0.6rem;
   text-align: center;
 }
 
@@ -40,13 +46,15 @@ p {
   }
 }
 
-@media only screen and (max-width: 430px) {
+@media only screen and (min-width: 1920px) {
   .attribution-logo {
-    height: 0.5rem;
+    height: clamp(1rem, 1vw, 1.5rem); 
+
   }
 
   p {
-    font-size: 0.5rem;
+    font-size: 0.8rem;
   }
 }
+
 </style>
