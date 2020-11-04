@@ -58,6 +58,9 @@ body::-webkit-scrollbar {
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
+  display: flex; 
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 @media only screen and (max-width: 1500px) {
