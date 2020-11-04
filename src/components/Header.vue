@@ -109,6 +109,7 @@ export default {
 <style lang="scss" scoped>
 .main-header {
   height: 10vh;
+  min-height: 5rem;
   width: 100%;
   padding: 0 3rem;
   background-color: rgba(0, 0, 0, 0.5);
@@ -225,6 +226,7 @@ export default {
   .main-header {
     background-color: black;
     justify-content: space-between;
+    min-height: 3.75rem;
     height: 3.75rem; //Header gets fixed height and navbar has absolute position from top 3.75rem
   }
 
