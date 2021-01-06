@@ -9,7 +9,7 @@
   },
   "homepage": "https://goranturkalj.github.io/Movie-App-Practice-Project",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "gh-pages": "^3.1.0",
     "vue": "^2.6.11",
